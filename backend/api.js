@@ -18,21 +18,25 @@ var pool = mysql.createPool({
 // CREATE
 router.post('/createCustomer', (req, res) => {
 
+  // gets a sql connection
 	pool.getConnection(function(err, connection) {
 
+  // creates an object from json data passed from React fetch request
 	let customer = {name: req.body.name, address: req.body.address};
+  // sql query
 	let sql = "INSERT INTO customers (name, address) VALUES ('" + customer.name + "', '" + customer.address + "')";
+  // sends query to db
 	connection.query(sql, function(error, results, fields) {
-        	connection.release();
+        	connection.release(); // releases connection after query goes through
 
 		if (!error) {
-      res.status(200);
-      res.send(JSON.stringify(results));
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
 		} else {
       res.status(400);
       res.send(JSON.stringify(error));
 		}
-       	});
+  });
 	});
 });
 
