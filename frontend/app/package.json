@@ -7,7 +7,9 @@
     "react": "^16.5.2",
     "react-bootstrap": "^0.32.4",
     "react-dom": "^16.5.2",
+    "react-native-cli": "^2.0.1",
     "react-router-dom": "^4.3.1",
+    "react-router-native": "^4.3.0",
     "react-scripts": "2.0.4",
     "reactstrap": "^6.5.0"
   },
@@ -17,6 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+   "proxy": "http://localhost:5000/api",
   "eslintConfig": {
     "extends": "react-app"
   },

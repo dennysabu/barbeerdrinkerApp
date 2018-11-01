@@ -26,15 +26,11 @@ router.post('/createCustomer', (req, res) => {
         	connection.release();
 
 		if (!error) {
-		res.json({
-        		statusCode: 200,
-        		response: "New Customer Added!"
-        	});
+      res.status(200);
+      res.send(JSON.stringify(results));
 		} else {
-		res.json({
-			statusCode: 400,
-			response: err
-		});
+      res.status(400);
+      res.send(JSON.stringify(error));
 		}
        	});
 	});
@@ -51,15 +47,11 @@ router.get('/getCustomers', (req, res) => {
                 connection.release();
 
                 if (!error) {
-                res.json({
-                        statusCode: 200,
-                        response: results
-                });
+                res.status(200);
+                res.send(JSON.stringify(results));
                 } else {
-                res.json({
-                        statusCode: 400,
-                        response: err
-                });
+                res.status(400);
+                res.send(JSON.stirngify(error));
                 }
         });
         });
@@ -76,15 +68,11 @@ router.patch('/updateCustomer', (req, res) => {
                 connection.release();
 
                 if (!error) {
-                res.json({
-                        statusCode: 200,
-                        response: "Customer Updated!"
-                });
+                res.status(200);
+                res.send(JSON.stringify(results));
                 } else {
-                res.json({
-                        statusCode: 400,
-                        response: err
-                });
+                  res.status(400);
+                  res.send(JSON.stringify(error));
                 }
         });
         });
@@ -101,15 +89,11 @@ router.delete('/removeCustomer', (req, res) => {
                 connection.release();
 
                 if (!error) {
-                res.json({
-                        statusCode: 200,
-                        response: "Customer Deleted!"
-                });
+                  res.status(200);
+                  res.send(JSON.stringify(results));
                 } else {
-                res.json({
-                        statusCode: 400,
-                        response: err
-                });
+                  res.status(400);
+                  res.send(JSON.stringify(error));
                 }
         });
         });
