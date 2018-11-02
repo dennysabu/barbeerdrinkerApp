@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table } from 'reactstrap'; // Table pre-built component from reactstrap library
+import { Table, Progress } from 'reactstrap'; // Table pre-built component from reactstrap library
 
 // Drinker Component
 export default class Drinker extends Component {
@@ -22,7 +22,6 @@ export default class Drinker extends Component {
  // fetch request to express api endpoint
  getCustomers() {
    fetch('/getCustomers',{
-       mode: 'no-cors', // disables cors
        headers: {
            "Content-Type": "application/json", // enables json content only
        }
@@ -37,9 +36,9 @@ export default class Drinker extends Component {
     // if loading is true
     if(this.state.isLoading){
       return(
-        <h1>
-        loading...
-        </h1>
+        <Progress multi>
+         <Progress bar animated color="blue" value="100"/>
+       </Progress>
       )
     }
 

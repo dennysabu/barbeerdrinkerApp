@@ -1,0 +1,20 @@
+.item {
+  height: 600px;
+  align-items: center;
+}
+
+.carousel .item{
+  height: 600px;
+}
+
+.carousel {
+  height: 600px;
+}
+
+.caption {
+    font: 20px cursive, courier;
+}
+
+.search {
+   max-width: 50%;
+}

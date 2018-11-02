@@ -15,6 +15,35 @@ var pool = mysql.createPool({
 	      multipleStatements: true
 });
 
+// Executes any MySQL query that does not delete data
+router.post('/query', (req, res) => {
+
+  let sql = req.body.query + ";";
+  if (sql.toLowerCase().includes("delete from"))
+  {
+    res.status(403);
+    res.send(JSON.stringify({ sqlMessage: "Attempt to delete user prohibited data" }));
+  } else {
+
+  // gets a sql connection
+	pool.getConnection(function(err, connection) {
+
+  // sends query to db
+	connection.query(sql, function(error, results, fields) {
+        	connection.release(); // releases connection after query goes through
+
+		if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+		} else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+		}
+  });
+	});
+  }
+});
+
 // CREATE
 router.post('/createCustomer', (req, res) => {
 
