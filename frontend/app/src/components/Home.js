@@ -5,20 +5,21 @@ import {
   CarouselItem,
   CarouselControl,
   CarouselIndicators,
-  CarouselCaption
+  CarouselCaption,
+  Badge
 } from 'reactstrap';
 
 const items = [
   {
-    src: './beer1.jpg',
+    src: './beer1.gif',
     caption: 'Ice Cold'
   },
   {
-    src: './beer2.jpg',
+    src: './beer2.gif',
     caption: 'Just The Right Balance of Hops and Malt'
   },
   {
-    src: './beer3.jpg',
+    src: './beer3.gif',
     caption: 'More Than 50 Draft Beers!'
   }
 ];
@@ -83,6 +84,7 @@ class Home extends Component {
      });
 
      return (
+       <div style={{ backgroundColor: "#333a40", height: "100%" }}>
        <Carousel
         className="carousel"
         styles={styles.carousel}
@@ -95,6 +97,22 @@ class Home extends Component {
          <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
          <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
        </Carousel>
+       <hr style={{ color: "lightGray", backgroundColor: "lightGray" }}/>
+       <br/>
+       <br/>
+       <h2 className="follow">Follow Us!</h2>
+       <div>
+       <div className="facebook"/>
+       <div className="instagram"/>
+       </div>
+       <br/>
+       <br/>
+       <br/>
+       <br/>
+       <br/>
+       <br/>
+       <p style={{ font:  "22px cursive, courier", color: "white", textAlign: "center" }}>© 2018 Beerazon</p>
+       </div>
      );
    }
 }

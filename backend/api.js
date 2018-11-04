@@ -74,8 +74,7 @@ router.get('/getCustomers', (req, res) => {
 
         pool.getConnection(function(err, connection) {
 
-        let customer = {name: req.body.name, address: req.body.address};
-        let sql = "SELECT * FROM customers";
+        let sql = "SELECT * FROM Drinkers";
         connection.query(sql, function(error, results, fields) {
                 connection.release();
 

@@ -10,7 +10,6 @@ import {
   Modal,
   ModalBody,
   ModalHeader,
-  ModalFooter,
   Button,
   Table,
   Input,
@@ -144,28 +143,28 @@ export default class NavBar extends React.Component {
       <div>
         <Navbar color="dark" dark expand="md">
           <NavbarBrand href="/">
-          Beerazon
+          Beerazon 🍺
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav pills>
               <NavItem>
-                <NavLink exact to="/" tag={DomNavLink}>Home</NavLink>
+                <NavLink exact to="/" tag={DomNavLink} style={{ color: "white" }}>Home</NavLink>
               </NavItem>
               <NavItem>
-                 <NavLink exact to="/beers" tag={DomNavLink}>Beers</NavLink>
+                 <NavLink exact to="/beers" tag={DomNavLink} style={{ color: "white" }}>Beers</NavLink>
               </NavItem>
               <NavItem>
-                 <NavLink exact to="/drinkers" tag={DomNavLink}>Drinkers</NavLink>
+                 <NavLink exact to="/drinkers" tag={DomNavLink} style={{ color: "white" }}>Drinkers</NavLink>
               </NavItem>
               <NavItem>
-                 <NavLink exact to="/bars" tag={DomNavLink}>Bars</NavLink>
+                 <NavLink exact to="/bars" tag={DomNavLink} style={{ color: "white" }}>Bars</NavLink>
               </NavItem>
               <NavItem>
-                 <NavLink exact to="/bartenders" tag={DomNavLink}>Bartenders</NavLink>
+                 <NavLink exact to="/bartenders" tag={DomNavLink} style={{ color: "white" }}>Bartenders</NavLink>
               </NavItem>
               <NavItem>
-                 <NavLink exact to="/manufacturers" tag={DomNavLink}>Manufacturers</NavLink>
+                 <NavLink exact to="/manufacturers" tag={DomNavLink} style={{ color: "white" }}>Manufacturers</NavLink>
               </NavItem>
             </Nav>
 

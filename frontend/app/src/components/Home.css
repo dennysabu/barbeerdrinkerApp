@@ -12,9 +12,80 @@
 }
 
 .caption {
-    font: 20px cursive, courier;
+    font: 22px cursive, courier;
+    font-weight: bolder;
 }
 
 .search {
    max-width: 50%;
+}
+
+.follow {
+   color: white;
+   position: relative;
+   font: 22px cursive, courier;
+   left: 10%;
+}
+
+.facebook {
+	background: #43609C;
+	border-radius: 9%;
+	display: block;
+	height: 100px;
+	left: 10%;
+	position: absolute;
+	width: 100px;
+}
+
+.facebook:after {
+	color: #fff;
+	content: "f";
+	display: block;
+	font-family: Facebook Letter Faces, Arial;
+	font-size: 100px;
+	font-weight: bold;
+	margin: -10px 0 0 50%;
+}
+
+.facebook:hover {
+  -moz-box-shadow: 0px 0px 7px rgba(255, 250, 250, 0.75);
+	-webkit-box-shadow: 0px 0px 7px rgba(255, 250, 250, 0.75);
+	box-shadow: 0px 0px 7px rgba(255, 250, 250, 0.90);
+  cursor: pointer;
+}
+
+.instagram {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  left: 20%;
+  border-radius: 25%;
+  background: radial-gradient(circle at 33% 100%, #fed373 4%, #f15245 30%, #d92e7f 62%, #9b36b7 85%, #515ecf)
+}
+
+.instagram:after,
+.instagram:before {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 70px;
+  height: 70px;
+  border: 5px solid #fff;
+  transform: translate(-50%, -50%);
+  content: ''
+}
+.instagram:before {
+  border-radius: 20%
+}
+.instagram:after {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%
+}
+
+.instagram:hover {
+	-moz-box-shadow: 0px 0px 7px rgba(255, 250, 250, 0.75);
+	-webkit-box-shadow: 0px 0px 7px rgba(255, 250, 250, 0.75);
+	box-shadow: 0px 0px 7px rgba(255, 250, 250, 0.90);
+  cursor: pointer;
 }

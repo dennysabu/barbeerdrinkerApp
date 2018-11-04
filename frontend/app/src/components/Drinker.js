@@ -11,6 +11,7 @@ export default class Drinker extends Component {
     this.state = {
       data: [],
       isLoading: true,
+      tableHeaders: [],
     };
   }
 
@@ -27,7 +28,7 @@ export default class Drinker extends Component {
        }
    })
    .then(res => res.json()) // converts response to json
-   .then(data => this.setState({ data: data, isLoading: false })); // updates the state of Drinker component
+   .then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false })); // updates the state of Drinker component
  }
 
  // renders a view to the web page
@@ -40,7 +41,7 @@ export default class Drinker extends Component {
          <Progress bar animated color="blue" value="100"/>
        </Progress>
       )
-    }
+    } else {
 
     // if loading is false
     // * style is css styling, I am doing inline styling instead of creating a seperate css file
@@ -50,25 +51,41 @@ export default class Drinker extends Component {
     // tr contains td (standard html cell - regular and left-aligned by default)
     // * key - required to map the data to a list or table of array items
     return (
-         <Table>
-           <thead style={{fontSize:'22px', textAlign:'center'}}>
-             <tr>
-               <th>Drinker</th>
-               <th>Address</th>
-             </tr>
-           </thead>
-           <tbody style={{fontSize:'15px', textAlign:'center'}}>
-           {
-             this.state.data.map(drinker =>
-             <tr key={drinker.name}>
-             <td>{drinker.name}</td>
-             <td>{drinker.address}</td>
-             </tr>
-             )
-           }
-           </tbody>
-         </Table>
+      <Table>
+        <thead style={{fontSize:'22px', textAlign:'center'}}>
+          <tr>
+          {
+            this.state.tableHeaders.map(header =>
+           <th key={header}>
+           {header}
+           </th>
+           )
+         }
+          </tr>
+        </thead>
+        <tbody style={{fontSize:'15px', textAlign:'center'}}>
+        {
+
+          this.state.data.map((res, x) => {
+            return (
+                 <tr>
+                   {this.state.tableHeaders.map((header, i) => {
+
+                     return (
+                       <td>{res[header]}</td>
+                     );
+
+                   })}
+               </tr>
+             );
+           })
+
+       }
+        </tbody>
+      </Table>
        );
+
+     }
 
   }
 
