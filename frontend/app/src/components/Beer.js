@@ -5,7 +5,6 @@ class Beer extends Component {
     return (
       <div>
         <h2>Beer</h2>
-        <p>Lets get krunk!</p>
       </div>
     );
   }

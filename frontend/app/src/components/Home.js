@@ -84,7 +84,7 @@ class Home extends Component {
      });
 
      return (
-       <div style={{ backgroundColor: "#333a40", height: "100%" }}>
+       <div style={{ backgroundColor: "white", height: "100%" }}>
        <Carousel
         className="carousel"
         styles={styles.carousel}
@@ -102,8 +102,12 @@ class Home extends Component {
        <br/>
        <h2 className="follow">Follow Us!</h2>
        <div>
+       <a href="https://www.facebook.com">
        <div className="facebook"/>
+       </a>
+       <a href="https://www.instagram.com">
        <div className="instagram"/>
+       </a>
        </div>
        <br/>
        <br/>
@@ -111,7 +115,7 @@ class Home extends Component {
        <br/>
        <br/>
        <br/>
-       <p style={{ font:  "22px cursive, courier", color: "white", textAlign: "center" }}>© 2018 Beerazon</p>
+       <p style={{ font:  "22px cursive, courier", color: "black", textAlign: "center" }}>© 2018 Beerazon</p>
        </div>
      );
    }

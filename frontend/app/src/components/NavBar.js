@@ -1,4 +1,5 @@
 import React from 'react';
+import styles from './NavBar.css';
 import {
   Collapse,
   Navbar,
@@ -141,33 +142,34 @@ export default class NavBar extends React.Component {
         NavBar - setup with buttons and NavLinks to Route(s)
       */}
       <div>
-        <Navbar color="dark" dark expand="md">
-          <NavbarBrand href="/">
+        <Navbar color="light" light expand="md">
+          <NavbarBrand href="/" style={{ font: "32px cursive, courier", fontWeight: "bolder" }}>
           Beerazon 🍺
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
-            <Nav pills>
-              <NavItem>
-                <NavLink exact to="/" tag={DomNavLink} style={{ color: "white" }}>Home</NavLink>
-              </NavItem>
-              <NavItem>
-                 <NavLink exact to="/beers" tag={DomNavLink} style={{ color: "white" }}>Beers</NavLink>
-              </NavItem>
-              <NavItem>
-                 <NavLink exact to="/drinkers" tag={DomNavLink} style={{ color: "white" }}>Drinkers</NavLink>
-              </NavItem>
-              <NavItem>
-                 <NavLink exact to="/bars" tag={DomNavLink} style={{ color: "white" }}>Bars</NavLink>
-              </NavItem>
-              <NavItem>
-                 <NavLink exact to="/bartenders" tag={DomNavLink} style={{ color: "white" }}>Bartenders</NavLink>
-              </NavItem>
-              <NavItem>
-                 <NavLink exact to="/manufacturers" tag={DomNavLink} style={{ color: "white" }}>Manufacturers</NavLink>
-              </NavItem>
-            </Nav>
+            <Nav navbar className="Nav" style={styles}>
 
+              <NavItem>
+              <NavLink exact to="/" tag={DomNavLink} style={{ color: "black" }}>Home</NavLink>
+              </NavItem>
+              <NavItem>
+                 <NavLink exact to="/beers" tag={DomNavLink} style={{ color: "black" }}>Beers</NavLink>
+              </NavItem>
+              <NavItem>
+                 <NavLink exact to="/drinkers" tag={DomNavLink} style={{ color: "black" }}>Drinkers</NavLink>
+              </NavItem>
+              <NavItem>
+                 <NavLink exact to="/bars" tag={DomNavLink} style={{ color: "black" }}>Bars</NavLink>
+              </NavItem>
+              <NavItem>
+                 <NavLink exact to="/bartenders" tag={DomNavLink} style={{ color: "black" }}>Bartenders</NavLink>
+              </NavItem>
+              <NavItem>
+                 <NavLink exact to="/manufacturers" tag={DomNavLink} style={{ color: "black" }}>Manufacturers</NavLink>
+              </NavItem>
+
+            </Nav>
           <InputGroup className="search" onChange={this.qTextHandler}>
           <Input placeholder="Query Here..."/>
           <InputGroupAddon addonType="append">
