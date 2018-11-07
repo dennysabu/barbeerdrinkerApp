@@ -1,5 +1,13 @@
 import React, { Component } from 'react';
-import { Table, Progress } from 'reactstrap'; // Table pre-built component from reactstrap library
+import {
+    Form,
+    FormGroup,
+    Input,
+    Label,
+    Table,
+    Progress,
+    Col,
+} from 'reactstrap'; // Table pre-built component from reactstrap library
 
 // Drinker Component
 export default class Drinker extends Component {
@@ -34,7 +42,6 @@ export default class Drinker extends Component {
  // renders a view to the web page
   render(){
 
-    // if loading is true
     if(this.state.isLoading){
       return(
         <Progress multi>
@@ -43,49 +50,31 @@ export default class Drinker extends Component {
       )
     } else {
 
-    // if loading is false
-    // * style is css styling, I am doing inline styling instead of creating a seperate css file
-    //   because I am only using 2 style attributes rather than several
-    // * map, maps array of drinkers to the given html elements ex... <tr>, <td>, <tbody>
-    // tbody (table body) contains all tr (table row)
-    // tr contains td (standard html cell - regular and left-aligned by default)
-    // * key - required to map the data to a list or table of array items
     return (
-      <Table>
-        <thead style={{fontSize:'22px', textAlign:'center'}}>
-          <tr>
-          {
-            this.state.tableHeaders.map(header =>
-           <th key={header}>
-           {header}
-           </th>
-           )
-         }
-          </tr>
-        </thead>
-        <tbody style={{fontSize:'15px', textAlign:'center'}}>
+      <div>
+      <br/>
+      <Form>
+      <Col md={6}>
+      <FormGroup>
+       <Col md={6}>
+        <Label>Select Drinker</Label>
+        <Input type="select" name="select">
         {
-
-          this.state.data.map((res, x) => {
-            return (
-                 <tr>
-                   {this.state.tableHeaders.map((header, i) => {
-
-                     return (
-                       <td>{res[header]}</td>
-                     );
-
-                   })}
-               </tr>
-             );
-           })
-
+          this.state.data.map(drinker =>
+         <option key={drinker.name}>
+         {drinker.name}
+         </option>
+         )
        }
-        </tbody>
-      </Table>
-       );
+        </Input>
+        </Col>
+      </FormGroup>
+        </Col>
+      </Form>
+      </div>
 
-     }
+    );
+  }
 
   }
 

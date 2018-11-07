@@ -5,8 +5,7 @@ import {
   CarouselItem,
   CarouselControl,
   CarouselIndicators,
-  CarouselCaption,
-  Badge
+  CarouselCaption
 } from 'reactstrap';
 
 const items = [

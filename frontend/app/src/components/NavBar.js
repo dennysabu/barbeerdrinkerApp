@@ -1,5 +1,9 @@
 import React from 'react';
+
+// NavBar css
 import styles from './NavBar.css';
+
+// Reactstrap styling for components
 import {
   Collapse,
   Navbar,
@@ -18,13 +22,14 @@ import {
   InputGroupAddon,
 } from 'reactstrap';
 
+// Endpoint (url) routing
 import {
   Route,
   NavLink as DomNavLink,
   HashRouter
 } from "react-router-dom";
 
-// Routes
+// Routes of web page
 import Home from "./Home";
 import Beer from "./Beer";
 import Drinker from "./Drinker";
@@ -32,31 +37,35 @@ import Bar from "./Bar";
 import Bartender from "./Bartender";
 import Manufacturer from "./Manufacturer";
 
-
+// NavBar component
 export default class NavBar extends React.Component {
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
+    // state of page
     this.state = {
       isOpen: false,
       modal: false,
       queryResults: [],
       tableHeaders: [],
+      text: "",
     };
 
+    // allows for 'this' keyword
     this.toggle = this.toggle.bind(this);
     this.searchHandler = this.searchHandler.bind(this);
     this.queryHandler = this.queryHandler.bind(this);
     this.qTextHandler = this.qTextHandler.bind(this);
   }
 
+  // when a toggle event happens for a query opening Modal component
   toggle() {
     this.setState({
       isOpen: !this.state.isOpen
     });
   }
 
+  // query text handler to change the text state to what is currently typed in query bar
   qTextHandler(event) {
 
     this.setState({
@@ -64,6 +73,7 @@ export default class NavBar extends React.Component {
     });
   }
 
+  // query button pressed event to make http requeest to API
   queryHandler() {
 
     fetch('/query',{
@@ -81,36 +91,46 @@ export default class NavBar extends React.Component {
         {
         alert(data.sqlMessage);
         } else {
+        // sets state of page to data recieved from query
         this.setState({ queryResults: data, headers: Object.keys(data[0]), modal: !this.state.modal })
         }
     });
 
   }
 
+  // closes or opens Modal event
   searchHandler() {
     this.setState({
         modal: !this.state.modal
     });
   }
 
+  // Renders JSX to screen (UI)
   render() {
+
+    // state constants
     const qResults = this.state.queryResults;
     const headers = this.state.headers;
     const modalBody = this.state.queryResults;
-    let body;
+    let body; // JSX to render
 
+  // Conditional Render
+  // Assigns body constant to JSX data
+  // if query returns nothing
  if (modalBody.length === 0) {
    body = <p></p>
- } else {
+ } else { // if query returns more than 0 records
    body = <Table>
      <thead style={{fontSize:'22px', textAlign:'center'}}>
        <tr>
        {
+
          this.state.headers.map(header =>
         <th key={header}>
         {header}
         </th>
         )
+
       }
        </tr>
      </thead>
@@ -136,6 +156,7 @@ export default class NavBar extends React.Component {
    </Table>
  }
 
+    // Returns whats actually loaded into the UI
     return (
       <HashRouter>
       {/*
@@ -144,7 +165,7 @@ export default class NavBar extends React.Component {
       <div>
         <Navbar color="light" light expand="md">
           <NavbarBrand href="/" style={{ font: "32px cursive, courier", fontWeight: "bolder" }}>
-          Beerazon 🍺
+          Beerazon <span role="img" aria-label="beer">🍺</span>
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
@@ -180,7 +201,7 @@ export default class NavBar extends React.Component {
         <Modal size="lg" isOpen={this.state.modal} toggle={this.searchHandler} className={this.props.className}>
          <ModalHeader toggle={this.searchHandler}>Query Results</ModalHeader>
          <ModalBody>
-         {body}
+         {body} 
          </ModalBody>
        </Modal>
 
