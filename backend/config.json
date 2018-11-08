@@ -1,6 +1,6 @@
 {
- 	      "host": "localhost",
-        "user": "root",
-        "password": "password",
-        "database": "mydb"
+ 	"host": "beerbardrinkerplus.c8t70voalh1b.us-east-1.rds.amazonaws.com",
+        "user": "listsmasterin",
+        "password": "Helloworld1244",
+        "database": "BarBeerDrinkersPLUS"
 }
