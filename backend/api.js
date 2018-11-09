@@ -128,6 +128,10 @@ router.post('/getDrinkersTopBeers', (req, res) => {
   });
 });
 
+
+/*
+ *   SQL INTERFACE PAGE
+ */
 // Executes any MySQL query that does not delete data
 router.post('/query', (req, res) => {
 
@@ -157,11 +161,17 @@ router.post('/query', (req, res) => {
   }
 });
 
-router.post('/getDrinkersTopBeers', (req, res) => {
 
-  let drinker = req.body.drinker;
+/*
+ *  BAR PAGE
+ */
 
-  let sql = "SELECT b.id, b.date, bi.item, COUNT(bi.item) as Quantity FROM Bills b, Bill_Items bi, Items i WHERE b.id = bi.billid AND bi.item = i.name AND i.$
+ // Given a bar, return top 10 drinkers who are the top spenders
+router.post('/getTop10Spenders', (req, res) => {
+
+  let bar = req.body.bar;
+
+  let sql = "SELECT b.drinker, SUM(b.total) as spent FROM Bills b, Bills b1 WHERE b.drinker = b1.drinker AND b.id = b1.id AND b.bar = b1.bar AND b.bar = '" + bar + "' GROUP BY b.drinker ORDER BY spent DESC LIMIT 10;";
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
