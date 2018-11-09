@@ -4,8 +4,10 @@ import {
     FormGroup,
     Input,
     Label,
-    Table,
     Progress,
+    Row,
+    Button,
+    Table,
     Col,
 } from 'reactstrap'; // Table pre-built component from reactstrap library
 
@@ -40,7 +42,7 @@ export default class Drinker extends Component {
  }
 
  // renders a view to the web page
-  render(){
+  render() {
 
     if(this.state.isLoading){
       return(
@@ -50,28 +52,77 @@ export default class Drinker extends Component {
       )
     } else {
 
+      const table = <Table>
+                        <thead style={{fontSize:'22px', textAlign:'center'}}>
+                          <tr>
+                          {
+
+                            this.state.tableHeaders.map(header =>
+                           <th key={header}>
+                           {header}
+                           </th>
+                           )
+
+                         }
+                          </tr>
+                        </thead>
+                        <tbody style={{fontSize:'15px', textAlign:'center'}}>
+                        {
+
+                          this.state.data.map((res, x) => {
+                            return (
+                                 <tr>
+                                   {this.state.tableHeaders.map((header, i) => {
+
+                                     return (
+                                       <td>{res[header]}</td>
+                                     );
+
+                                   })}
+                               </tr>
+                             );
+                           })
+
+                       }
+                        </tbody>
+                      </Table>
+
+
     return (
-      <div>
+      <div style={{ marginLeft: '30px', marginRight: '30px' }}>
       <br/>
+      <label>Select Drinker:</label>
+      <div className="row" style={{ marginLeft: '30px', marginRight: '30px' }}>
+      <br/>
+
       <Form>
-      <Col md={6}>
       <FormGroup>
-       <Col md={6}>
-        <Label>Select Drinker</Label>
+       <div className="row">
+       <div className="column">
         <Input type="select" name="select">
         {
-          this.state.data.map(drinker =>
+         this.state.data.map(drinker =>
          <option key={drinker.name}>
          {drinker.name}
          </option>
          )
-       }
+        }
         </Input>
-        </Col>
-      </FormGroup>
-        </Col>
-      </Form>
+        </div>
+      <div className="column" style={{ paddingLeft: '10px' }}>
+      <Button outline color="secondary">Search</Button>
       </div>
+      </div>
+      </FormGroup>
+      </Form>
+
+      </div>
+      <br/>
+      {
+        table
+      }
+      </div>
+
 
     );
   }
