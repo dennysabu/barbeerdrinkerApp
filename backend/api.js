@@ -15,6 +15,119 @@ var pool = mysql.createPool({
 	      multipleStatements: true
 });
 
+// Dennies Functions
+//
+//
+
+router.post('/getInv', (req, res) => {
+
+  let bar = req.body.bar;
+  let item = req.body.item;
+  let date = req.body.date;
+
+  let sql = "SELECT COUNT(*) as item_sales FROM Sells s, Bill_Items bi, Bills b WHERE s.bar = bi.bar AND s.item = bi.item AND bi.billId = b.id AND s.bar = '" + bar + "' AND bi.item = '" + item + "' AND DATE(b.date) = '" + date + "';";
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
+
+
+router.post('/getSold', (req, res) => {
+
+  let bar = req.body.bar;
+
+  let sql = "SELECT s.item, COUNT(*) as items_sold FROM Sells s, Bill_Items b WHERE s.bar = b.bar AND s.item = b.item AND s.bar = '" + bar + "' GROUP BY s.item, s.bar;";
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
+////////////////////////////////////////////////////////////////////////
+///////////////////// END Dennies Functions ////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
+/*
+ *	DRINKERS PAGE
+ */
+
+// get transactions for a sepcific drinker ordered by time and grouped by bar
+router.post('/getTransactionsForDrinker', (req, res) => {
+
+  let drinker = req.body.drinker;
+
+  let sql = "SELECT * FROM Bills WHERE drinker = '" + drinker + "' GROUP BY bar ORDER BY date;";
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
+router.post('/getDrinkersTopBeers', (req, res) => {
+
+  let drinker = req.body.drinker;
+
+  let sql = "SELECT b.id, b.date, bi.item, COUNT(bi.item) as Quantity FROM Bills b, Bill_Items bi, Items i WHERE b.id = bi.billid AND bi.item = i.name AND i.type <> 'food' AND b.drinker = '" + drinker + "' GROUP BY bi.item ORDER BY Quantity DESC LIMIT 3;";
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
 // Executes any MySQL query that does not delete data
 router.post('/query', (req, res) => {
 
@@ -43,6 +156,31 @@ router.post('/query', (req, res) => {
 	});
   }
 });
+
+router.post('/getDrinkersTopBeers', (req, res) => {
+
+  let drinker = req.body.drinker;
+
+  let sql = "SELECT b.id, b.date, bi.item, COUNT(bi.item) as Quantity FROM Bills b, Bill_Items bi, Items i WHERE b.id = bi.billid AND bi.item = i.name AND i.$
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
 
 // CREATE
 router.post('/createCustomer', (req, res) => {
