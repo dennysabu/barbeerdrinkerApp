@@ -3,12 +3,9 @@ import {
     Form,
     FormGroup,
     Input,
-    Label,
     Progress,
-    Row,
     Button,
     Table,
-    Col,
 } from 'reactstrap'; // Table pre-built component from reactstrap library
 
 // Drinker Component
