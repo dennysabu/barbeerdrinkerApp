@@ -36,6 +36,7 @@ import Drinker from "./Drinker";
 import Bar from "./Bar";
 import Bartender from "./Bartender";
 import Manufacturer from "./Manufacturer";
+import Modifications from "./Modifications";
 
 // NavBar component
 export default class NavBar extends React.Component {
@@ -189,6 +190,9 @@ export default class NavBar extends React.Component {
               <NavItem>
                  <NavLink exact to="/manufacturers" tag={DomNavLink} style={{ color: "black" }}>Manufacturers</NavLink>
               </NavItem>
+              <NavItem>
+                 <NavLink exact to="/modifications" tag={DomNavLink} style={{ color: "black" }}>Modifications</NavLink>
+              </NavItem>
 
             </Nav>
           <InputGroup className="search" onChange={this.qTextHandler}>
@@ -201,7 +205,7 @@ export default class NavBar extends React.Component {
         <Modal size="lg" isOpen={this.state.modal} toggle={this.searchHandler} className={this.props.className}>
          <ModalHeader toggle={this.searchHandler}>Query Results</ModalHeader>
          <ModalBody>
-         {body} 
+         {body}
          </ModalBody>
        </Modal>
 
@@ -217,6 +221,7 @@ export default class NavBar extends React.Component {
         <Route path="/bars" component={Bar}/>
         <Route path="/bartenders" component={Bartender}/>
         <Route path="/manufacturers" component={Manufacturer}/>
+        <Route path="/modifications" component={Modifications}/>
         </div>
         </div>
 

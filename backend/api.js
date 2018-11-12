@@ -80,7 +80,7 @@ var pool = mysql.createPool({
                     res.send(JSON.stringify(results));
                     } else {
                     res.status(400);
-                    res.send(JSON.stirngify(error));
+                    res.send(JSON.stringify(error));
                     }
             });
             });
@@ -103,7 +103,7 @@ var pool = mysql.createPool({
                     res.send(JSON.stringify(results));
                     } else {
                     res.status(400);
-                    res.send(JSON.stirngify(error));
+                    res.send(JSON.stringify(error));
                     }
             });
             });
@@ -129,7 +129,7 @@ router.get('/getDrinkers', (req, res) => {
                 res.send(JSON.stringify(results));
                 } else {
                 res.status(400);
-                res.send(JSON.stirngify(error));
+                res.send(JSON.stringify(error));
                 }
         });
         });
@@ -262,7 +262,7 @@ router.post('/getTop10Spenders', (req, res) => {
                  res.send(JSON.stringify(results));
                  } else {
                  res.status(400);
-                 res.send(JSON.stirngify(error));
+                 res.send(JSON.stringify(error));
                  }
          });
          });

@@ -16,26 +16,52 @@ export default class Drinker extends Component {
 
     // state of component
     this.state = {
+      drinker: null,
       data: [],
-      isLoading: true,
       tableHeaders: [],
+      isLoading: true,
     };
+
+      this.getTransactions = this.getTransactions.bind(this);
+      this.getDrinkers = this.getDrinkers.bind(this);
+      this.drinkerSelectionChanged = this.drinkerSelectionChanged.bind(this);
   }
 
   // overriden method for when component mounts
-  componentDidMount(){
-    this.getCustomers();
+  componentDidMount() {
+    this.getDrinkers();
+ }
+
+ drinkerSelectionChanged(e) {
+   this.setState({ drinker: e.target.value });
+   console.log(e.target.value);
  }
 
  // fetch request to express api endpoint
- getCustomers() {
+ getDrinkers() {
 	fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getDrinkers',{
 	headers: {
            "Content-Type": "application/json", // enables json content only
-       }
+       },
    }).then(res => res.json()
    ).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));
 }
+
+// fetch request to express api endpoint
+getTransactions() {
+
+ fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getTransactionsForDrinker', {
+ method: "post",
+ headers: {
+          "Content-Type": "application/json", // enables json content only
+      },
+ body: {
+      "drinker": this.state.drinker
+  },
+  }).then(res => res.json()
+  ).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));
+}
+
 
  // renders a view to the web page
   render() {
@@ -95,7 +121,7 @@ export default class Drinker extends Component {
       <FormGroup>
        <div className="row">
        <div className="column">
-        <Input type="select" name="select">
+        <Input type="select" name="select" onChange={this.drinkerSelectionChanged}>
         {
          this.state.data.map(drinker =>
          <option key={drinker.name}>
@@ -106,7 +132,7 @@ export default class Drinker extends Component {
         </Input>
         </div>
       <div className="column" style={{ paddingLeft: '10px' }}>
-      <Button outline color="secondary">Search</Button>
+      <Button outline color="secondary" onClick={this.getTransactions}>Search</Button>
       </div>
       </div>
       </FormGroup>

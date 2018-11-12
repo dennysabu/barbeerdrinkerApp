@@ -6,7 +6,7 @@ class Beer extends Component {
       <div>
         <h2>Beer</h2>
 	<p>Hey Steve, don't yell at me</p>
-	<ul> 
+	<ul>
 		<li> List of all beers</li>
 			<p> SELECT DISTINCT name from Items where type='beer' </p>
 		<li> Beers sold by certain bar </li>
