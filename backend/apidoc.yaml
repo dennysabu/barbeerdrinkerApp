@@ -1,7 +1,7 @@
 info:
   version: 1.0.0
-  title: Swagger Petstore
-  description: A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification
+  title: BarBeerDrinkersPLUS API
+  description: Getting data and analytics from the greatest bars and the thirstiest drinkers around!
   license:
     name: MIT
 basePath: /api
@@ -13,7 +13,7 @@ produces:
   - text/plain
 
 paths:
-
+#       Beer Page       #
   /getBarsForBeer:
     post:
       description: show bars where this beer sells the most (again only top 10)
@@ -35,7 +35,7 @@ paths:
 
   /getTopBeerConsumers:
     post:
-      description: drinkers who are the biggest consumers of this beer
+      description: show also drinkers who are the biggest consumers of this beer
       requestBody:
         content:
           application/json:
@@ -54,7 +54,7 @@ paths:
 
     /beerTdDate:
       post:
-        description: time distribution of when this beer sells the most, how many sold per date
+        description: time distribution of when this beer sells the most, per date
         requestBody:
           content:
             application/json:
@@ -73,7 +73,7 @@ paths:
 
     /beerTdTime:
       post:
-        description: time distribution of when this beer sells the most, how many sold per time of day
+        description: time distribution of when this beer sells the most, per time of day
         requestBody:
           content:
             application/json:
@@ -89,10 +89,10 @@ paths:
               type: array
           "400":
             description: Bad Request
-
+#           Drinkers Page       #
       /getDrinkers:
         get:
-          description: get all drinkers
+          description: Get all drinkers
           responses:
             "200":
               description: OK
@@ -103,7 +103,7 @@ paths:
 
     /getTransactionsForDrinker:
       post:
-        description: gets bills for a given drinker
+        description: Given a drinker, show all his/her transactions ordered by time and grouped by different bars
         requestBody:
           content:
             application/json:
@@ -122,7 +122,7 @@ paths:
 
     /getDrinkersTopBeers:
       post:
-        description: gets drinkers top 3 beers
+        description: beers s/he orders the most (returns top 3)
         requestBody:
           content:
             application/json:
@@ -138,10 +138,10 @@ paths:
               type: array
           "400":
             description: Bad Request
-
+#           SQL Query Interface       #
       /query:
         post:
-          description: executes any MySQL query that does not delete data
+          description: Executes any MySQL query that does not delete data
           requestBody:
             content:
               application/json:
@@ -157,10 +157,10 @@ paths:
                 type: array
             "400":
               description: Bad Request
-
+#             Bar Page        #
     /getTop10Spenders:
       post:
-        description: returns top 10 drinkers who are the top spenders
+        description: top10 drinkers who are largest spenders,
         requestBody:
           content:
             application/json:
@@ -176,10 +176,10 @@ paths:
               type: array
           "400":
             description: Bad Request
-
+#           Bartenders Page       #
     /getBartenders:
       get:
-        description: returns all bartenders
+        description: Get all bartenders
         responses:
           "200":
             description: OK
