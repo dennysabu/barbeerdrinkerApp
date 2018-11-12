@@ -76,7 +76,7 @@ export default class NavBar extends React.Component {
   // query button pressed event to make http requeest to API
   queryHandler() {
 
-    fetch('/query',{
+    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/query',{
         method: 'post',
         headers: {
           'Content-Type':'application/json'

@@ -7,11 +7,11 @@ var router = express.Router();
 
 // MySQL Create a Pool for Connection
 var pool = mysql.createPool({
-        host: process.env.RDS_HOST,
-        user: process.env.RDS_USERNAME,
-        port: process.env.RDS_PORT,
-        password: process.env.RDS_PASSWORD,
-        database: 'BarBeerDrinkersPLUS',
+        host: config.host,
+        user: config.user,
+        port: config.port,
+        password: config.password,
+        database: config.database,
 	      multipleStatements: true
 });
 
