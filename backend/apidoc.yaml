@@ -1,0 +1,189 @@
+info:
+  version: 1.0.0
+  title: Swagger Petstore
+  description: A sample API that uses a petstore as an example to demonstrate features in the swagger-2.0 specification
+  license:
+    name: MIT
+basePath: /api
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - text/plain
+
+paths:
+
+  /getBarsForBeer:
+    post:
+      description: show bars where this beer sells the most (again only top 10)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                beer:
+                  type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+        "400":
+          description: Bad Request
+
+  /getTopBeerConsumers:
+    post:
+      description: drinkers who are the biggest consumers of this beer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                beer:
+                  type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: array
+        "400":
+          description: Bad Request
+
+    /beerTdDate:
+      post:
+        description: time distribution of when this beer sells the most, how many sold per date
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  beer:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
+    /beerTdTime:
+      post:
+        description: time distribution of when this beer sells the most, how many sold per time of day
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  beer:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
+      /getDrinkers:
+        get:
+          description: get all drinkers
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request
+
+    /getTransactionsForDrinker:
+      post:
+        description: gets bills for a given drinker
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  drinker:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
+    /getDrinkersTopBeers:
+      post:
+        description: gets drinkers top 3 beers
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  drinker:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
+      /query:
+        post:
+          description: executes any MySQL query that does not delete data
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    query:
+                      type: string
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request
+
+    /getTop10Spenders:
+      post:
+        description: returns top 10 drinkers who are the top spenders
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bar:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
+    /getBartenders:
+      get:
+        description: returns all bartenders
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
