@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import axios from 'axios';
 import {
     Form,
     FormGroup,
@@ -30,15 +29,12 @@ export default class Drinker extends Component {
 
  // fetch request to express api endpoint
  getCustomers() {
-	//axios.get('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getCustomers')
-	//.then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));
-	fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getCustomers',{
+	fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getDrinkers',{
 	headers: {
-	   "Access-Control-Allow-Origin": "*",
            "Content-Type": "application/json", // enables json content only
        }
    }).then(res => res.json()
-   ).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));  
+   ).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));
 }
 
  // renders a view to the web page
