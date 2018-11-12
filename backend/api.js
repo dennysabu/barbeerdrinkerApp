@@ -22,7 +22,7 @@ var pool = mysql.createPool({
 // show bars where this beer sells the most (again only top 10)
  router.post('/getBarsForBeer', (req, res) => {
 
-        let drinker = req.body.beer;
+        let beer = req.body.beer;
         let sql = "SELECT b1.bar, (SELECT COUNT(b3.item) as sold FROM Bill_Items b3 WHERE b1.bar = b3.bar AND b3.item = '" + beer + "') as sold FROM Bill_Items as b1 GROUP BY b1.bar ORDER BY sold DESC LIMIT 10;";
 
          pool.getConnection(function(err, connection) {
@@ -44,7 +44,7 @@ var pool = mysql.createPool({
 // drinkers who are the biggest consumers of this beer
   router.post('/getTopBeerConsumers', (req, res) => {
 
-         let drinker = req.body.beer;
+         let beer = req.body.beer;
          let sql = "SELECT b.drinker, COUNT(b.drinker) as bought FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND bi.item = '" + beer + "' GROUP BY b.drinker ORDER BY bought DESC LIMIT 10;";
 
           pool.getConnection(function(err, connection) {
@@ -67,7 +67,7 @@ var pool = mysql.createPool({
   // How many sold per date
     router.post('/beerTdDate', (req, res) => {
 
-           let drinker = req.body.beer;
+           let beer = req.body.beer;
            let sql = "SELECT DATE(b.date) as date, COUNT(b.id) as sold FROM Bills b, Bills b1, Bill_Items bi WHERE b.id = bi.billid AND b.id = b1.id AND b.bar = bi.bar AND bi.item = '" + beer + "' AND DATE(b.date) = DATE(b1.date) GROUP BY DATE(b.date) ORDER BY sold DESC;";
 
             pool.getConnection(function(err, connection) {
@@ -90,7 +90,7 @@ var pool = mysql.createPool({
     // How many sold per time of day
     router.post('/beerTdTime', (req, res) => {
 
-           let drinker = req.body.beer;
+           let beer = req.body.beer;
            let sql = "SELECT TIME(b.date) as time, COUNT(b.id) as sold FROM Bills b, Bills b1, Bill_Items bi WHERE b.id = bi.billid AND b.id = b1.id AND b.bar = bi.bar AND bi.item = '" + beer + "' AND TIME(b.date) = TIME(b1.date) GROUP BY TIME(b.date) ORDER BY sold DESC;";
 
             pool.getConnection(function(err, connection) {
