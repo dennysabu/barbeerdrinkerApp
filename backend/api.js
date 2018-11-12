@@ -15,71 +15,126 @@ var pool = mysql.createPool({
 	      multipleStatements: true
 });
 
-// Dennies Functions
-//
-//
+/*
+ *  BEER PAGE
+ */
 
-router.post('/getInv', (req, res) => {
+// show bars where this beer sells the most (again only top 10)
+ router.post('/getBarsForBeer', (req, res) => {
 
-  let bar = req.body.bar;
-  let item = req.body.item;
-  let date = req.body.date;
+        let drinker = req.body.beer;
+        let sql = "SELECT b1.bar, (SELECT COUNT(b3.item) as sold FROM Bill_Items b3 WHERE b1.bar = b3.bar AND b3.item = '" + beer + "') as sold FROM Bill_Items as b1 GROUP BY b1.bar ORDER BY sold DESC LIMIT 10;";
 
-  let sql = "SELECT COUNT(*) as item_sales FROM Sells s, Bill_Items bi, Bills b WHERE s.bar = bi.bar AND s.item = bi.item AND bi.billId = b.id AND s.bar = '" + bar + "' AND bi.item = '" + item + "' AND DATE(b.date) = '" + date + "';";
+         pool.getConnection(function(err, connection) {
 
-  // gets a sql connection
-        pool.getConnection(function(err, connection) {
+         connection.query(sql, function(error, results, fields) {
+                 connection.release();
 
-  // sends query to db
-        connection.query(sql, function(error, results, fields) {
-                connection.release(); // releases connection after query goes through
+                 if (!error) {
+                 res.status(200);
+                 res.send(JSON.stringify(results));
+                 } else {
+                 res.status(400);
+                 res.send(JSON.stirngify(error));
+                 }
+         });
+         });
+ });
 
-                if (!error) {
-      res.status(200); // sends a status code
-      res.send(JSON.stringify(results)); // sends results recieved from sql
-                } else {
-      res.status(400);
-      res.send(JSON.stringify(error));
-                }
+// drinkers who are the biggest consumers of this beer
+  router.post('/getTopBeerConsumers', (req, res) => {
+
+         let drinker = req.body.beer;
+         let sql = "SELECT b.drinker, COUNT(b.drinker) as bought FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND bi.item = '" + beer + "' GROUP BY b.drinker ORDER BY bought DESC LIMIT 10;";
+
+          pool.getConnection(function(err, connection) {
+
+          connection.query(sql, function(error, results, fields) {
+                  connection.release();
+
+                  if (!error) {
+                  res.status(200);
+                  res.send(JSON.stringify(results));
+                  } else {
+                  res.status(400);
+                  res.send(JSON.stirngify(error));
+                  }
+          });
+          });
   });
-  });
-});
 
+  // time distribution of when this beer sells the most.
+  // How many sold per date
+    router.post('/beerTdDate', (req, res) => {
 
+           let drinker = req.body.beer;
+           let sql = "SELECT DATE(b.date) as date, COUNT(b.id) as sold FROM Bills b, Bills b1, Bill_Items bi WHERE b.id = bi.billid AND b.id = b1.id AND b.bar = bi.bar AND bi.item = '" + beer + "' AND DATE(b.date) = DATE(b1.date) GROUP BY DATE(b.date) ORDER BY sold DESC;";
 
-router.post('/getSold', (req, res) => {
+            pool.getConnection(function(err, connection) {
 
-  let bar = req.body.bar;
+            connection.query(sql, function(error, results, fields) {
+                    connection.release();
 
-  let sql = "SELECT s.item, COUNT(*) as items_sold FROM Sells s, Bill_Items b WHERE s.bar = b.bar AND s.item = b.item AND s.bar = '" + bar + "' GROUP BY s.item, s.bar;";
+                    if (!error) {
+                    res.status(200);
+                    res.send(JSON.stringify(results));
+                    } else {
+                    res.status(400);
+                    res.send(JSON.stirngify(error));
+                    }
+            });
+            });
+    });
 
-  // gets a sql connection
-        pool.getConnection(function(err, connection) {
+    // time distribution of when this beer sells the most.
+    // How many sold per time of day
+    router.post('/beerTdTime', (req, res) => {
 
-  // sends query to db
-        connection.query(sql, function(error, results, fields) {
-                connection.release(); // releases connection after query goes through
+           let drinker = req.body.beer;
+           let sql = "SELECT TIME(b.date) as time, COUNT(b.id) as sold FROM Bills b, Bills b1, Bill_Items bi WHERE b.id = bi.billid AND b.id = b1.id AND b.bar = bi.bar AND bi.item = '" + beer + "' AND TIME(b.date) = TIME(b1.date) GROUP BY TIME(b.date) ORDER BY sold DESC;";
 
-                if (!error) {
-      res.status(200); // sends a status code
-      res.send(JSON.stringify(results)); // sends results recieved from sql
-                } else {
-      res.status(400);
-      res.send(JSON.stringify(error));
-                }
-  });
-  });
-});
+            pool.getConnection(function(err, connection) {
 
-////////////////////////////////////////////////////////////////////////
-///////////////////// END Dennies Functions ////////////////////////////
-////////////////////////////////////////////////////////////////////////
+            connection.query(sql, function(error, results, fields) {
+                    connection.release();
+
+                    if (!error) {
+                    res.status(200);
+                    res.send(JSON.stringify(results));
+                    } else {
+                    res.status(400);
+                    res.send(JSON.stirngify(error));
+                    }
+            });
+            });
+    });
+
 
 /*
  *	DRINKERS PAGE
  */
 
 // get transactions for a sepcific drinker ordered by time and grouped by bar
+
+router.get('/getDrinkers', (req, res) => {
+
+        pool.getConnection(function(err, connection) {
+
+        let sql = "SELECT * FROM Drinkers";
+        connection.query(sql, function(error, results, fields) {
+                connection.release();
+
+                if (!error) {
+                res.status(200);
+                res.send(JSON.stringify(results));
+                } else {
+                res.status(400);
+                res.send(JSON.stirngify(error));
+                }
+        });
+        });
+});
+
 router.post('/getTransactionsForDrinker', (req, res) => {
 
   let drinker = req.body.drinker;
@@ -127,7 +182,6 @@ router.post('/getDrinkersTopBeers', (req, res) => {
   });
   });
 });
-
 
 /*
  *   SQL INTERFACE PAGE
@@ -191,6 +245,34 @@ router.post('/getTop10Spenders', (req, res) => {
   });
 });
 
+/*
+ *  Bartenders
+ */
+
+ router.get('/getBartenders', (req, res) => {
+
+         pool.getConnection(function(err, connection) {
+
+         let sql = "SELECT * FROM Bartenders";
+         connection.query(sql, function(error, results, fields) {
+                 connection.release();
+
+                 if (!error) {
+                 res.status(200);
+                 res.send(JSON.stringify(results));
+                 } else {
+                 res.status(400);
+                 res.send(JSON.stirngify(error));
+                 }
+         });
+         });
+ });
+
+
+
+/*
+ *  General Operations
+ */
 
 // CREATE
 router.post('/createCustomer', (req, res) => {
@@ -215,26 +297,6 @@ router.post('/createCustomer', (req, res) => {
 		}
   });
 	});
-});
-
-// READ
-router.get('/getCustomers', (req, res) => {
-
-        pool.getConnection(function(err, connection) {
-
-        let sql = "SELECT * FROM Drinkers";
-        connection.query(sql, function(error, results, fields) {
-                connection.release();
-
-                if (!error) {
-                res.status(200);
-                res.send(JSON.stringify(results));
-                } else {
-                res.status(400);
-                res.send(JSON.stirngify(error));
-                }
-        });
-        });
 });
 
 // UPDATE

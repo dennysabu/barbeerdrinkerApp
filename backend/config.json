@@ -1,7 +1,7 @@
 {
- 	"host": "beerbardrinkerplus.c8t70voalh1b.us-east-1.rds.amazonaws.com",
-        "port": "3306",
-	"user": "listsmasterin",
-        "password": "Helloworld1244",
-        "database": "BarBeerDrinkersPLUS"
+    "host": "beerbardrinkerplus.c8t70voalh1b.us-east-1.rds.amazonaws.com",
+    "port": "3306",
+	  "user": "listsmasterin",
+    "password": "Helloworld1244",
+    "database": "BarBeerDrinkersPLUS"
 }
