@@ -139,7 +139,7 @@ router.post('/getTransactionsForDrinker', (req, res) => {
 
   let drinker = req.body.drinker;
 
-  let sql = "SELECT * FROM Bills WHERE drinker = '" + drinker + "' GROUP BY bar ORDER BY date;";
+  let sql = "SELECT * FROM Bills WHERE drinker = '" + drinker + "' GROUP BY bar ORDER BY TIME(date);";
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
