@@ -48,7 +48,6 @@ export default class Drinker extends Component {
 
  drinkerSelectionChanged(e) {
    this.setState({ drinker: e.target.value });
-   console.log(e.target.value);
  }
 
 
