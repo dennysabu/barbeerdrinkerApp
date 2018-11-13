@@ -1,0 +1,37 @@
+
+.glb {
+
+  display: inline-flex;
+
+}
+
+.firstTable {
+
+  display: inline-block;
+}
+
+
+.tlb {
+  width: 400px;
+  height: 800px;
+  overflow-y: scroll;
+  padding-right: 10px;
+  align-items: center;
+  border-right: 15px solid grey;
+}
+
+.tlbrow:hover {
+  font-size: 21px;
+  transition-duration: 0.4s
+}
+
+.beerinsight {
+
+
+}
+
+
+.tlb_sel {
+  display: inline-flex;
+  padding: 20px;
+}
