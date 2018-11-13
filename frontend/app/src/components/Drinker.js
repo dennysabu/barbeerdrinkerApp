@@ -18,6 +18,7 @@ export default class Drinker extends Component {
     this.state = {
       drinker: null,
       data: [],
+      response: null,
       tableHeaders: [],
       isLoading: true,
     };
@@ -44,22 +45,21 @@ export default class Drinker extends Component {
            "Content-Type": "application/json", // enables json content only
        },
    }).then(res => res.json()
-   ).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));
+ ).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));
 }
 
 // fetch request to express api endpoint
 getTransactions() {
-
  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getTransactionsForDrinker', {
- method: "post",
+ method: "POST",
  headers: {
           "Content-Type": "application/json", // enables json content only
       },
- body: {
+ body: JSON.stringify({
       "drinker": this.state.drinker
-  },
+  }),
   }).then(res => res.json()
-  ).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));
+).then(data => this.setState({ response: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));
 }
 
 
@@ -72,6 +72,40 @@ getTransactions() {
          <Progress bar animated color="blue" value="100"/>
        </Progress>
       )
+    } else if (this.state.response === null) {
+
+      return (
+        <div style={{ marginLeft: '30px', marginRight: '30px' }}>
+        <br/>
+        <label>Select Drinker:</label>
+        <div className="row" style={{ marginLeft: '30px', marginRight: '30px' }}>
+        <br/>
+
+        <Form>
+        <FormGroup>
+         <div className="row">
+         <div className="column">
+          <Input type="select" name="select" onChange={this.drinkerSelectionChanged}>
+          {
+           this.state.data.map(drinker =>
+           <option key={drinker.name}>
+           {drinker.name}
+           </option>
+           )
+          }
+          </Input>
+          </div>
+        <div className="column" style={{ paddingLeft: '15px' }}>
+        <Button outline color="secondary" onClick={this.getTransactions}>Search</Button>
+        </div>
+        </div>
+        </FormGroup>
+        </Form>
+
+        </div>
+        </div>
+      );
+
     } else {
 
       const table = <Table>
@@ -91,7 +125,7 @@ getTransactions() {
                         <tbody style={{fontSize:'15px', textAlign:'center'}}>
                         {
 
-                          this.state.data.map((res, x) => {
+                          this.state.response.map((res, x) => {
                             return (
                                  <tr>
                                    {this.state.tableHeaders.map((header, i) => {
@@ -108,7 +142,6 @@ getTransactions() {
                        }
                         </tbody>
                       </Table>
-
 
     return (
       <div style={{ marginLeft: '30px', marginRight: '30px' }}>
@@ -143,7 +176,7 @@ getTransactions() {
       {
         table
       }
-      </div>
+   </div>
 
 
     );
