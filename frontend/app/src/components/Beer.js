@@ -7,6 +7,7 @@ import {
     Button,
     Table,
 } from 'reactstrap'; // Table pre-built component from reactstrap library
+import './Beer.css'
 
 
 class Beer extends Component {
@@ -18,13 +19,19 @@ class Beer extends Component {
     super(props);
 
   this.state = {
-    beer: null,
+    Beer: null,
+    Manufacturer: null,
     data: [],
+    manuData: [],
     tableHeaders: [],
+    manutableHeader: [],
     isLoading: true,
+    manutableIsLoading: true,
   };
 
   this.getBeers = this.getBeers.bind(this);
+
+  this.beerSelectionChanged = this.beerSelectionChanged.bind(this);
 
 
 }
@@ -33,22 +40,35 @@ componentDidMount() {
   this.getBeers();
 }
 
+beerSelectionChanged(e){
+  console.log(e.target.value);
+  this.setState({Beer: e.target.value});
+
+
+
+  for (var i in this.state.data){
+
+    if(e.target.value === this.state.data[i].Beer){
+      this.setState({Manufacturer: this.state.data[i].Manufacturer});
+    }
+  }
+}
 
 
 
 
 getBeers(){
-  console.log("FUCK");
+
   fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/query',{
     method: "post",
     headers: {
       "Content-Type":"application/json",
     },
     body: JSON.stringify({
-      "query": "SELECT DISTINCT name from Items where type='beer'",
+      "query": "SELECT DISTINCT name as Beer, manf as Manufacturer FROM Items WHERE type='beer'",
     }),
   }).then(res => res.json()
-).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false }));
+).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false, Beer: data[0].Beer, Manufacturer: data[0].Manufacturer}));
 
 }
 
@@ -85,7 +105,7 @@ getBeers(){
 
                           this.state.data.map((res, x) => {
                             return (
-                                 <tr>
+                                 <tr className ="tlbrow">
                                    {this.state.tableHeaders.map((header, i) => {
 
                                      return (
@@ -101,12 +121,44 @@ getBeers(){
                         </tbody>
                       </Table>
 
-        return (
 
-          <div>
-            {table}
+
+
+        return (
+          <div className="glb">
+
+          <div className="firstTable">
+              <div className="tlb_sel">
+                  <Input type="select" name="select" onChange={this.beerSelectionChanged} >
+                  {
+                    this.state.data.map(Beer =>
+                      <option key={Beer.item}>
+                        {Beer.Beer}
+                      </option>
+                    )
+                  }
+              </Input>
+              <Button style={{ }}onClick={this.getManf}> Get Info</Button>
+              </div>
+
+
+              <div className="tlb">
+
+                {table}
+              </div>
+
           </div>
 
+          <div className="beerinsight">
+
+            <h1> Beer Insight </h1>
+            <h2> Beer: {this.state.Beer} </h2>
+            <h2> Manufacturer: {this.state.Manufacturer} </h2>
+
+
+          </div>
+
+          </div >
 
 
         )
