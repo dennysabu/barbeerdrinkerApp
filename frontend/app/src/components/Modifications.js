@@ -5,6 +5,7 @@ import {
     Input,
     Button,
     Progress,
+    Badge,
     InputGroup,
     InputGroupAddon,
 } from 'reactstrap';
@@ -17,9 +18,15 @@ export default class Modifications extends Component {
         modification: "Update",
         table: "Bars",
         attributes: [],
+        values: [[]],
+        condition: "",
         isLoading: false,
       };
 
+      this.nullPadArray = this.nullPadArray.bind(this);
+      this.conditionChange = this.conditionChange.bind(this);
+      this.attributeChange = this.attributeChange.bind(this);
+      this.modifyDatabase = this.modifyDatabase.bind(this);
       this.getAttributes = this.getAttributes.bind(this);
       this.modificationChange = this.modificationChange.bind(this);
       this.tableChange = this.tableChange.bind(this);
@@ -27,6 +34,13 @@ export default class Modifications extends Component {
 
     componentDidMount() {
       this.getAttributes(this.state.table);
+    }
+
+
+    conditionChange(e) {
+      this.setState({
+        condition: e.target.value,
+      });
     }
 
     modificationChange(e) {
@@ -43,17 +57,57 @@ export default class Modifications extends Component {
       this.getAttributes(e.target.value);
     }
 
+    conditionChange(e) {
+      this.setState({
+        condition: e.target.value,
+      });
+    }
+
+    // Assign 2d array (dictionary) of attributes for record to enter
+    attributeChange(e) {
+
+         var values = this.state.values;
+         var value = e.target.value;
+         var name = e.target.name;
+         var index = e.target.attributes.getNamedItem('index').value;
+
+        var tmp = [name, value];
+
+        for (var i in values) {
+
+        if (tmp[0] !== values[i][0] && values.length >= i) {
+              values[i][index] = tmp;
+              break;
+          }
+        }
+
+    }
+
+
  // renders a view to the web page
   render() {
 
         var conditionView = <div>
-                          <p>WHERE</p>
-                          <InputGroup>
-                          <Input placeholder="condition" />
+                          <p>Where?:</p>
+                          <InputGroup onChange={this.conditionChange}>
+                          <Input placeholder="column='value'" />
                           </InputGroup>
                           </div>
 
-    if(this.state.isLoading){
+        var attributesView =
+        this.state.attributes.map((header, i) => {
+            return (
+             <div key={i}>
+             <InputGroup>
+             <Input placeholder="value" name={header} index={i} onChange={this.attributeChange}/>
+             <InputGroupAddon addonType="prepend">{header}</InputGroupAddon>
+             </InputGroup>
+             <br/>
+             </div>
+            );
+          })
+
+    if(this.state.isLoading) {
       return(
         <Progress multi>
          <Progress bar animated color="blue" value="100"/>
@@ -61,8 +115,25 @@ export default class Modifications extends Component {
       )
     } else {
 
-      if (this.state.modification === "Insert") {
-          conditionView = <div></div>
+      switch (this.state.modification) {
+        case "Insert":
+            conditionView = <div></div>
+            break;
+        case "Delete":
+          attributesView = <div>
+                            {
+                            this.state.attributes.map((header, i) => {
+                              return (
+                                <div key={i}>
+                                <Badge>{header}</Badge>
+                                </div>
+                              );
+                            })
+                            }
+                          <br/>
+                          </div>
+          break;
+
       }
 
     return (
@@ -71,8 +142,7 @@ export default class Modifications extends Component {
       <div className="row" style={{ marginLeft: '30px', marginRight: '30px' }}>
       <br/>
 
-      <Form>
-      <FormGroup>
+
        <div className="column">
 
          <label>Select Modification:</label>
@@ -97,47 +167,59 @@ export default class Modifications extends Component {
          <option>Shifts</option>
         </Input>
         <br/>
-
-        {this.state.attributes.map((header, i) => {
-          return (
-            <div key={i}>
-           <InputGroup>
-           <Input placeholder="value" />
-           <InputGroupAddon addonType="prepend">{header}</InputGroupAddon>
-           </InputGroup>
-           <br/>
-           </div>
-          );
-        })}
+        {
+          attributesView
+        }
         {
           conditionView
         }
     <br/>
-    <Button outline color="secondary">Search</Button>
+    <Button outline color="secondary" onClick={this.modifyDatabase}>{this.state.modification}</Button>
+    <br/>
+    <br/>
     </div>
-    </FormGroup>
-    </Form>
+
     </div>
     </div>
 
        );
      }
   }
-/*
+
+  nullPadArray() {
+    var attr = this.state.attributes;
+    var values = this.state.values[0];
+
+    for (var i = 0; i < attr.length; i++) {
+      if (i >= values.length)
+      {
+        values[i] = [attr[i], "NULL"];
+      }
+    }
+
+  }
+
   modifyDatabase() {
 
-    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/query', {
+    this.nullPadArray();
+
+    /*
+    fetch('http://localhost:5000/api/modifyDatabase', {
     method: "POST",
     headers: {
              "Content-Type": "application/json", // enables json content only
          },
     body: JSON.stringify({
-         query: "SELECT * FROM " + value + " LIMIT 1",
+         modification: this.state.modification,
+         table: this.state.table,
+         values: this.state.values[0],
+         condition: this.state.condition,
      }),
      }).then(res => res.json()
-   ).then(data => this.setState({ attributes: Object.keys(data[0]), isLoading: false }));
+   ).then(data => this.setState({isLoading: false}));
+   */
   }
-*/
+
 
   getAttributes(value) {
 

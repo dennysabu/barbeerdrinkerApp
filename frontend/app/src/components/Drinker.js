@@ -211,7 +211,7 @@ export default class Drinker extends Component {
     }),
     }).then(res => res.json()
   ).then(data => {
-    this.setState({ transactions: data, tableHeaders: Object.keys(data[0]), isLoading: false });
+    this.setState({ transactions: data, tableHeaders: Object.keys(data[0]), drinker: data[0].drinker, isLoading: false });
   });
 
   this.getItemGraphData();

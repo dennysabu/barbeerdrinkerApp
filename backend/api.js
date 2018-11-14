@@ -268,4 +268,70 @@ router.post('/getTop10Spenders', (req, res) => {
          });
  });
 
+ /*
+  *  MODIFICATIONS PAGE
+  */
+
+  // Given a bar, return top 10 drinkers who are the top spenders
+ router.post('/modifyDatabase', (req, res) => {
+
+   let mod = req.body.modification;
+   let table = req.body.table;
+   let attr = req.body.values;
+   let cond = req.body.condition;
+
+   console.log(attr);
+
+   if (cond.length !== 0) {
+     cond = "WHERE " + cond;
+   }
+
+   let sql;
+   var vals = [];
+
+   switch (mod) {
+
+     case "Insert":
+         attr.forEach(function(item, i) {
+           var newItem;
+           if (item[1] === "NULL") {
+              newItem = item[1];
+           } else {
+             newItem = "'" + item[1] + "'";
+          }
+          vals[i] = newItem;
+        });
+       sql = "INSERT INTO " + table + " VALUES (" + vals.join(',') + ");";
+      break;
+    case "Update":
+        sql = "UPDATE " + table + " SET " + vals.join(',') + " " + cond + ";";
+      break;
+    case "Delete":
+    attr.forEach(function(item, i) {
+     var newItem = item[0] + "='" + item[1] + "'";
+     vals[i] = newItem;
+    });
+        sql = "DELETE FROM " + table + " " + cond + ";";
+      break;
+    default:
+      break;
+   }
+   // gets a sql connection
+         pool.getConnection(function(err, connection) {
+
+   // sends query to db
+         connection.query(sql, function(error, results, fields) {
+                 connection.release(); // releases connection after query goes through
+
+                 if (!error) {
+       res.status(200); // sends a status code
+       res.send(JSON.stringify(results)); // sends results recieved from sql
+                 } else {
+       res.status(400);
+       res.send(JSON.stringify(error));
+                 }
+   });
+   });
+ });
+
 module.exports = router;
