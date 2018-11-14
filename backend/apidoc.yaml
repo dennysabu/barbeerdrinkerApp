@@ -176,6 +176,70 @@ paths:
               type: array
           "400":
             description: Bad Request
+#           TODO      #
+      /getTopBeersForBarAndDay:
+        post:
+          description: Rank top 10 beer brands which are most popular in the specified bar on a specified day of the week or weekend
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    bar:
+                      type: string
+                    day:
+                      type: string
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request
+
+    /getTimeDistForBar:
+      post:
+        description: Demonstrate time distribution of sales, show what are the busiest periods of the day and of the week for each bar
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bar:
+                    type: string
+                  day:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
+      /getBarBySales:
+        post:
+          description: Rank top 10 bars by sales of each brand of a beer and total sales for each day of the week
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    beer:
+                      type: string
+                    day:
+                      type: string
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request
+
 #           Bartenders Page       #
     /getBartenders:
       get:
