@@ -245,6 +245,84 @@ router.post('/getTop10Spenders', (req, res) => {
   });
 });
 
+// Rank top 10 beer brands which are most popular in the specified bar on a specified day of the week or weekend
+router.post('/getTopBeersForBarAndDay', (req, res) => {
+
+  let bar = req.body.bar;
+  let day = req.body.day;
+
+  let sql = "SELECT bi.item, COUNT(bi.item) as sold FROM Bill_Items bi, Items i WHERE i.type <> 'food' AND bi.item = i.name AND bi.billid IN (SELECT id FROM Bills where bar = '" + bar + "' AND DAYNAME(date) = '" + day + "') GROUP BY bi.item ORDER BY sold DESC LIMIT 10;";
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
+// Demonstrate time distribution of sales, show what are the busiest periods of the day and of the week for each bar
+router.post('/getTimeDistForBar', (req, res) => {
+
+  let bar = req.body.bar;
+  let day = req.body.day;
+
+  let sql = "SELECT date, COUNT(date) as transactions FROM Bills WHERE bar = '" + bar + "' AND DAYNAME(date) = '" + day + "' GROUP BY date ORDER BY transactions DESC LIMIT 5;";
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
+// Rank top 10 bars by sales of each brand of a beer and total sales for each day of the week
+router.post('/getBarBySales', (req, res) => {
+
+  let beer = req.body.beer;
+  let day = req.body.day;
+
+  let sql = "SELECT bi.bar, COUNT(bi.item) as sold FROM Bill_Items bi, Items i WHERE i.type <> 'food' AND bi.item = i.name AND bi.item = '" + beer + "' AND bi.billid IN (SELECT id FROM Bills where DAYNAME(date) = '" + day + "') GROUP BY bi.item ORDER BY sold DESC LIMIT 10;";
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
 /*
  *  Bartenders
  */
