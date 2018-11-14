@@ -10,6 +10,7 @@ import {
 import './Beer.css'
 
 
+
 class Beer extends Component {
 
 
@@ -22,36 +23,52 @@ class Beer extends Component {
     Beer: null,
     Manufacturer: null,
     data: [],
-    manuData: [],
+    BeerData: [],
     tableHeaders: [],
-    manutableHeader: [],
+    beerTableHeader: ["drinker", "bought"],
     isLoading: true,
-    manutableIsLoading: true,
+    BeerIsLoading: true,
   };
 
-  this.getBeers = this.getBeers.bind(this);
+    this.getBeers = this.getBeers.bind(this);
+    this.getTopConsumers = this.getTopConsumers.bind(this)
+    this.beerSelectionChanged = this.beerSelectionChanged.bind(this);
+    this.getSetInit = this.getSetInit.bind(this);
 
-  this.beerSelectionChanged = this.beerSelectionChanged.bind(this);
+
+  }
 
 
+
+getTopConsumers(value){
+  console.log("From con " + value);
+  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getTopBeerConsumers',{
+    method: "post",
+    headers: {
+        "Content-Type":"application/json",
+    },
+    body: JSON.stringify({
+      beer: value
+    })
+  }).then(res => res.json()
+).then(data=> this.setState({BeerData: data,  BeerIsLoading: false }));
 }
+
 
 componentDidMount() {
   this.getBeers();
 }
 
 beerSelectionChanged(e){
-  console.log(e.target.value);
+  //console.log(e.target.value);
   this.setState({Beer: e.target.value});
-
-
-
   for (var i in this.state.data){
 
     if(e.target.value === this.state.data[i].Beer){
       this.setState({Manufacturer: this.state.data[i].Manufacturer});
     }
   }
+  this.getTopConsumers(e.target.value);
 }
 
 
@@ -69,9 +86,14 @@ getBeers(){
     }),
   }).then(res => res.json()
 ).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false, Beer: data[0].Beer, Manufacturer: data[0].Manufacturer}));
+this.getSetInit();
 
 }
 
+getSetInit(){
+  console.log(this.state.BeerData[0]);
+  this.getTopConsumers(this.state.BeerData[0]);
+}
 
 
   render(){
@@ -90,19 +112,16 @@ getBeers(){
                         <thead style={{fontSize:'22px', textAlign:'center'}}>
                           <tr>
                           {
-
                             this.state.tableHeaders.map(header =>
                            <th key={header}>
                            {header}
                            </th>
                            )
-
                          }
                           </tr>
                         </thead>
                         <tbody style={{fontSize:'15px', textAlign:'center'}}>
                         {
-
                           this.state.data.map((res, x) => {
                             return (
                                  <tr className ="tlbrow">
@@ -116,19 +135,52 @@ getBeers(){
                                </tr>
                              );
                            })
-
                        }
                         </tbody>
                       </Table>
 
+        const insights = <Table>
+          <thead style={{fontSize:'22px', textAlign:'center', textTransform: 'capitalize'} }>
+            <tr>
+              {
+                this.state.beerTableHeader.map(header =>
+                  <th key={header}>
+                    {header}
+                  </th>
+                )
+              }
+
+            </tr>
+          </thead>
+          <tbody style={{fontSize:'15px', textAlign:'center'}}>
+            {
+              this.state.BeerData.map((res, x) => {
+
+                return (
+                  <tr className="tlbrow">
+                  {this.state.beerTableHeader.map((header, i) => {
+
+                    return (
+                      <td>{ res[header] }</td>
+                    );
+
+                  })}
+                  </tr>
+                );
+              })
+            }
+          </tbody>
 
 
+        </Table>
 
+//Actual HTML
         return (
           <div className="glb">
 
           <div className="firstTable">
               <div className="tlb_sel">
+                  <p> Select Beer </p>
                   <Input type="select" name="select" onChange={this.beerSelectionChanged} >
                   {
                     this.state.data.map(Beer =>
@@ -138,7 +190,7 @@ getBeers(){
                     )
                   }
               </Input>
-              <Button style={{ }}onClick={this.getManf}> Get Info</Button>
+
               </div>
 
 
@@ -154,7 +206,7 @@ getBeers(){
             <h1> Beer Insight </h1>
             <h2> Beer: {this.state.Beer} </h2>
             <h2> Manufacturer: {this.state.Manufacturer} </h2>
-
+            {insights}
 
           </div>
 
