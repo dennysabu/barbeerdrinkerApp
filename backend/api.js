@@ -23,7 +23,7 @@ var pool = mysql.createPool({
   router.get('/getBeers', (req, res) => {
 
          let beer = req.body.beer;
-         let sql = "SELECT * FROM Items WHERE type <> 'food';";
+         let sql = "SELECT name FROM Items WHERE type <> 'food';";
 
           pool.getConnection(function(err, connection) {
 
@@ -245,7 +245,7 @@ router.post('/query', (req, res) => {
   router.get('/getBars', (req, res) => {
 
          let beer = req.body.beer;
-         let sql = "SELECT * FROM Bars;";
+         let sql = "SELECT name FROM Bars;";
 
           pool.getConnection(function(err, connection) {
 
@@ -374,7 +374,7 @@ router.post('/getBarBySales', (req, res) => {
 
          pool.getConnection(function(err, connection) {
 
-         let sql = "SELECT * FROM Bartenders";
+         let sql = "SELECT name FROM Bartenders";
          connection.query(sql, function(error, results, fields) {
                  connection.release();
 
