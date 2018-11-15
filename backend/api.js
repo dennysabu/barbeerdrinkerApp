@@ -389,6 +389,30 @@ router.post('/getBarBySales', (req, res) => {
          });
  });
 
+ router.get('/getBartendersByBar', (req, res) => {
+
+    let bar = req.body.bar;
+
+    let sql = "SELECT name FROM Shifts WHERE bar = '" + bar + "'";
+
+         pool.getConnection(function(err, connection) {
+
+         connection.query(sql, function(error, results, fields) {
+                 connection.release();
+
+                 if (!error) {
+                 res.status(200);
+                 res.send(JSON.stringify(results));
+                 } else {
+                 res.status(400);
+                 res.send(JSON.stringify(error));
+                 }
+         });
+         });
+ });
+
+
+
  /*
   *  MODIFICATIONS PAGE
   */

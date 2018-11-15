@@ -273,3 +273,22 @@ paths:
               type: array
           "400":
             description: Bad Request
+
+  /getBartendersByBar:
+      post:
+        description: Gets Bartenders names by a given bar
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  bar:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
