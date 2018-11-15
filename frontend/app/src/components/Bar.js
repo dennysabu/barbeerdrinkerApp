@@ -16,7 +16,6 @@ import {
   VerticalGridLines,
 } from "react-vis";
 
-//import styles from './Bar.css';
 
 export default class Bar extends Component {
 
@@ -30,9 +29,12 @@ export default class Bar extends Component {
       bars: [],
       itemGraph: [],
       beerGraph: [],
+      timeGraph: [],
       isLoading: true,
     };
 
+    this.getTimeGraphData = this.getTimeGraphData.bind(this);
+    this.parseTimeGraphData = this.parseTimeGraphData.bind(this);
     this.parseBeerGraphData = this.parseBeerGraphData.bind(this);
     this.getBeerGraphData = this.getBeerGraphData.bind(this);
     this.getBars = this.getBars.bind(this);
@@ -56,7 +58,6 @@ export default class Bar extends Component {
    this.setState({ day: e.target.value });
    this.getBeerGraphData(this.state.bar, e.target.value);
  }
-
 
 
  // renders a view to the web page
@@ -97,9 +98,9 @@ export default class Bar extends Component {
 
 
       var topSpenders =   <div align="center">
-                          <XYPlot animation={true} margin={{top: 25, bottom: 100}} xType="ordinal" xDistance={1000} width={800} height={500}>
+                          <XYPlot animation={true} margin={{top: 25, bottom: 100}} xType="ordinal" xDistance={1000} width={1000} height={500}>
                           <VerticalBarSeries data={this.state.itemGraph} />
-                          <XAxis title="Drinkers"/>
+                          <XAxis title="Drinker"/>
                           <YAxis title="Amount Spent (USD)"/>
                           <LabelSeries
                           data={this.state.itemGraph.map(obj => {
@@ -112,10 +113,10 @@ export default class Bar extends Component {
                           </div>
 
     var topBeers =      <div align="center">
-                        <XYPlot animation={true} margin={{top: 25, bottom: 100}} xType="ordinal" xDistance={1000} width={800} height={500}>
+                        <XYPlot animation={true} margin={{top: 25, bottom: 100}} xType="ordinal" xDistance={1000} width={1000} height={500}>
                         <VerticalBarSeries data={this.state.beerGraph} />
-                        <XAxis title="Drinkers"/>
-                        <YAxis title="Amount Spent (USD)"/>
+                        <XAxis title="Beer"/>
+                        <YAxis title="Amount Sold"/>
                         <LabelSeries
                         data={this.state.beerGraph.map(obj => {
                           return { ...obj, label: obj.y.toString() }
@@ -126,6 +127,20 @@ export default class Bar extends Component {
                         </XYPlot>
                         </div>
 
+    var timeDist =      <div align="center">
+                        <XYPlot animation={true} margin={{top: 25, bottom: 100}} xType="ordinal" xDistance={1000} width={1250} height={500}>
+                        <VerticalBarSeries data={this.state.timeGraph} />
+                        <XAxis title="Date (24-Hr)"/>
+                        <YAxis title="Transactions"/>
+                        <LabelSeries
+                        data={this.state.timeGraph.map(obj => {
+                          return { ...obj, label: obj.y.toString() }
+                        })}
+                        labelAnchorX="middle"
+                        labelAnchorY="top"
+                        />
+                        </XYPlot>
+                        </div>
 
 
 
@@ -158,6 +173,10 @@ export default class Bar extends Component {
           {
             topBeers
           }
+          <h1>Time Distribution of Sales on a {this.state.day} for {this.state.bar}</h1>
+          {
+            timeDist
+          }
         </div>
 
         </div>
@@ -182,6 +201,7 @@ export default class Bar extends Component {
       this.setState({bars: data, bar: data[0].name});
       this.getItemGraphData(data[0].name, this.state.day);
       this.getBeerGraphData(data[0].name, this.state.day);
+      this.getTimeGraphData(data[0].name, this.state.day);
   });
 }
   // fetch request to express api endpoint
@@ -199,6 +219,7 @@ export default class Bar extends Component {
   ).then(data => {
       this.parseItemGraphData(data);
       this.getBeerGraphData(this.state.bar, this.state.day);
+      this.getTimeGraphData(this.state.bar, this.state.day);
   });
 
   }
@@ -217,6 +238,25 @@ export default class Bar extends Component {
      }).then(res => res.json()
    ).then(data => {
        this.parseBeerGraphData(data);
+       this.getTimeGraphData(this.state.bar, this.state.day);
+   });
+
+  }
+
+  getTimeGraphData(bar, day) {
+
+    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getTimeDistForBar', {
+    method: "POST",
+    headers: {
+             "Content-Type": "application/json", // enables json content only
+         },
+    body: JSON.stringify({
+         "bar": bar,
+         "day": day,
+     }),
+     }).then(res => res.json()
+   ).then(data => {
+       this.parseTimeGraphData(data);
    });
 
   }
@@ -244,6 +284,18 @@ export default class Bar extends Component {
         graph[i] = {x: vals[0], y: vals[1]};
     }
     this.setState({ beerGraph: graph, isLoading: false});
+
+  }
+
+  parseTimeGraphData(data) {
+
+    var graph = [];
+
+    for (var i in data) {
+        let vals = Object.values(data[i]);
+        graph[i] = {x: vals[0], y: vals[1]};
+    }
+    this.setState({ timeGraph: graph, isLoading: false});
 
   }
 
