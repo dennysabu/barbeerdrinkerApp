@@ -19,6 +19,28 @@ var pool = mysql.createPool({
  *  BEER PAGE
  */
 
+ // selects all beers
+  router.get('/getBeers', (req, res) => {
+
+         let beer = req.body.beer;
+         let sql = "SELECT * FROM Items WHERE type <> 'food';";
+
+          pool.getConnection(function(err, connection) {
+
+          connection.query(sql, function(error, results, fields) {
+                  connection.release();
+
+                  if (!error) {
+                  res.status(200);
+                  res.send(JSON.stringify(results));
+                  } else {
+                  res.status(400);
+                  res.send(JSON.stirngify(error));
+                  }
+          });
+          });
+  });
+
 // show bars where this beer sells the most (again only top 10)
  router.post('/getBarsForBeer', (req, res) => {
 
@@ -219,6 +241,27 @@ router.post('/query', (req, res) => {
 /*
  *  BAR PAGE
  */
+ // selects all beers
+  router.get('/getBars', (req, res) => {
+
+         let beer = req.body.beer;
+         let sql = "SELECT * FROM Bars;";
+
+          pool.getConnection(function(err, connection) {
+
+          connection.query(sql, function(error, results, fields) {
+                  connection.release();
+
+                  if (!error) {
+                  res.status(200);
+                  res.send(JSON.stringify(results));
+                  } else {
+                  res.status(400);
+                  res.send(JSON.stirngify(error));
+                  }
+          });
+          });
+  });
 
  // Given a bar, return top 10 drinkers who are the top spenders
 router.post('/getTop10Spenders', (req, res) => {
