@@ -22,8 +22,7 @@ var pool = mysql.createPool({
  // selects all beers
   router.get('/getBeers', (req, res) => {
 
-         let beer = req.body.beer;
-         let sql = "SELECT name FROM Items WHERE type <> 'food';";
+         let sql = 'SELECT name FROM Items WHERE type <> "food";';
 
           pool.getConnection(function(err, connection) {
 
@@ -44,8 +43,8 @@ var pool = mysql.createPool({
 // show bars where this beer sells the most (again only top 10)
  router.post('/getBarsForBeer', (req, res) => {
 
-        let beer = req.body.beer;
-        let sql = "SELECT b1.bar, (SELECT COUNT(b3.item) as sold FROM Bill_Items b3 WHERE b1.bar = b3.bar AND b3.item = '" + beer + "') as sold FROM Bill_Items as b1 GROUP BY b1.bar ORDER BY sold DESC LIMIT 10;";
+        let beer = req.body.beer.replace(/'/g, "\\'");
+        let sql = 'SELECT b1.bar, (SELECT COUNT(b3.item) as sold FROM Bill_Items b3 WHERE b1.bar = b3.bar AND b3.item = "' + beer + '") as sold FROM Bill_Items as b1 GROUP BY b1.bar ORDER BY sold DESC LIMIT 10;';
 
          pool.getConnection(function(err, connection) {
 
@@ -66,8 +65,8 @@ var pool = mysql.createPool({
 // drinkers who are the biggest consumers of this beer
   router.post('/getTopBeerConsumers', (req, res) => {
 
-         let beer = req.body.beer;
-         let sql = "SELECT b.drinker, COUNT(b.drinker) as bought FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND bi.item = '" + beer + "' GROUP BY b.drinker ORDER BY bought DESC LIMIT 10;";
+         let beer = req.body.beer.replace(/'/g, "\\'");
+         let sql = 'SELECT b.drinker, COUNT(b.drinker) as bought FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND bi.item = "' + beer + '" GROUP BY b.drinker ORDER BY bought DESC LIMIT 10;';
 
           pool.getConnection(function(err, connection) {
 
@@ -89,8 +88,8 @@ var pool = mysql.createPool({
   // How many sold per date
     router.post('/beerTdDate', (req, res) => {
 
-           let beer = req.body.beer;
-           let sql = "SELECT DATE(b.date) as date, COUNT(b.id) as sold FROM Bills b, Bills b1, Bill_Items bi WHERE b.id = bi.billid AND b.id = b1.id AND b.bar = bi.bar AND bi.item = '" + beer + "' AND DATE(b.date) = DATE(b1.date) GROUP BY DATE(b.date) ORDER BY sold DESC;";
+           let beer = req.body.beer.replace(/'/g, "\\'");
+           let sql = 'SELECT DATE(b.date) as date, COUNT(b.id) as sold FROM Bills b, Bills b1, Bill_Items bi WHERE b.id = bi.billid AND b.id = b1.id AND b.bar = bi.bar AND bi.item = "' + beer + '" AND DATE(b.date) = DATE(b1.date) GROUP BY DATE(b.date) ORDER BY sold DESC;';
 
             pool.getConnection(function(err, connection) {
 
@@ -112,8 +111,8 @@ var pool = mysql.createPool({
     // How many sold per time of day
     router.post('/beerTdTime', (req, res) => {
 
-           let beer = req.body.beer;
-           let sql = "SELECT TIME(b.date) as time, COUNT(b.id) as sold FROM Bills b, Bills b1, Bill_Items bi WHERE b.id = bi.billid AND b.id = b1.id AND b.bar = bi.bar AND bi.item = '" + beer + "' AND TIME(b.date) = TIME(b1.date) GROUP BY TIME(b.date) ORDER BY sold DESC;";
+           let beer = req.body.beer.replace(/'/g, "\\'");
+           let sql = 'SELECT TIME(b.date) as time, COUNT(b.id) as sold FROM Bills b, Bills b1, Bill_Items bi WHERE b.id = bi.billid AND b.id = b1.id AND b.bar = bi.bar AND bi.item = "' + beer + '" AND TIME(b.date) = TIME(b1.date) GROUP BY TIME(b.date) ORDER BY sold DESC;';
 
             pool.getConnection(function(err, connection) {
 
@@ -159,9 +158,9 @@ router.get('/getDrinkers', (req, res) => {
 
 router.post('/getTransactionsForDrinker', (req, res) => {
 
-  let drinker = req.body.drinker;
+  let drinker = req.body.drinker.replace(/'/g, "\\'");
 
-  let sql = "SELECT * FROM Bills WHERE drinker = '" + drinker + "' GROUP BY bar ORDER BY TIME(date);";
+  let sql = 'SELECT * FROM Bills WHERE drinker = "' + drinker + '" GROUP BY bar ORDER BY TIME(date);';
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
@@ -183,9 +182,9 @@ router.post('/getTransactionsForDrinker', (req, res) => {
 
 router.post('/getDrinkersTopBeers', (req, res) => {
 
-  let drinker = req.body.drinker;
+  let drinker = req.body.drinker.replace(/'/g, "\\'");
 
-  let sql = "SELECT b.id, b.date, bi.item, COUNT(bi.item) as Quantity FROM Bills b, Bill_Items bi, Items i WHERE b.id = bi.billid AND bi.item = i.name AND i.type <> 'food' AND b.drinker = '" + drinker + "' GROUP BY bi.item ORDER BY Quantity DESC LIMIT 3;";
+  let sql = 'SELECT b.id, b.date, bi.item, COUNT(bi.item) as Quantity FROM Bills b, Bill_Items bi, Items i WHERE b.id = bi.billid AND bi.item = i.name AND i.type <> "food" AND b.drinker = "' + drinker + '" GROUP BY bi.item ORDER BY Quantity DESC LIMIT 3;';
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
@@ -211,8 +210,8 @@ router.post('/getDrinkersTopBeers', (req, res) => {
 // Executes any MySQL query that does not delete data
 router.post('/query', (req, res) => {
 
-  let sql = req.body.query + ";";
-  if (sql.toLowerCase().includes("delete from"))
+  let sql = req.body.query + ';';
+  if (sql.toLowerCase().includes('delete from'))
   {
     res.status(403);
     res.send(JSON.stringify({ sqlMessage: "Attempt to delete user prohibited data" }));
@@ -244,7 +243,6 @@ router.post('/query', (req, res) => {
  // selects all beers
   router.get('/getBars', (req, res) => {
 
-         let beer = req.body.beer;
          let sql = "SELECT name FROM Bars;";
 
           pool.getConnection(function(err, connection) {
@@ -266,9 +264,9 @@ router.post('/query', (req, res) => {
  // Given a bar, return top 10 drinkers who are the top spenders
 router.post('/getTop10Spenders', (req, res) => {
 
-  let bar = req.body.bar;
+  let bar = req.body.bar.replace(/'/g, "\\'");
 
-  let sql = "SELECT b.drinker, SUM(b.total) as spent FROM Bills b, Bills b1 WHERE b.drinker = b1.drinker AND b.id = b1.id AND b.bar = b1.bar AND b.bar = '" + bar + "' GROUP BY b.drinker ORDER BY spent DESC LIMIT 10;";
+  let sql = 'SELECT b.drinker, SUM(b.total) as spent FROM Bills b, Bills b1 WHERE b.drinker = b1.drinker AND b.id = b1.id AND b.bar = b1.bar AND b.bar = "' + bar + '" GROUP BY b.drinker ORDER BY spent DESC LIMIT 10;';
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
@@ -291,10 +289,10 @@ router.post('/getTop10Spenders', (req, res) => {
 // Rank top 10 beer brands which are most popular in the specified bar on a specified day of the week or weekend
 router.post('/getTopBeersForBarAndDay', (req, res) => {
 
-  let bar = req.body.bar;
+  let bar = req.body.bar.replace(/'/g, "\\'");
   let day = req.body.day;
 
-  let sql = "SELECT bi.item, COUNT(bi.item) as sold FROM Bill_Items bi, Items i WHERE i.type <> 'food' AND bi.item = i.name AND bi.billid IN (SELECT id FROM Bills where bar = '" + bar + "' AND DAYNAME(date) = '" + day + "') GROUP BY bi.item ORDER BY sold DESC LIMIT 10;";
+  let sql = 'SELECT bi.item, COUNT(bi.item) as sold FROM Bill_Items bi, Items i WHERE i.type <> "food" AND bi.item = i.name AND bi.billid IN (SELECT id FROM Bills where bar = "' + bar + '" AND DAYNAME(date) = "' + day + '") GROUP BY bi.item ORDER BY sold DESC LIMIT 10;';
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
@@ -317,10 +315,10 @@ router.post('/getTopBeersForBarAndDay', (req, res) => {
 // Demonstrate time distribution of sales, show what are the busiest periods of the day and of the week for each bar
 router.post('/getTimeDistForBar', (req, res) => {
 
-  let bar = req.body.bar;
+  let bar = req.body.bar.replace(/'/g, "\\'");
   let day = req.body.day;
 
-  let sql = "SELECT date, COUNT(date) as transactions FROM Bills WHERE bar = '" + bar + "' AND DAYNAME(date) = '" + day + "' GROUP BY date ORDER BY transactions DESC LIMIT 5;";
+  let sql = 'SELECT date, COUNT(date) as transactions FROM Bills WHERE bar = "' + bar + '" AND DAYNAME(date) = "' + day + '" GROUP BY date ORDER BY transactions DESC LIMIT 5;';
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
@@ -343,10 +341,10 @@ router.post('/getTimeDistForBar', (req, res) => {
 // Rank top 10 bars by sales of each brand of a beer and total sales for each day of the week
 router.post('/getBarBySales', (req, res) => {
 
-  let beer = req.body.beer;
+  let beer = req.body.beer.replace(/'/g, "\\'");
   let day = req.body.day;
 
-  let sql = "SELECT bi.bar, COUNT(bi.item) as sold FROM Bill_Items bi, Items i WHERE i.type <> 'food' AND bi.item = i.name AND bi.item = '" + beer + "' AND bi.billid IN (SELECT id FROM Bills where DAYNAME(date) = '" + day + "') GROUP BY bi.item ORDER BY sold DESC LIMIT 10;";
+  let sql = 'SELECT bi.bar, COUNT(bi.item) as sold FROM Bill_Items bi, Items i WHERE i.type <> "food" AND bi.item = i.name AND bi.item = "' + beer + '" AND bi.billid IN (SELECT id FROM Bills where DAYNAME(date) = "' + day + '") GROUP BY bi.item ORDER BY sold DESC LIMIT 10;';
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
@@ -389,11 +387,11 @@ router.post('/getBarBySales', (req, res) => {
          });
  });
 
- router.get('/getBartendersByBar', (req, res) => {
+ router.post('/getBartendersByBar', (req, res) => {
 
-    let bar = req.body.bar;
+    let bar = req.body.bar.replace(/'/g, "\\'");
 
-    let sql = "SELECT name FROM Shifts WHERE bar = '" + bar + "'";
+    let sql = 'SELECT DISTINCT bartender FROM Shifts WHERE bar = "' + bar + '";';
 
          pool.getConnection(function(err, connection) {
 
@@ -428,7 +426,7 @@ router.post('/getBarBySales', (req, res) => {
    console.log(attr);
 
    if (cond.length !== 0) {
-     cond = "WHERE " + cond;
+     cond = 'WHERE ' + cond;
    }
 
    let sql;
@@ -439,24 +437,32 @@ router.post('/getBarBySales', (req, res) => {
      case "Insert":
          attr.forEach(function(item, i) {
            var newItem;
-           if (item[1] === "NULL") {
+           if (item[1] === 'NULL') {
               newItem = item[1];
            } else {
-             newItem = "'" + item[1] + "'";
+             newItem = '"' + item[1].replace(/'/g, "\\'") + '"';
           }
           vals[i] = newItem;
         });
-       sql = "INSERT INTO " + table + " VALUES (" + vals.join(',') + ");";
+       sql = 'INSERT INTO ' + table + ' VALUES (' + vals.join(',') + ');';
       break;
-    case "Update":
-        sql = "UPDATE " + table + " SET " + vals.join(',') + " " + cond + ";";
+    case "Update": // IF ATTRIBUTE FIELD IS NOT SET, CLIENT SETS IT TO NULL (ex. ['phone', 'NULL']) AND API IGNORES NULLS
+    attr.forEach(function(item, i) {
+      var newItem;
+      if (item[1] !== 'NULL') {
+        newItem = item[0] + '="' + item[1].replace(/'/g, "\\'") + '"';
+         vals[i] = newItem;
+     }
+   });
+        sql = 'UPDATE ' + table + ' SET ' + vals.join(',') + ' ' + cond + ';';
+        console.log(sql);
       break;
     case "Delete":
     attr.forEach(function(item, i) {
-     var newItem = item[0] + "='" + item[1] + "'";
+     var newItem = item[0] + '="' + item[1] + '"';
      vals[i] = newItem;
     });
-        sql = "DELETE FROM " + table + " " + cond + ";";
+        sql = 'DELETE FROM ' + table + ' ' + cond + ';';
       break;
     default:
       break;
@@ -470,7 +476,7 @@ router.post('/getBarBySales', (req, res) => {
 
                  if (!error) {
        res.status(200); // sends a status code
-       res.send(JSON.stringify(results)); // sends results recieved from sql
+       res.send(JSON.stringify(results.sqlMessage)); // sends results recieved from sql
                  } else {
        res.status(400);
        res.send(JSON.stringify(error));

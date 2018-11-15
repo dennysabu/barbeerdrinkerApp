@@ -4,6 +4,9 @@ import {
     Button,
     Progress,
     Badge,
+    Modal,
+    ModalBody,
+    ModalHeader,
     InputGroup,
     InputGroupAddon,
 } from 'reactstrap';
@@ -37,12 +40,18 @@ export default class Modifications extends Component {
     modificationChange(e) {
       this.setState({
         modification: e.target.value,
+        attributes: [],
+        condition: "",
+        values: [[]]
       });
     }
 
     tableChange(e) {
       this.setState({
         table: e.target.value,
+        attributes: [],
+        condition: "",
+        values: [[]]
       });
 
       this.getAttributes(e.target.value);
@@ -80,15 +89,15 @@ export default class Modifications extends Component {
 
         var conditionView = <div>
                           <p>Where?:</p>
-                          <InputGroup onChange={this.conditionChange}>
-                          <Input placeholder="column='value'" />
+                          <InputGroup onChange={this.conditionChange} style={{width:'50%'}}>
+                          <Input placeholder='column="value"' />
                           </InputGroup>
                           </div>
 
         var attributesView =
         this.state.attributes.map((header, i) => {
             return (
-             <div key={i}>
+             <div key={i} style={{width:'50%'}}>
              <InputGroup>
              <Input placeholder="value" name={header} index={i} onChange={this.attributeChange}/>
              <InputGroupAddon addonType="prepend">{header}</InputGroupAddon>
@@ -130,23 +139,22 @@ export default class Modifications extends Component {
       }
 
     return (
-      <div style={{ marginLeft: '30px', marginRight: '30px' }}>
+      <div align="center">
       <br/>
-      <div className="row" style={{ marginLeft: '30px', marginRight: '30px' }}>
       <br/>
 
 
        <div className="column">
 
          <label>Select Modification:</label>
-        <Input type="select" name="select" onChange={this.modificationChange}>
+        <Input type="select" name="select" onChange={this.modificationChange} style={{width:'50%'}}>
          <option>Update</option>
          <option>Delete</option>
          <option>Insert</option>
         </Input>
         <br/>
         <label>Select Table:</label>
-        <Input type="select" name="select" onChange={this.tableChange}>
+        <Input type="select" name="select" onChange={this.tableChange} style={{width:'50%'}}>
          <option>Bars</option>
          <option>Bartenders</option>
          <option>Bill_Items</option>
@@ -167,12 +175,12 @@ export default class Modifications extends Component {
           conditionView
         }
     <br/>
-    <Button outline color="secondary" onClick={this.modifyDatabase}>{this.state.modification}</Button>
+    <Button outline color="secondary" onClick={this.modifyDatabase} style={{width:'25%'}}>{this.state.modification}</Button>
+    <br/>
     <br/>
     <br/>
     </div>
 
-    </div>
     </div>
 
        );
@@ -196,7 +204,6 @@ export default class Modifications extends Component {
 
     this.nullPadArray();
 
-    /*
     fetch('http://localhost:5000/api/modifyDatabase', {
     method: "POST",
     headers: {
@@ -208,9 +215,18 @@ export default class Modifications extends Component {
          values: this.state.values[0],
          condition: this.state.condition,
      }),
-     }).then(res => res.json()
-   ).then(data => this.setState({isLoading: false}));
-   */
+   }).then(res => {
+     if (res.status === 200)
+     {
+       alert('Successul ' + this.state.modification + ' to the ' + this.state.table + ' table!');
+        return res.json();
+     } else if (res.sqlMessage === undefined){
+       alert('Invalid Modification, Please Check Your Syntax and Table Selection 😭');
+    } else {
+       alert(res.sqlMessage);
+    }
+
+   });
   }
 
 
