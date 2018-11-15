@@ -426,7 +426,7 @@ router.post('/getBarBySales', (req, res) => {
    console.log(attr);
 
    if (cond.length !== 0) {
-     cond = "WHERE " + cond;
+     cond = 'WHERE ' + cond;
    }
 
    let sql;
@@ -446,8 +446,16 @@ router.post('/getBarBySales', (req, res) => {
         });
        sql = 'INSERT INTO ' + table + ' VALUES (' + vals.join(',') + ');';
       break;
-    case "Update":
+    case "Update": // IF ATTRIBUTE FIELD IS NOT SET, CLIENT SETS IT TO NULL (ex. ['phone', 'NULL']) AND API IGNORES NULLS
+    attr.forEach(function(item, i) {
+      var newItem;
+      if (item[1] !== 'NULL') {
+        newItem = item[0] + '="' + item[1].replace(/'/g, "\\'") + '"';
+         vals[i] = newItem;
+     }
+   });
         sql = 'UPDATE ' + table + ' SET ' + vals.join(',') + ' ' + cond + ';';
+        console.log(sql);
       break;
     case "Delete":
     attr.forEach(function(item, i) {
@@ -468,7 +476,7 @@ router.post('/getBarBySales', (req, res) => {
 
                  if (!error) {
        res.status(200); // sends a status code
-       res.send(JSON.stringify(results)); // sends results recieved from sql
+       res.send(JSON.stringify(results.sqlMessage)); // sends results recieved from sql
                  } else {
        res.status(400);
        res.send(JSON.stringify(error));
