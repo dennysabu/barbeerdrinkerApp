@@ -96,7 +96,7 @@ export default class Drinker extends Component {
         <Form>
         <FormGroup>
          <div className="column">
-          <label>Select Bar:</label>
+          <label>Select Drinker:</label>
         {
           inputSelector
         }
@@ -149,7 +149,7 @@ export default class Drinker extends Component {
       <Form>
       <FormGroup>
        <div className="column">
-        <label>Select Bar:</label>
+        <label>Select Drinker:</label>
           {
             inputSelector
           }
