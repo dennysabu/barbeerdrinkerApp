@@ -391,9 +391,9 @@ router.post('/getBarBySales', (req, res) => {
 
  router.post('/getBartendersByBar', (req, res) => {
 
-    let bar = req.body.bar;
+    let bar = req.body.bar.replace(/'/g, "\\'");
 
-    let sql = "SELECT DISTINCT bartender FROM Shifts WHERE bar = '" + bar + "'";
+    let sql = 'SELECT DISTINCT bartender FROM Shifts WHERE bar = "' + bar + '";';
 
          pool.getConnection(function(err, connection) {
 
