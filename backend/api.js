@@ -389,7 +389,7 @@ router.post('/getBarBySales', (req, res) => {
          });
  });
 
- router.get('/getBartendersByBar', (req, res) => {
+ router.post('/getBartendersByBar', (req, res) => {
 
     let bar = req.body.bar;
 
