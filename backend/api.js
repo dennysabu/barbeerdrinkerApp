@@ -393,7 +393,7 @@ router.post('/getBarBySales', (req, res) => {
 
     let bar = req.body.bar;
 
-    let sql = "SELECT name FROM Shifts WHERE bar = '" + bar + "'";
+    let sql = "SELECT bartender FROM Shifts WHERE bar = '" + bar + "'";
 
          pool.getConnection(function(err, connection) {
 
