@@ -1,7 +1,7 @@
 
 
 .gra{
-  width: 200px;
+
   height: 400px;
   background-color: red;
 }
@@ -9,8 +9,7 @@
 .actualInsights{
   display: inline-block;
   overflow-y: scroll;
-  width: 100vh;
-  height:100vh;
+  height: 766px;
 
 }
 
@@ -22,7 +21,6 @@
 
   display: inline-flex;
   padding: 20px;
-
 }
 
 .firstTable {
@@ -42,8 +40,8 @@
 
 
 .tlb {
-  width: 450px;
-  height: 100vh;
+
+  height: 800px;
   overflow-y: scroll;
   padding-right: 10px;
   align-items: center;
