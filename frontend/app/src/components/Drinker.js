@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, ReactCSSTransitionGroup } from 'react';
 import {
     Form,
     FormGroup,
     Input,
-    Progress,
-    Button,
     Table,
+    Progress,
 } from 'reactstrap'; // Table pre-built component from reactstrap library
 
 import {
@@ -48,49 +47,63 @@ export default class Drinker extends Component {
 
  drinkerSelectionChanged(e) {
    this.setState({ drinker: e.target.value });
+   this.getTransactions(e.target.value);
  }
 
 
  // renders UI view to the web page
   render() {
 
+    var inputSelector = <div style={{width: "25%"}}>
+                        <Input type="select" name="select" onChange={this.drinkerSelectionChanged}>
+                          {
+                            this.state.drinkers.map(drinker =>
+                              <option key={drinker.name}>
+                              {drinker.name}
+                              </option>
+                            )
+                          }
+                          </Input>
+                          </div>
+
+    var topBeersGraph =   <div align="center">
+                          <br/>
+                          <br/>
+                          <h1>Top 3 Beers for {this.state.drinker}</h1>
+                          <br/>
+                          <XYPlot animation={true} margin={{bottom: 100}} xType="ordinal" width={800} height={500}>
+                          <VerticalGridLines />
+                          <HorizontalGridLines />
+                          <VerticalBarSeries data={this.state.itemGraph} />
+                          <XAxis title="Drinker"/>
+                          <YAxis title="Quantity"/>
+                          </XYPlot>
+                          </div>
+
+
+
     if(this.state.isLoading){
       return(
         <Progress multi>
          <Progress bar animated color="blue" value="100"/>
        </Progress>
-      )
-    } else if (this.state.transactions === null) {
+     );
+   } else if (this.state.transactions === null) {
 
       return (
-        <div style={{ marginLeft: '30px', marginRight: '30px' }}>
-        <br/>
-        <label>Select Drinker:</label>
-        <div className="row" style={{ marginLeft: '30px', marginRight: '30px' }}>
-        <br/>
-
+        <div align="center">
+          <br/>
         <Form>
         <FormGroup>
-         <div className="row">
          <div className="column">
-          <Input type="select" name="select" onChange={this.drinkerSelectionChanged}>
-          {
-           this.state.drinkers.map(drinker =>
-           <option key={drinker.name}>
-           {drinker.name}
-           </option>
-           )
-          }
-          </Input>
-          </div>
-        <div className="column" style={{ paddingLeft: '15px' }}>
-        <Button outline color="secondary" onClick={this.getTransactions}>Search</Button>
-        </div>
+          <label>Select Bar:</label>
+        {
+          inputSelector
+        }
         </div>
         </FormGroup>
         </Form>
 
-        </div>
         </div>
       );
 
@@ -126,57 +139,29 @@ export default class Drinker extends Component {
                                </tr>
                              );
                            })
-
                        }
                         </tbody>
                       </Table>
 
     return (
-      <div style={{ marginLeft: '30px', marginRight: '30px' }}>
-      <br/>
-        <label>Select Drinker:</label>
-        <div className="row" style={{ marginLeft: '30px', marginRight: '30px' }}>
-      <br/>
-
+      <div align="center">
+        <br/>
       <Form>
-        <FormGroup>
-          <div className="row">
-          <div className="column">
-          <Input type="select" name="select" onChange={this.drinkerSelectionChanged}>
+      <FormGroup>
+       <div className="column">
+        <label>Select Bar:</label>
           {
-            this.state.drinkers.map(drinker =>
-              <option key={drinker.name}>
-              {drinker.name}
-              </option>
-              )
+            inputSelector
           }
-        </Input>
-      </div>
-          <div className="column" style={{ paddingLeft: '10px' }}>
-          <Button outline color="secondary" onClick={this.getTransactions}>Search</Button>
-          </div>
       </div>
       </FormGroup>
       </Form>
-
-      </div>
+      {
+        topBeersGraph
+      }
       {
         table
       }
-      <br/>
-      <br/>
-      <div align="center">
-      <h1>Top 3 Beers for {this.state.drinker}</h1>
-     <XYPlot animation={true} margin={{bottom: 200}} xType="ordinal" width={800} height={500}>
-     <VerticalGridLines />
-     <HorizontalGridLines />
-     <XAxis/>
-     <YAxis title="Quantity"/>
-     <VerticalBarSeries data={this.state.itemGraph} />
-   </XYPlot>
-   <br/>
-   <br/>
-   </div>
    </div>
 
 
@@ -196,25 +181,30 @@ export default class Drinker extends Component {
              "Content-Type": "application/json", // enables json content only
          },
      }).then(res => res.json()
-   ).then(data => this.setState({ drinkers: data, drinker: data[0].name, tableHeaders:  Object.keys(data[0]), isLoading: false }));
+   ).then(data => {
+     this.setState({ drinkers: data, drinker: data[0].name, tableHeaders:  Object.keys(data[0]), isLoading: false });
+     this.getTransactions(data[0].name);
+   });
+
   }
 
   // fetch request to express api endpoint
-  getTransactions() {
+  getTransactions(drinker) {
    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getTransactionsForDrinker', {
    method: "POST",
    headers: {
             "Content-Type": "application/json", // enables json content only
         },
    body: JSON.stringify({
-        "drinker": this.state.drinker
+        "drinker": drinker
     }),
     }).then(res => res.json()
   ).then(data => {
-    this.setState({ transactions: data, tableHeaders: Object.keys(data[0]), drinker: data[0].drinker, isLoading: false });
+    this.setState({ transactions: data, tableHeaders: Object.keys(data[0]), drinker: data[0].drinker });
+    this.getItemGraphData(data);
   });
 
-  this.getItemGraphData();
+
   }
 
   // fetch request to express api endpoint
@@ -240,7 +230,7 @@ export default class Drinker extends Component {
         itemGraph[i] = {x: data[i].item, y: data[i].Quantity};
     }
 
-    this.setState({ itemGraph: itemGraph });
+    this.setState({ itemGraph: itemGraph, isLoading: false});
   }
 
 }
