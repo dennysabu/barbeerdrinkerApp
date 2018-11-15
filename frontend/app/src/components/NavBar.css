@@ -2,3 +2,10 @@
   background: lightGray;
   border-radius: 10%;
 }
+
+.Nav {
+  width: 100%;
+	float: left;
+	margin: 0 0 1em 0;
+	padding: 0;
+}

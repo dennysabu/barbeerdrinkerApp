@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import {
-    Form,
-    FormGroup,
     Input,
     Button,
     Progress,
@@ -34,13 +32,6 @@ export default class Modifications extends Component {
 
     componentDidMount() {
       this.getAttributes(this.state.table);
-    }
-
-
-    conditionChange(e) {
-      this.setState({
-        condition: e.target.value,
-      });
     }
 
     modificationChange(e) {
@@ -133,6 +124,8 @@ export default class Modifications extends Component {
                           <br/>
                           </div>
           break;
+          default:
+            break;
 
       }
 
