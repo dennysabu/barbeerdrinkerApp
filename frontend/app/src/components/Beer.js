@@ -31,6 +31,7 @@ class Beer extends Component {
     BeerData: [],
     tableHeaders: [],
     beerTableHeader: ["drinker", "bought"],
+    barTableHeader: ["bar", "sold"],
     isLoading: true,
     graphItems: [],
     graphLoading: true,
@@ -76,10 +77,6 @@ componentDidUpdate(){
        </Progress>
       )
     } else {
-
-
-
-      let barTableData = [];
 
       const table = <Table>
                         <thead style={{fontSize:'22px', textAlign:'center'}}>
@@ -145,19 +142,55 @@ componentDidUpdate(){
           </tbody>
         </Table>
 
-      const x =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1000} height={500}>
+
+        const topsellingbars = <Table>
+          <thead style={{fontSize:'22px', textAlign:'center', textTransform: 'capitalize'} }>
+            <tr>
+              {
+                this.state.barTableHeader.map(header =>
+                  <th key={header}>
+                    {header}
+                  </th>
+                )
+              }
+
+            </tr>
+          </thead>
+          <tbody style={{fontSize:'15px', textAlign:'center'}}>
+            {
+              this.state.topBarData.map((res, x) => {
+
+                return (
+                  <tr className="tlbrow">
+                  {this.state.barTableHeader.map((header, i) => {
+
+                    return (
+                      <td>{ res[header] }</td>
+                    );
+
+                  })}
+                  </tr>
+                );
+              })
+            }
+          </tbody>
+        </Table>
+
+
+
+      const x =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500} >
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis/>
-                    <YAxis title="Quantity" />
+
                     <VerticalBarSeries data={this.state.graphItems} color="skyblue"/>
                   </XYPlot>
 
-      const y =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1000} height={500}>
+      const y =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500}>
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis/>
-                    <YAxis title="Quantity"/>
+
                     <VerticalBarSeries data={this.state.graphBarItems} color="skyblue"/>
                   </XYPlot>
 
@@ -166,25 +199,26 @@ componentDidUpdate(){
           <div className="glb">
 
             <div className="firstTable">
-                <div className="tlb_sel">
-                    <p> Select Beer </p>
-                    <Input type="select" name="select" onChange={this.beerSelectionChanged} >
-                    {
-                      this.state.data.map(Beer =>
-                        <option key={Beer.item}>
-                          {Beer.Beer}
-                        </option>
-                      )
-                    }
-                </Input>
 
-                </div>
+            <div className="tlb_sel">
+                <p> Select Beer </p>
+                <Input type="select" name="select" onChange={this.beerSelectionChanged} >
+                {
+                  this.state.data.map(Beer =>
+                    <option key={Beer.item}>
+                      {Beer.Beer}
+                    </option>
+                  )
+                }
+            </Input>
+
+            </div>
 
 
                 <div className="tlb">
-
                   {table}
                 </div>
+
             </div>
 
             <div className="beerinsight">
@@ -207,7 +241,7 @@ componentDidUpdate(){
                             <h1 className="beerinsightgraphtitle"> Top 10 Selling Bars for {this.state.Beer}</h1>
                             {y}
                             <hr/>
-
+                            {topsellingbars}
 
 
                     </div>
