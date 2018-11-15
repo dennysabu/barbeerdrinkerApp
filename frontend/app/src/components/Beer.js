@@ -32,11 +32,22 @@ class Beer extends Component {
     tableHeaders: [],
     beerTableHeader: ["drinker", "bought"],
     barTableHeader: ["bar", "sold"],
+
     isLoading: true,
     graphItems: [],
     graphLoading: true,
     graphBarItems: [],
     topBarData: [],
+
+    //Test
+    timeTableHeader: ["time", "sold"],
+    timeBarData: [],
+    timeBarDataGraph: [],
+
+
+
+
+
   };
 
     this.getBeers = this.getBeers.bind(this);
@@ -45,6 +56,10 @@ class Beer extends Component {
     this.populateGraph = this.populateGraph.bind(this);
     this.getTopBars = this.getTopBars.bind(this);
     this.populateBarGraph = this.populateBarGraph.bind(this);
+
+    //Test BeerData
+    this.getTimeSold = this.getTimeSold.bind(this);
+    this.populateTimeBarGraph = this.populateTimeBarGraph.bind(this);
 
 
   }
@@ -182,7 +197,7 @@ componentDidUpdate(){
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis/>
-
+                     <YAxis title="Quantity"/>
                     <VerticalBarSeries data={this.state.graphItems} color="skyblue"/>
                   </XYPlot>
 
@@ -190,8 +205,17 @@ componentDidUpdate(){
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis/>
-
+                    <YAxis title="Quantity"/>
                     <VerticalBarSeries data={this.state.graphBarItems} color="skyblue"/>
+                  </XYPlot>
+
+
+      const z =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500}>
+                    <VerticalGridLines />
+                    <HorizontalGridLines />
+                    <XAxis/>
+                     <YAxis title="Quantity"/>
+                    <VerticalBarSeries data={this.state.timeBarDataGraph} color="skyblue"/>
                   </XYPlot>
 
 //Actual HTML
@@ -242,7 +266,12 @@ componentDidUpdate(){
                             {y}
                             <hr/>
                             {topsellingbars}
-
+                    </div>
+                    <hr/>
+                    <div className="HourSellers">
+                            <h1 className="beerinsightgraphtitle"> Time Distribution for {this.state.Beer}</h1>
+                            {z}
+                            <hr/>
 
                     </div>
 
@@ -265,6 +294,51 @@ componentDidUpdate(){
 
 
 }//ends return
+
+
+
+populateTimeBarGraph(data){
+  let g = [];
+
+  if(data.length === 0)
+      {
+      g[0] = {x: "None", y: 0};
+      this.setState({timeBarDataGraph: g});
+      //this.setState({graphItems: {x: "None", y: 0} });
+      return;
+      }
+  else{
+    for(var i in data){
+      g[i] = {x: data[i].time, y: data[i].sold}
+      }
+    }
+    this.setState({timeBarDataGraph:g});
+    this.forceUpdate();
+
+    return;
+
+
+
+}
+
+
+
+getTimeSold(value){
+  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/beerTdtime',{
+    method: "post",
+    headers: {
+        "Content-Type":"application/json",
+    },
+    body: JSON.stringify({
+      beer: value
+    })
+  }).then(res => res.json(),
+  ).then(data=> {
+  this.setState({topBarData: data});
+  console.log(data);
+  this.populateTimeBarGraph(data);
+  } );
+}
 
 
 populateBarGraph(data)
@@ -353,6 +427,7 @@ getTopConsumers(value){
   this.setState({BeerData: data,  BeerIsLoading: false});
   this.populateGraph(data);
   this.getTopBars(value);
+  this.getTimeSold(value);
 } );
 
   this.forceUpdate();
