@@ -45,3 +45,32 @@ END IF;
 END $
 DELIMITER ;
 
+
+
+#Trigger checks to make sure that bills are not issued after a bar closes
+DELIMITER //
+CREATE TRIGGER BillTimeCheck 
+	BEFORE INSERT ON Bills
+		FOR EACH ROW BEGIN
+        
+
+			IF NOT EXISTS (
+				SELECT * 
+				FROM Bars b
+				WHERE b.name = New.bar AND
+				(TIME(New.date) BETWEEN b.weekdayOpen AND b.weekdayClose) AND
+				(TIME(New.date) BETWEEN b.weekendOpen AND weekendClose)
+
+           )
+            THEN
+				SIGNAL SQLSTATE 'HY000'
+					SET MESSAGE_TEXT = 'Check the time of the Bill! It is issued when the bar is not open';
+                
+			END IF;
+
+
+
+
+END //
+DELIMITER ;
+
