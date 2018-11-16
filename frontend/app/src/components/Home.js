@@ -96,7 +96,7 @@ class Home extends Component {
          <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
          <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
        </Carousel>
-       <hr style={{ color: "lightGray", backgroundColor: "lightGray" }}/>
+       <hr aign="center" style={{ color: "lightGray", backgroundColor: "lightGray", width: "90%"}}/>
        <br/>
        <br/>
        <h2 className="follow">Follow Us!</h2>

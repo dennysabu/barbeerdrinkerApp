@@ -221,7 +221,7 @@ export default class Modifications extends Component {
        alert('Successul ' + this.state.modification + ' to the ' + this.state.table + ' table!');
         return res.json();
      } else if (res.sqlMessage === undefined){
-       alert('Invalid Modification, Please Check Your Syntax and Table Selection 😭');
+       alert('Invalid Modification, Please Check Your "Where" Syntax and Table Selection 😭');
     } else {
        alert(res.sqlMessage);
     }

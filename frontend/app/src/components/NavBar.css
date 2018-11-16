@@ -1,9 +1,9 @@
 .Nav>li:hover {
-  background: lightGray;
-  border-radius: 10%;
+  background-image:linear-gradient(to top,gray 2px,transparent 0);
 }
 
 .Nav {
+  position: relative;
   width: 100%;
 	float: left;
 	margin: 0 0 1em 0;
