@@ -68,19 +68,63 @@ class Home extends Component {
     const { activeIndex } = this.state;
 
      const slides = items.map((item) => {
-       return (
-         <CarouselItem
-           className="item"
-           style={styles.item}
-           onExiting={this.onExiting}
-           onExited={this.onExited}
-           key={item.src}
-         >
-           <img style={{ height: '600px', width: '100%' }} src={item.src} alt={item.altText} />
-           <CarouselCaption className="caption" captionText='' captionHeader={item.caption} />
-         </CarouselItem>
-       );
-     });
+                    return (
+                      <CarouselItem
+                      className="item"
+                      style={styles.item}
+                      onExiting={this.onExiting}
+                      onExited={this.onExited}
+                      key={item.src}
+                      >
+                      <img style={{ height: '600px', width: '100%' }} src={item.src} alt={item.altText} />
+                      <CarouselCaption className="caption" captionText='' captionHeader={item.caption} />
+                      </CarouselItem>
+                    );
+                  });
+
+    const footer =  <div align="center">
+                      <div className="row" style={{ height:'250px'}}>
+
+                      <div className="column" style={{marginLeft: '10%', width: '25%'}}>
+                          <h2 className="titleCurs" align="left">Follow Us!</h2>
+                      <div className="row" style={{ display:'table', width: '25%', height: '25%'}}>
+                          <a href="https://www.facebook.com">
+                          <div className="facebook" />
+                          </a>
+                          <a href="https://www.instagram.com">
+                          <div className="instagram" />
+                          </a>
+                    </div>
+                    </div>
+
+                    <div className="column" style={{width: '60%', marginRight: '0'}}>
+                    <br/>
+                    <div className="row" style={{ width: '85%', height: '10%'}}>
+                      <h2 className="titleCurs" style={{ width: '33.3%'}}>About</h2>
+                      <h2 className="titleCurs" style={{ width: '33.3%'}}>Quality</h2>
+                      <h2 className="titleCurs" style={{ width: '33.3%'}}>Orders</h2>
+                  </div>
+                  <br/>
+                  <div className="row" style={{ width: '85%', height: '50%'}}>
+                    <p className="bodyCurs" style={{ width: '33%'}}>
+                    We are a small company selling classic American beers.
+                    </p>
+                    <p className="bodyCurs" style={{ width: '33%'}}>
+                    We vow to only sell the highest quality beers providing a perfect balance of hops and malt.
+                    </p>
+                    <p className="bodyCurs" style={{ width: '33%'}}>
+                    Please contact us for orders by phone Monday through Saturday.<br/>908-457-8867
+                    </p>
+                </div>
+                  </div>
+
+
+                    </div>
+                    <div className="row" style={{ display:'table', width: '25%', height: '25%'}}>
+                        <p style={{ font:  "22px cursive, courier", color: "black", textAlign: 'center' }}>© 2018 Beerazon</p>
+                    </div>
+                    </div>
+
 
      return (
        <div style={{ backgroundColor: "white", height: "100%" }}>
@@ -97,24 +141,9 @@ class Home extends Component {
          <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
        </Carousel>
        <hr aign="center" style={{ color: "lightGray", backgroundColor: "lightGray", width: "90%"}}/>
-       <br/>
-       <br/>
-       <h2 className="follow">Follow Us!</h2>
-       <div>
-       <a href="https://www.facebook.com">
-       <div className="facebook"/>
-       </a>
-       <a href="https://www.instagram.com">
-       <div className="instagram"/>
-       </a>
-       </div>
-       <br/>
-       <br/>
-       <br/>
-       <br/>
-       <br/>
-       <br/>
-       <p style={{ font:  "22px cursive, courier", color: "black", textAlign: "center" }}>© 2018 Beerazon</p>
+       {
+         footer
+       }
        </div>
      );
    }
