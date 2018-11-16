@@ -81,7 +81,7 @@ export default class Bartender extends Component {
 
     if(!this.state.InformationCanLoad){
       ld = <Progress multi>
-              <Progress bar animated color="blue" value="50"/>
+              <Progress bar animated color="success" value="0"/>
             </Progress>
     }
     else {
@@ -106,9 +106,9 @@ export default class Bartender extends Component {
         <div className = "btd-glb">
 
               <div className = "selection">
-                  <h2> Please Select a Bar: </h2>
+                  <h2> Select a Bar: </h2>
                   {selectBar}
-                  <h2> Please Select a Bartender </h2>
+                  <h2> Select a Bartender: </h2>
                   {selectBartender}
                   {ld}
 

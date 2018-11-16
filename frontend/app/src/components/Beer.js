@@ -6,6 +6,7 @@ import {
     Progress,
     Button,
     Table,
+    Alert,
 } from 'reactstrap'; // Table pre-built component from reactstrap library
 import './Beer.css';
 import {
@@ -61,7 +62,6 @@ class Beer extends Component {
     this.getTimeSold = this.getTimeSold.bind(this);
     this.populateTimeBarGraph = this.populateTimeBarGraph.bind(this);
 
-
   }
 
 
@@ -72,7 +72,7 @@ class Beer extends Component {
 componentDidMount() {
 
   this.getBeers();
-  this.getTopConsumers(this.state.Beer);
+
 }
 
 
@@ -83,8 +83,6 @@ componentDidUpdate(){
 
   render(){
 
-
-
     if(this.state.isLoading){
       return(
         <Progress multi>
@@ -92,6 +90,15 @@ componentDidUpdate(){
        </Progress>
       )
     } else {
+
+      var alrt;
+
+      if(this.state.BeerData.length === 0){
+        alrt = <Alert color = "danger" >This beer hasn't sold anything! Try another beer.</Alert>
+      }
+      else {
+
+      }
 
       const table = <Table>
                         <thead style={{fontSize:'22px', textAlign:'center'}}>
@@ -225,16 +232,6 @@ componentDidUpdate(){
             <div className="firstTable">
 
             <div className="tlb_sel">
-                <p> Select Beer </p>
-                <Input type="select" name="select" onChange={this.beerSelectionChanged} >
-                {
-                  this.state.data.map(Beer =>
-                    <option key={Beer.item}>
-                      {Beer.Beer}
-                    </option>
-                  )
-                }
-            </Input>
 
             </div>
 
@@ -248,13 +245,23 @@ componentDidUpdate(){
             <div className="beerinsight">
                     <div className ="insightHeader">
                       <h1> Beer Insight </h1>
-                      <h2> Beer: {this.state.Beer} </h2>
+                      <h2> Beer:
+                      <Input type="select" name="select" onChange={this.beerSelectionChanged}>
+                      {
+                        this.state.data.map(Beer =>
+                          <option key={Beer.item}>
+                            {Beer.Beer}
+                          </option>
+                        )
+                      }
+                  </Input> </h2>
                       <h2> Manufacturer: {this.state.Manufacturer} </h2>
                       <hr/>
                     </div>
 
               <div className="actualInsights">
                     <div className="TopBuyers">
+                            {alrt}
                             <h1 className="beerinsightgraphtitle"> Top 10 Buyers of {this.state.Beer}</h1>
                             {x}
                             <hr/>
@@ -294,7 +301,6 @@ componentDidUpdate(){
 
 
 }//ends return
-
 
 
 populateTimeBarGraph(data){
@@ -422,7 +428,7 @@ getTopConsumers(value){
     body: JSON.stringify({
       beer: value
     })
-  }).then(res => res.json(),
+  }).then(res => res.json()
 ).then(data=> {
   this.setState({BeerData: data,  BeerIsLoading: false});
   this.populateGraph(data);
@@ -445,7 +451,15 @@ getBeers(){
       "query": "SELECT DISTINCT name as Beer, manf as Manufacturer FROM Items WHERE type='beer'",
     }),
       }).then(res => res.json()
-          ).then(data => this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false, Beer: data[0].Beer, Manufacturer: data[0].Manufacturer}));
+    ).then(data =>
+      {
+
+      this.setState({ data: data, tableHeaders:  Object.keys(data[0]), isLoading: false, Beer: data[0].Beer, Manufacturer: data[0].Manufacturer})
+        this.getTopConsumers(data[0].Beer);
+
+
+
+    });
 }
 
 
@@ -467,80 +481,3 @@ beerSelectionChanged(e){
 }
 
 export default Beer;
-
-
-
-
-
-/*
-<div>
-  <h2>Beer</h2>
-<p>Hey Steve, don't yell at me</p>
-<ul>
-<li> List of all beers</li>
-<p> SELECT DISTINCT name from Items where type='beer' </p>
-<li> Beers sold by certain bar </li>
-<p> drop down of all bars, then get SELECT DISTINCT item from Sells, Items where Bar = '207' and Items.name = Sells.item and Items.type = 'beer' </p>
-<li> Number of specific beer sold </li>
-</ul>
-</div>
-*/
-
-
-/*
-const table = <Table>
-                  <thead style={{fontSize:'22px', textAlign:'center'}}>
-                    <tr>
-                    {
-
-                      this.state.tableHeaders.map(header =>
-                     <th key={header}>
-                     {header}
-                     </th>
-                     )
-
-                   }
-                    </tr>
-                  </thead>
-                  <tbody style={{fontSize:'15px', textAlign:'center'}}>
-                  {
-
-                    this.state.data.map((res, x) => {
-                      return (
-                           <tr>
-                             {this.state.tableHeaders.map((header, i) => {
-
-                               return (
-                                 <td>{res[header]}</td>
-                               );
-
-                             })}
-                         </tr>
-                       );
-                     })
-
-                 }
-                  </tbody>
-                </Table>
-
-
-
-
-
-
-return(
-  <div>
-    <p> Steve has a big dick </p>
-    <Button onClick={this.getBeers}>STEVE</Button>
-    <div>
-      {table}
-    </div>
-  </div>
-);
-}
-
-
-
-
-
-*/

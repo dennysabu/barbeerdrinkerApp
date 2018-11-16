@@ -33,6 +33,10 @@
   padding: 10px;
 }
 
+.beerinsight Input{
+  width: 50px;
+}
+
 .beerinsightgraphtitle{
   color: grey;
   text-align: center;
