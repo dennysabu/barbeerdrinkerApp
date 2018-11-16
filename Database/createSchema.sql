@@ -99,7 +99,7 @@ CREATE TABLE Frequents (
 CREATE TABLE Shifts (
 	bar varchar(50),
     bartender varchar(50),
-	day varchar(50),
+	day DATE,
     primary key (bartender, day),
     startTime Time,
     endTime Time,

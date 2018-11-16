@@ -1,4 +1,4 @@
-# Verifies that drinkers only frequents bars that are in the same city they live in .
+-- Verifies that drinkers only frequents bars that are in the same city they live in .
 SELECT f.drinker, f.bar, d.city FROM Frequents f, Bars b, Drinkers d
 WHERE
 f.drinker = d.name
@@ -17,4 +17,14 @@ AND s1.price > s2.price AND s3.price < s4.price;
 -- Verify Bill is made when bar is open
 SELECT bi.date, ba.weekendOpen, ba.weekendClose, bi.bar
 FROM Bills bi, Bars ba
-WHERE bi.bar = ba.name AND TIMEDIFF(bi.date, ba.weekendOpen) > 0 AND TIMEDIFF(bi.date, ba.weekendClose) < 0;
+WHERE bi.bar = ba.name AND TIMEDIFF(bi.date, ba.weekendOpen) > 0 AND TIMEDIFF(bi.date, ba.weekendClose) < 0
+AND TIMEDIFF(bi.date, ba.weekdayOpen) > 0 AND TIMEDIFF(bi.date, ba.weekdayClose) < 0 ;
+
+-- Verify a bartender cannot work more than one shift a day
+SELECT s.bartender, s.bar, s.day, COUNT(s.day) as shifts_worked
+FROM Shifts s
+GROUP BY s.bartender, s.day
+HAVING shifts_worked > 1;
+
+
+-- Verify Bar cannot sell more beers of specific brand, than it has in its inventory
