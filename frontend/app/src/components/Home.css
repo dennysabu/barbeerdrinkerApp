@@ -20,11 +20,15 @@
    max-width: 50%;
 }
 
-.follow {
+.titleCurs {
+   font-weight: bold;
    color: black;
-   position: relative;
-   font: 22px cursive, courier;
-   left: 10%;
+   font: 24px cursive, courier;
+}
+
+.bodyCurs {
+   color: black;
+   font: 16px cursive, courier;
 }
 
 .facebook {
@@ -44,7 +48,7 @@
 	font-family: Facebook Letter Faces, Arial;
 	font-size: 100px;
 	font-weight: bold;
-	margin: -10px 0 0 50%;
+	margin: -10px 0 0 40%;
 }
 
 .facebook:hover {
