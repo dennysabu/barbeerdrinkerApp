@@ -465,7 +465,7 @@ router.post('/getBarBySales', (req, res) => {
      let bar = req.body.bar.replace(/'/g, "\\'");
      let bartender = req.body.bartender.replace(/'/g, "\\'");
 
-     let sql = 'SELECT bi.item, COUNT(bi.item) as sold FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND b.bartender = "' + bartender + '" #These will be passed in AND b.bar = "' + bar + '" #These will be passed in GROUP BY (bi.item);';
+     let sql = 'SELECT bi.item, COUNT(bi.item) as sold FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND b.bartender = "' + bartender + '" AND b.bar = "' + bar + '" GROUP BY (bi.item);';
 
           pool.getConnection(function(err, connection) {
 
