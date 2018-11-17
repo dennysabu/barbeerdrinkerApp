@@ -141,7 +141,7 @@ router.get('/getDrinkers', (req, res) => {
 
         pool.getConnection(function(err, connection) {
 
-        let sql = "SELECT * FROM Drinkers";
+        let sql = "SELECT DISTINCT name FROM Drinkers d, Bills b WHERE d.name = b.drinker;";
         connection.query(sql, function(error, results, fields) {
                 connection.release();
 

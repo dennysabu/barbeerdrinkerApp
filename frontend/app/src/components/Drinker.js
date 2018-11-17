@@ -46,8 +46,8 @@ export default class Drinker extends Component {
  }
 
  drinkerSelectionChanged(e) {
-   this.setState({ drinker: e.target.value });
-   this.getTransactions(e.target.value);
+
+     this.getTransactions(e.target.value);
  }
 
 
@@ -200,8 +200,19 @@ export default class Drinker extends Component {
     }),
     }).then(res => res.json()
   ).then(data => {
-    this.setState({ transactions: data, tableHeaders: Object.keys(data[0]), drinker: data[0].drinker });
+
+    if (data.length !== 0)
+    {
+    this.setState({
+      transactions: data,
+      drinker: drinker,
+      tableHeaders: Object.keys(data[0]),
+      drinker: data[0].drinker
+    });
     this.getItemGraphData(data);
+  } else {
+   alert('Sorry this drinker has no bills');
+  }
   });
 
 
