@@ -184,7 +184,7 @@ router.post('/getDrinkersTopBeers', (req, res) => {
 
   let drinker = req.body.drinker.replace(/'/g, "\\'");
 
-  let sql = 'SELECT b.id, b.date, bi.item, COUNT(bi.item) as Quantity FROM Bills b, Bill_Items bi, Items i WHERE b.id = bi.billid AND bi.item = i.name AND i.type <> "food" AND b.drinker = "' + drinker + '" GROUP BY bi.item ORDER BY Quantity DESC LIMIT 3;';
+  let sql = 'SELECT bi.item, COUNT(bi.item) as Quantity FROM Bills b, Bill_Items bi, Items i WHERE b.id = bi.billid AND bi.item = i.name AND i.type <> "food" AND b.drinker = "' + drinker + '" GROUP BY bi.item ORDER BY Quantity DESC LIMIT 3;';
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
