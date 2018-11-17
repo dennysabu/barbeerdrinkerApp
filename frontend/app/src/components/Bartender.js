@@ -7,6 +7,7 @@ import {
     Progress,
     Button,
     Table,
+    Alert,
 } from 'reactstrap'; // Table pre-built component from reactstrap library
 import {
   XYPlot,
@@ -38,6 +39,7 @@ export default class Bartender extends Component {
     ItemsHeader: ["item", "sold"],
     ItemsGraph: [],
     InformationCanLoad: false,
+    first: true,
 
   }
 
@@ -61,6 +63,16 @@ export default class Bartender extends Component {
 
  // renders a view to the web page
   render(){
+
+    var alrt;
+
+    if(this.state.ItemsSoldByBartender.length === 0 && !this.state.first){
+      alrt = <Alert color = "danger" >This bartender hasn't sold anything! Try another bartender.</Alert>
+    }
+    else {
+
+    }
+
 
     //Table that displays count of items sold by bartender
     const countsoldby = <Table width={100}>
@@ -97,10 +109,10 @@ export default class Bartender extends Component {
 
 
 
-    const itemsoldbar =    <XYPlot animation={true} xType="ordinal" width={900} height={500} margin={{bottom: 100, left: 30} } >
+    const itemsoldbar =    <XYPlot animation={true} xType="ordinal" width={1000} height={500} margin={{bottom: 100, left: 30} } >
                   <VerticalGridLines />
                   <HorizontalGridLines />
-                  <XAxis />
+                  <XAxis tickLabelAngle={335}/>
                    <YAxis title="Quantity"/>
                   <VerticalBarSeries data={this.state.ItemsGraph} color="skyblue"/>
                 </XYPlot>
@@ -175,9 +187,11 @@ export default class Bartender extends Component {
 
                   <Button size="lg" onClick={this.getCountsSold}>Get Information</Button>
               </div>
-
-              {countsoldby}
-              {itemsoldbar}
+              <div class = "bartenderinfo">
+                  {alrt}
+                  {countsoldby}
+                  {itemsoldbar}
+              </div>
 
 
         </div>
@@ -200,7 +214,7 @@ export default class Bartender extends Component {
 
         }).then(res => res.json()
       ).then(data => {
-        this.setState( { Bars: data, BarsIsLoading:false}) ;
+        this.setState( { Bars: data, BarsIsLoading:false, CurrentBarSelected: data[0].name}) ;
         //console.log(data);
         this.getBartenders(data[0].name);
       });
@@ -243,17 +257,20 @@ export default class Bartender extends Component {
   }
 
   getCountsSold(){
-    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/query',{
+      this.setState({first: false});
+      console.log("Bar: " + this.state.CurrentBarSelected);
+      console.log("Bartender: " + this.state.CurrentBartenderSelected);
+
+
+
+    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getBartenderSales',{
       method: "post",
       headers: {
         "Content-Type":"application/json",
       },
       body: JSON.stringify({
-        /*
-        "bar": this.CurrentBarSelected[0].bar,
-        "bartender": this.CurrentBartenderSelected[0].bartender,
-        */
-        "query": "SELECT bi.item, COUNT(bi.item) as sold FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND b.bartender = 'Aline' AND b.bar = 'Avenu Lounge'  GROUP BY (bi.item)",
+        "bar": this.state.CurrentBarSelected,
+        "bartender": this.state.CurrentBartenderSelected,
       }),
 
       }).then(res => res.json()

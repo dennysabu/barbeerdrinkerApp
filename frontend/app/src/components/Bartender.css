@@ -10,9 +10,15 @@
   padding-bottom: 20px;
   background-color: darkgrey;
   border-radius: 20px;
-  width: 100vh;
+  width: 25vh;
+  height: 25vh;
 }
 
 .selection h2{
   color:white;
+}
+
+.bartenderinfo{
+  padding-left: 25px;
+  display: inline-block;
 }
