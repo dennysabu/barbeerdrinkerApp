@@ -109,7 +109,7 @@ export default class Bartender extends Component {
 
 
 
-    const itemsoldbar =    <XYPlot animation={true} xType="ordinal" width={1000} height={500} margin={{bottom: 100, left: 30} } >
+    const itemsoldbar =    <XYPlot animation={true} xType="ordinal" width={1000} height={500} className="test" margin={{bottom: 100, left: 100} } >
                   <VerticalGridLines />
                   <HorizontalGridLines />
                   <XAxis tickLabelAngle={335}/>
