@@ -149,6 +149,49 @@ paths:
               type: array
           "400":
             description: Bad Request
+
+    /getDrinkersSpendingByDate:
+      post:
+        description: drinkers spending in different bars, on different dates
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  drinker:
+                    type: string
+                  date:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
+    /getDrinkersSpendingByWeek:
+      post:
+        description: drinkers spending in different bars, on different weeks
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  drinker:
+                    type: string
+                  week:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
 #           SQL Query Interface       #
       /query:
         post:

@@ -99,38 +99,19 @@ export default class Drinker extends Component {
                           </XYPlot>
                           </div>
 
-      var dateSelector = <div style={{width: "25%"}}>
-                          <Input type="select" name="select" onChange={this.dateSelectionChanged}>
-                                <option>{this.february[0][0]}</option>
-                                <option>{this.february[0][1]}</option>
-                                <option>{this.february[0][2]}</option>
-                                <option>{this.february[1][0]}</option>
-                                <option>{this.february[1][1]}</option>
-                                <option>{this.february[1][2]}</option>
-                                <option>{this.february[1][3]}</option>
-                                <option>{this.february[1][4]}</option>
-                                <option>{this.february[1][5]}</option>
-                                <option>{this.february[1][6]}</option>
-                                <option>{this.february[1][0]}</option>
-                                <option>{this.february[1][1]}</option>
-                                <option>{this.february[1][2]}</option>
-                                <option>{this.february[1][3]}</option>
-                                <option>{this.february[1][4]}</option>
-                                <option>{this.february[1][5]}</option>
-                                <option>{this.february[1][6]}</option>
-                                <option>{this.february[2][0]}</option>
-                                <option>{this.february[2][1]}</option>
-                                <option>{this.february[2][2]}</option>
-                                <option>{this.february[2][3]}</option>
-                                <option>{this.february[2][4]}</option>
-                                <option>{this.february[2][5]}</option>
-                                <option>{this.february[2][6]}</option>
-                                <option>{this.february[3][0]}</option>
-                                <option>{this.february[3][1]}</option>
-                                <option>{this.february[3][2]}</option>
-                                <option>{this.february[3][3]}</option>
-                            </Input>
-                            </div>
+        var dateSelector = <div style={{width: "25%"}}>
+                           <Input type="select" name="select" onChange={this.dateSelectionChanged}>
+                           {
+
+                             this.february.map((res, x) => {
+                               return res.map((header, i) => {
+                                        return <option key={i}>{header}</option>
+                                      })
+                                    })
+                          }
+                           </Input>
+                           </div>
+
 
       var weekSelector = <div style={{width: "25%"}}>
                           <Input type="select" name="select" onChange={this.weekSelectionChanged}>
@@ -216,20 +197,25 @@ export default class Drinker extends Component {
           {
             inputSelector
           }
+          <br/>
+          {
+            topBeersGraph
+          }
+          <h1>The Month of February</h1>
+          <br/>
+          <label>Select Week:</label>
+          {
+            weekSelector
+          }
+          <label>Select Date:</label>
+          {
+            dateSelector
+          }
       </div>
       </FormGroup>
       </Form>
       {
-        topBeersGraph
-      }
-      {
         table
-      }
-      {
-        dateSelector
-      }
-      {
-        weekSelector
       }
    </div>
 

@@ -228,6 +228,31 @@ router.post('/getDrinkersTopBeers', (req, res) => {
   });
 });
 
+router.post('/getDrinkersSpendingByDate', (req, res) => {
+
+  let drinker = req.body.drinker.replace(/'/g, "\\'");
+  let date = req.body.date.replace(/'/g, "\\'");
+
+  let sql = 'SELECT bar, SUM(total+tip) as spent FROM BarBeerDrinkersPLUS.Bills WHERE drinker = "' + drinker + '" AND DATE(date) = "' + date + '" GROUP BY bar;';
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
 
 /*
  *   SQL INTERFACE PAGE
@@ -457,7 +482,6 @@ router.post('/getBarBySales', (req, res) => {
           });
           });
   });
-
 
 
  /*
