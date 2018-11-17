@@ -13,6 +13,7 @@ import {
   YAxis,
   HorizontalGridLines,
   VerticalBarSeries,
+  LabelSeries,
   VerticalGridLines,
 } from "react-vis";
 
@@ -122,12 +123,19 @@ export default class Drinker extends Component {
                           <br/>
                           <h1>Top 3 Beers for {this.state.drinker}</h1>
                           <br/>
-                          <XYPlot animation={true} margin={{bottom: 100}} xType="ordinal" width={1000} height={500}>
+                          <XYPlot animation={true} margin={{top:25, bottom: 100}} xType="ordinal" width={1000} height={500}>
                           <VerticalGridLines />
                           <HorizontalGridLines />
                           <VerticalBarSeries data={this.state.beerGraph} />
                           <XAxis title="Drinker"/>
                           <YAxis title="Quantity"/>
+                          <LabelSeries
+                          data={this.state.beerGraph.map(obj => {
+                            return { ...obj, label: obj.y.toString() }
+                          })}
+                          labelAnchorX="middle"
+                          labelAnchorY="top"
+                          />
                           </XYPlot>
                           </div>
 
@@ -136,12 +144,19 @@ export default class Drinker extends Component {
                             <br/>
                             <h1>{this.state.drinker} Spendings on {this.state.date}</h1>
                             <br/>
-                            <XYPlot animation={true} margin={{bottom: 100, left: 200, right: 200}} xType="ordinal" width={1000} height={500}>
+                            <XYPlot animation={true} margin={{top: 25, bottom: 100}} xType="ordinal" width={1000} height={500}>
                             <VerticalGridLines />
                             <HorizontalGridLines />
                             <VerticalBarSeries data={this.state.dateGraph} />
                             <XAxis title="Bar"/>
                             <YAxis title="Money Spent (USD)"/>
+                            <LabelSeries
+                            data={this.state.dateGraph.map(obj => {
+                              return { ...obj, label: obj.y.toString() }
+                            })}
+                            labelAnchorX="middle"
+                            labelAnchorY="top"
+                            />
                             </XYPlot>
                             </div>
 
@@ -150,12 +165,19 @@ export default class Drinker extends Component {
                             <br/>
                             <h1>{this.state.drinker} Spendings during the week of {this.state.week}</h1>
                             <br/>
-                            <XYPlot animation={true} margin={{bottom: 100}} xType="ordinal" width={1000} height={500}>
+                            <XYPlot animation={true} margin={{top: 25, bottom: 100, left: 100, right: 100}} xType="ordinal" width={1000} height={500}>
                             <VerticalGridLines />
                             <HorizontalGridLines />
                             <VerticalBarSeries data={this.state.weekGraph} />
                             <XAxis title="Bar"/>
                             <YAxis title="Money Spent (USD)"/>
+                            <LabelSeries
+                            data={this.state.weekGraph.map(obj => {
+                              return { ...obj, label: obj.y.toString() }
+                            })}
+                            labelAnchorX="middle"
+                            labelAnchorY="top"
+                            />
                             </XYPlot>
                             </div>
 
@@ -279,8 +301,14 @@ export default class Drinker extends Component {
          },
      }).then(res => res.json()
    ).then(data => {
-     this.setState({ drinkers: data, drinker: data[0].name, tableHeaders:  Object.keys(data[0]), isLoading: false });
-     this.getTransactions(data[0].name);
+
+     if (data.length !== 0)
+     {
+       this.setState({ drinkers: data, drinker: data[0].name, tableHeaders:  Object.keys(data[0]), isLoading: false });
+       this.getTransactions(data[0].name);
+   } else {
+    alert('Sorry no drinker information available at this time');
+   }
    });
 
   }
@@ -308,7 +336,7 @@ export default class Drinker extends Component {
     });
     this.getBeerGraphData(data);
   } else {
-   alert('Sorry this drinker has no bills');
+   alert('Sorry ' + drinker + ' has no bills');
   }
   });
 
@@ -335,7 +363,7 @@ export default class Drinker extends Component {
       });
     this.parseWeekGraphData(data);
   } else {
-   alert('Sorry this drinker has no bills for this week');
+   alert('Sorry ' + drinker + ' has no bills for the week of ' + date);
   }
   });
 
@@ -362,7 +390,7 @@ export default class Drinker extends Component {
       });
     this.parseDateGraphData(data);
   } else {
-   alert('Sorry this drinker has no bills for this date');
+   alert('Sorry ' + drinker + ' has no bills for the date ' + date);
   }
   });
 
@@ -386,7 +414,7 @@ export default class Drinker extends Component {
     this.getDateGraphData(this.state.date, this.state.drinker);
     this.getWeekGraphData(this.state.week, this.state.drinker);
   } else {
-   alert('Sorry this drinker does not have a top 3 beers');
+   alert('Sorry ' + this.state.drinker + ' does not have a top 3 beers');
   }
   });
   }
