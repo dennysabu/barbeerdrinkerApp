@@ -160,7 +160,7 @@ router.post('/getTransactionsForDrinker', (req, res) => {
 
   let drinker = req.body.drinker.replace(/'/g, "\\'");
 
-  let sql = 'SELECT * FROM Bills WHERE drinker = "' + drinker + '" GROUP BY bar, id ORDER BY bar, TIME(date);';
+  let sql = 'SELECT * FROM Bills WHERE drinker = "' + drinker + '" GROUP BY bar,id ORDER BY bar, DATE(date), TIME(date);';
 
   // gets a sql connection
         pool.getConnection(function(err, connection) {
