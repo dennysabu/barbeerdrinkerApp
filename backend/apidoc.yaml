@@ -182,7 +182,7 @@ paths:
                 properties:
                   drinker:
                     type: string
-                  week:
+                  date:
                     type: string
         responses:
           "200":
