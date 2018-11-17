@@ -2,11 +2,12 @@
 
 USE BarBeerDrinkersPLUS;
 
--- UPDATE `Items` set `city` = TRIM(REPLACE(REPLACE(REPLACE(REPLACE(`city`,' ',''),'\t',''),'\n',''),'\r',''));
+UPDATE `Likes` set `item` = TRIM(REPLACE(REPLACE(REPLACE(`item`,'\t',''),'\n',''),'\r',''));
 
 /*
 -- This Command loads large CSV data WAY faster than data import wizard
 */
+SET FOREIGN_KEY_CHECKS = 0;
 
 LOAD DATA LOCAL INFILE '~/Desktop/db/Sells.csv'
 INTO TABLE Sells
@@ -38,8 +39,8 @@ INTO TABLE Shifts
 FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
 LINES TERMINATED BY '\n';
 
-LOAD DATA LOCAL INFILE '~/Desktop/db/Bartenders.csv'
-INTO TABLE Bartenders
+LOAD DATA LOCAL INFILE '~/Desktop/db/Likes.csv'
+INTO TABLE Likes
 FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
 LINES TERMINATED BY '\n';
 

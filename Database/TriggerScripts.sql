@@ -16,7 +16,6 @@ CREATE TRIGGER drinkercityfrequents BEFORE INSERT ON Frequents
      END//
 DELIMITER ;
 
-
 # Makes sure bartenders are from the city where the bar is that they are assigned a shift for
 DELIMITER $
 CREATE TRIGGER ShiftsFK
@@ -44,8 +43,6 @@ TIME(NEW.date) BETWEEN s.startTime AND s.endTime)) THEN
 END IF;
 END $
 DELIMITER ;
-
-
 
 #Trigger checks to make sure that bills are not issued after a bar closes
 DELIMITER //
