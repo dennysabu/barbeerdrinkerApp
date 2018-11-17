@@ -204,6 +204,31 @@ router.post('/getDrinkersTopBeers', (req, res) => {
   });
 });
 
+router.post('/getDrinkersTopBeers', (req, res) => {
+
+  let drinker = req.body.drinker.replace(/'/g, "\\'");
+
+  let sql = 'SELECT b.id, b.date, bi.item, COUNT(bi.item) as Quantity FROM Bills b, Bill_Items bi, Items i WHERE b.id = bi.billid AND bi.item = i.name AND i.type <> "food" AND b.drinker = "' + drinker + '" GROUP BY bi.item ORDER BY Quantity DESC LIMIT 3;';
+
+  // gets a sql connection
+        pool.getConnection(function(err, connection) {
+
+  // sends query to db
+        connection.query(sql, function(error, results, fields) {
+                connection.release(); // releases connection after query goes through
+
+                if (!error) {
+      res.status(200); // sends a status code
+      res.send(JSON.stringify(results)); // sends results recieved from sql
+                } else {
+      res.status(400);
+      res.send(JSON.stringify(error));
+                }
+  });
+  });
+});
+
+
 /*
  *   SQL INTERFACE PAGE
  */
@@ -408,6 +433,30 @@ router.post('/getBarBySales', (req, res) => {
          });
          });
  });
+
+
+  router.post('/getBartenderSales', (req, res) => {
+
+     let bar = req.body.bar.replace(/'/g, "\\'");
+     let bartender = req.body.bartender.replace(/'/g, "\\'");
+
+     let sql = 'SELECT bi.item, COUNT(bi.item) as sold FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND b.bartender = "' + bartender + '" #These will be passed in AND b.bar = "' + bar + '" #These will be passed in GROUP BY (bi.item);';
+
+          pool.getConnection(function(err, connection) {
+
+          connection.query(sql, function(error, results, fields) {
+                  connection.release();
+
+                  if (!error) {
+                  res.status(200);
+                  res.send(JSON.stringify(results));
+                  } else {
+                  res.status(400);
+                  res.send(JSON.stringify(error));
+                  }
+          });
+          });
+  });
 
 
 

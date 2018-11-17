@@ -31,8 +31,20 @@ export default class Drinker extends Component {
       tableHeaders: [],
       itemGraph: [],
       isLoading: true,
+      date: "2018-02-01",
+      week: 0,
     };
 
+      this.february = [
+          ['2018-02-01', '2018-02-02', '2018-02-03'],
+          ['2018-02-04','2018-02-05','2018-02-06','2018-02-07','2018-02-08','2018-02-09','2018-02-10'],
+          ['2018-02-11','2018-02-12','2018-02-13','2018-02-14','2018-02-15','2018-02-16','2018-02-17'],
+          ['2018-02-18','2018-02-19','2018-02-20','2018-02-21','2018-02-22','2018-02-23','2018-02-24'],
+          ['2018-02-25','2018-02-26','2018-02-27','2018-02-28']
+      ]
+
+      this.dateSelectionChanged = this.dateSelectionChanged.bind(this);
+      this.weekSelectionChanged = this.weekSelectionChanged.bind(this);
       this.parseGraphData = this.parseGraphData.bind(this);
       this.getItemGraphData = this.getItemGraphData.bind(this);
       this.getTransactions = this.getTransactions.bind(this);
@@ -46,8 +58,15 @@ export default class Drinker extends Component {
  }
 
  drinkerSelectionChanged(e) {
-
      this.getTransactions(e.target.value);
+ }
+
+ dateSelectionChanged(e) {
+
+ }
+
+ weekSelectionChanged(e) {
+
  }
 
 
@@ -80,6 +99,50 @@ export default class Drinker extends Component {
                           </XYPlot>
                           </div>
 
+      var dateSelector = <div style={{width: "25%"}}>
+                          <Input type="select" name="select" onChange={this.dateSelectionChanged}>
+                                <option>{this.february[0][0]}</option>
+                                <option>{this.february[0][1]}</option>
+                                <option>{this.february[0][2]}</option>
+                                <option>{this.february[1][0]}</option>
+                                <option>{this.february[1][1]}</option>
+                                <option>{this.february[1][2]}</option>
+                                <option>{this.february[1][3]}</option>
+                                <option>{this.february[1][4]}</option>
+                                <option>{this.february[1][5]}</option>
+                                <option>{this.february[1][6]}</option>
+                                <option>{this.february[1][0]}</option>
+                                <option>{this.february[1][1]}</option>
+                                <option>{this.february[1][2]}</option>
+                                <option>{this.february[1][3]}</option>
+                                <option>{this.february[1][4]}</option>
+                                <option>{this.february[1][5]}</option>
+                                <option>{this.february[1][6]}</option>
+                                <option>{this.february[2][0]}</option>
+                                <option>{this.february[2][1]}</option>
+                                <option>{this.february[2][2]}</option>
+                                <option>{this.february[2][3]}</option>
+                                <option>{this.february[2][4]}</option>
+                                <option>{this.february[2][5]}</option>
+                                <option>{this.february[2][6]}</option>
+                                <option>{this.february[3][0]}</option>
+                                <option>{this.february[3][1]}</option>
+                                <option>{this.february[3][2]}</option>
+                                <option>{this.february[3][3]}</option>
+                            </Input>
+                            </div>
+
+      var weekSelector = <div style={{width: "25%"}}>
+                          <Input type="select" name="select" onChange={this.weekSelectionChanged}>
+                            {
+                              this.february.map((week, i) =>
+                                <option key={week[i]}>
+                                {week[0]}
+                                </option>
+                              )
+                            }
+                            </Input>
+                            </div>
 
 
     if(this.state.isLoading){
@@ -161,6 +224,12 @@ export default class Drinker extends Component {
       }
       {
         table
+      }
+      {
+        dateSelector
+      }
+      {
+        weekSelector
       }
    </div>
 

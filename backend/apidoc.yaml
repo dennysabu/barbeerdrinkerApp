@@ -292,3 +292,24 @@ paths:
               type: array
           "400":
             description: Bad Request
+
+    /getBartenderSales:
+        post:
+          description: Given a bar and a bartender, returns count they've sold.
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    bar:
+                      type: string
+                    bartender:
+                      type: string
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request
