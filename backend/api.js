@@ -535,7 +535,7 @@ router.post('/getBarBySales', (req, res) => {
 
      let bar = req.body.bar.replace(/'/g, "\\'");
 
-     let sql = 'SELECT DISTINCT DATE(day) as day FROM Shifts WHERE bar = "' + bar + '";';
+     let sql = 'SELECT DISTINCT day FROM Shifts WHERE bar = "' + bar + '" ORDER BY day;';
 
           pool.getConnection(function(err, connection) {
 
