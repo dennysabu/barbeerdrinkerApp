@@ -338,7 +338,7 @@ getTimeSold(value){
   }).then(res => res.json(),
   ).then(data=> {
   this.setState({topBarData: data});
-  console.log(data);
+  //console.log(data);
   this.populateTimeBarGraph(data);
   } );
 }

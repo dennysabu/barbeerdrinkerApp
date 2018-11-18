@@ -400,8 +400,8 @@ const shiftsw = <Table width={100}>
 //TESTING Shifts
 getShiftsWorkedByThisBartender(){
 
-  console.log("Bar: " + this.state.CurrentBarSelected);
-  console.log("Bartender: " + this.state.CurrentBartenderSelected);
+  //console.log("Bar: " + this.state.CurrentBarSelected);
+  //console.log("Bartender: " + this.state.CurrentBartenderSelected);
 
 
 
@@ -593,7 +593,7 @@ getCountsSoldOnDay(){
     }).then(res => res.json()
   ).then(data => {
     this.setState( { SoldToday: data}) ;
-    console.log(data);
+    //console.log(data);
     this.populateSoldByBartenderOnDayGraphForAnalytics(data);
 
   });
@@ -601,10 +601,10 @@ getCountsSoldOnDay(){
 }
 
 getAnalytics(){
-  console.log("Clicked");
+  //console.log("Clicked");
   this.setState({firstAnalytics:false});
-  console.log("BAR: " + this.state.SelectedBar);
-  console.log("DATE: " +  this.state.SelectedDate);
+  //console.log("BAR: " + this.state.SelectedBar);
+  //console.log("DATE: " +  this.state.SelectedDate);
   this.getCountsSoldOnDay();
 
 }
