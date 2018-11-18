@@ -15,7 +15,7 @@ FROM Shifts
 WHERE bar = '207'
 ;
 
-SELECT b.bartender, bi.item, COUNT(bi.item) as sold
+SELECT b.bartender,  COUNT(bi.item) as sold
 From Bills b, Bill_Items bi, Items i
 WHERE b.id = bi.billid
 AND
@@ -25,7 +25,7 @@ bi.item = i.name
 and
 i.type = 'beer'
 and
-DATE(b.date) = '2018-02-10'
+DATE(b.date) = '2018-02-03'
 GROUP BY(b.bartender)
 ORDER BY b.bartender
 

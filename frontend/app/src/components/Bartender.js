@@ -46,8 +46,12 @@ export default class Bartender extends Component {
     BarsForAnalytics: [],
     SelectedBar: [],
     Shifts: [],
-    SelectedDate: null,
+    SelectedDate: [],
     ShiftsOnDay: [],
+    AnalyticsHeader: ["bartender", "sold"],
+    SoldToday: [],
+    firstAnalytics: true,
+    SoldTodayGraph: [],
 
   }
 
@@ -63,6 +67,7 @@ export default class Bartender extends Component {
   this.getShiftDays = this.getShiftDays.bind(this);
   this.analyticsDateSelectionChanged = this.analyticsDateSelectionChanged.bind(this);
   this.getAnalytics = this.getAnalytics.bind(this);
+  //this.populateSoldByBartenderOnDayGraphForAnalytics = this.populateSoldByBartenderOnDayGraphForAnalytics(this);
 
 }
 
@@ -79,6 +84,15 @@ export default class Bartender extends Component {
 
     if(this.state.ItemsSoldByBartender.length === 0 && !this.state.first){
       alrt = <Alert color = "danger" >This bartender hasn't sold anything! Try another bartender.</Alert>
+    }
+    else {
+
+    }
+
+    var alrt2;
+
+    if(this.state.SoldToday.length === 0 && !this.state.firstAnalytics){
+      alrt2 = <Alert color = "danger" >There were no sales at this bar today! Tough Economy! Try another day.</Alert>
     }
     else {
 
@@ -117,6 +131,71 @@ export default class Bartender extends Component {
                      }
                       </tbody>
                     </Table>
+
+
+
+
+
+
+//working 9:48 AM
+
+const countbeerssold = <Table width={100}>
+                  <thead style={{fontSize:'22px', textAlign:'center'}}>
+                    <tr>
+                    {
+                      this.state.AnalyticsHeader.map(header =>
+                     <th key={header}>
+                     {header}
+                     </th>
+                     )
+                   }
+                    </tr>
+                  </thead>
+                  <tbody style={{fontSize:'15px', textAlign:'center'}}>
+                  {
+
+                    this.state.SoldToday.map((res, x) => {
+                      return (
+                           <tr className ="tlbrow">
+                             {this.state.AnalyticsHeader.map((header, i) => {
+
+                               return (
+                                 <td>{ res[header] }</td>
+                               );
+
+                             })}
+                         </tr>
+                       );
+                     })
+                 }
+                  </tbody>
+                </Table>
+
+
+
+
+
+
+  const graphOfWhatBartendersHaveSold =    <XYPlot animation={true} xType="ordinal" width={1000} height={500} className={"test"} margin={{bottom: 100, left: 100} } >
+                <VerticalGridLines />
+                <HorizontalGridLines />
+                <XAxis tickLabelAngle={335}/>
+                 <YAxis title="Quantity"/>
+                <VerticalBarSeries data={this.state.SoldTodayGraph} color="skyblue"/>
+              </XYPlot>
+
+
+
+//End Working 9:48 AM
+
+
+
+
+
+
+
+
+
 
 
 
@@ -163,7 +242,7 @@ export default class Bartender extends Component {
 
       //Drop Down to select a bar:
       const selectBarForAnalytics =
-                                <Input type ="select" onChange={this.shiftChanged}>
+                                <Input type ="select" onChange={this.analyticsBarSelectionChanged}>
                                    {
                                      this.state.BarsForAnalytics.map(Bar =>
                                        <option key = {Bar.item}>
@@ -185,18 +264,6 @@ export default class Bartender extends Component {
                                        )
                                      }
                                     </Input>
-
-      //Drop Down to select a shift:
-      const selectShiftsForADay =
-                                <Input type ="select" >
-                                   {
-                                     this.state.Shifts.map(Shifts =>
-                                       <option key = {Shifts.day}>
-                                         {Shifts.day}
-                                       </option>
-                                     )
-                                   }
-                                  </Input>
 
 
     var ld;
@@ -254,12 +321,15 @@ export default class Bartender extends Component {
                   {selectBarForAnalytics}
                   <h2> Select a Day: </h2>
                   {selectShiftsForAnalytics}
-
                   <hr/>
-
                   <Button size="lg" onClick={this.getAnalytics} >Get Analytics</Button>
               </div>
 
+              <div className = "bartenderinfo">
+                {alrt2}
+                {countbeerssold}
+                {graphOfWhatBartendersHaveSold}
+              </div>
 
 
         </div>
@@ -306,6 +376,7 @@ export default class Bartender extends Component {
 
     analyticsDateSelectionChanged(e){
         this.setState({SelectedDate: e.target.value});
+        this.forceUpdate();
     }
 
   bartenderSelectionChanged(e){
@@ -418,7 +489,7 @@ export default class Bartender extends Component {
     });
   }
 
-//Get count sold by bartenders working on a Day
+//Get count sold by all the bartenders at a given bar on a given day.
 getCountsSoldOnDay(){
 
   fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getSoldByDay',{
@@ -433,16 +504,50 @@ getCountsSoldOnDay(){
 
     }).then(res => res.json()
   ).then(data => {
-    this.setState( { Shifts: data}) ;
+    this.setState( { SoldToday: data}) ;
     console.log(data);
+    this.populateSoldByBartenderOnDayGraphForAnalytics(data);
 
   });
 
 }
 
 getAnalytics(){
-  console.log("Clicked" + this.state.SelectedDate);
+  console.log("Clicked");
+  this.setState({firstAnalytics:false});
+  console.log("BAR: " + this.state.SelectedBar);
+  console.log("DATE: " +  this.state.SelectedDate);
+  this.getCountsSoldOnDay();
+
 }
+
+
+  populateSoldByBartenderOnDayGraphForAnalytics(data){
+
+    let g = [];
+
+    if(data.length === 0)
+        {
+        g[0] = {x: "None", y: 0};
+        this.setState({SoldTodayGraph: g});
+        //this.setState({graphItems: {x: "None", y: 0} });
+        return;
+        }
+      else{
+        for(var i in data){
+            g[i] = {x: data[i].bartender, y: data[i].sold}
+          }
+        }
+        this.setState({SoldTodayGraph:g });
+        console.log(g);
+        this.forceUpdate();
+        return;
+  }
+
+
+
+
+
 
 
 }//Ends component i think
