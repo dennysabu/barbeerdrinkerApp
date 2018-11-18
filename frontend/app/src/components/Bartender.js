@@ -47,11 +47,14 @@ export default class Bartender extends Component {
     SelectedBar: [],
     Shifts: [],
     SelectedDate: [],
-    ShiftsOnDay: [],
     AnalyticsHeader: ["bartender", "sold"],
     SoldToday: [],
     firstAnalytics: true,
     SoldTodayGraph: [],
+
+    //SHIFTS
+    ShiftsHeader: ["day", "shift"],
+    ShiftsOnDay: [],
 
   }
 
@@ -68,7 +71,7 @@ export default class Bartender extends Component {
   this.analyticsDateSelectionChanged = this.analyticsDateSelectionChanged.bind(this);
   this.getAnalytics = this.getAnalytics.bind(this);
   //this.populateSoldByBartenderOnDayGraphForAnalytics = this.populateSoldByBartenderOnDayGraphForAnalytics(this);
-
+  this.getShiftsWorkedByThisBartender = this.getShiftsWorkedByThisBartender.bind(this);
 }
 
   componentDidMount() {
@@ -92,7 +95,7 @@ export default class Bartender extends Component {
     var alrt2;
 
     if(this.state.SoldToday.length === 0 && !this.state.firstAnalytics){
-      alrt2 = <Alert color = "danger" >There were no sales at this bar today! Tough Economy! Try another day.</Alert>
+      alrt2 = <Alert color = "danger" >There were no sales at this bar on this day! Tough Economy! Try another day.</Alert>
     }
     else {
 
@@ -117,7 +120,7 @@ export default class Bartender extends Component {
 
                         this.state.ItemsSoldByBartender.map((res, x) => {
                           return (
-                               <tr className ="tlbrow">
+                               <tr>
                                  {this.state.ItemsHeader.map((header, i) => {
 
                                    return (
@@ -133,11 +136,6 @@ export default class Bartender extends Component {
                     </Table>
 
 
-
-
-
-
-//working 9:48 AM
 
 const countbeerssold = <Table width={100}>
                   <thead style={{fontSize:'22px', textAlign:'center'}}>
@@ -156,7 +154,7 @@ const countbeerssold = <Table width={100}>
 
                     this.state.SoldToday.map((res, x) => {
                       return (
-                           <tr className ="tlbrow">
+                           <tr>
                              {this.state.AnalyticsHeader.map((header, i) => {
 
                                return (
@@ -185,8 +183,47 @@ const countbeerssold = <Table width={100}>
               </XYPlot>
 
 
+//Testing shifts worked
 
-//End Working 9:48 AM
+
+const shiftsw = <Table width={100}>
+                  <thead style={{fontSize:'22px', textAlign:'center'}}>
+                    <tr>
+                    {
+                      this.state.ShiftsHeader.map(header =>
+                     <th key={header}>
+                     {header}
+                     </th>
+                     )
+                   }
+                    </tr>
+                  </thead>
+                  <tbody style={{fontSize:'15px', textAlign:'center'}}>
+                  {
+
+                    this.state.ShiftsOnDay.map((res, x) => {
+                      return (
+                           <tr>
+                             {this.state.ShiftsHeader.map((header, i) => {
+
+                               return (
+                                 <td>{ res[header] }</td>
+                               );
+
+                             })}
+                         </tr>
+                       );
+                     })
+                 }
+                  </tbody>
+                </Table>
+
+
+
+
+
+
+//End shifts
 
 
 
@@ -298,43 +335,58 @@ const countbeerssold = <Table width={100}>
               <div className = "firstset">
 
                     <div className = "selection">
-                        <h2> Select a Bar: </h2>
-                        {selectBar}
-                        <h2> Select a Bartender: </h2>
-                        {selectBartender}
-                        {ld}
-                        <hr/>
-                        <Button size="lg" onClick={this.getCountsSold}>Get Information</Button>
+                              <h2> Select a Bar: </h2>
+                              {selectBar}
+                              <h2> Select a Bartender: </h2>
+                              {selectBartender}
+                              {ld}
+                              <hr/>
+                              <Button size="lg" onClick={this.getCountsSold}>Get Information</Button>
                     </div>
+
+
                     <div className = "bartenderinfo">
-                        {alrt}
-                        <div className ="scrollxf ">
-                          <h2>Counts Sold:</h2>
-                          {countsoldby}
-                        </div>
-
-                        {itemsoldbar}
+                              {alrt}
+                              <div className ="scrollxf ">
+                                <h2>Counts Sold:</h2>
+                                {countsoldby}
+                              </div>
+                              <div className ="scrollxf ">
+                              <h2>Shifts Worked:</h2>
+                              {shiftsw}
+                              </div>
 
                     </div>
+
+                      {itemsoldbar}
 
               </div>
+
+
               <hr/>
 
-              <div className = "selection">
-                  <h2> Select a Bar: </h2>
-                  {selectBarForAnalytics}
-                  <h2> Select a Day: </h2>
-                  {selectShiftsForAnalytics}
-                  <hr/>
-                  <Button size="lg" onClick={this.getAnalytics} >Get Analytics</Button>
-              </div>
+              <div className = "firstset">
 
-              <div className = "bartenderinfo">
-                {alrt2}
-                {countbeerssold}
-                {graphOfWhatBartendersHaveSold}
-              </div>
+                      <div className = "selection2">
+                          <h2> Select a Bar: </h2>
+                          {selectBarForAnalytics}
+                          <h2> Select a Day: </h2>
+                          {selectShiftsForAnalytics}
+                          {alrt2}
+                          <hr/>
+                          <Button size="lg" onClick={this.getAnalytics} >Get Analytics</Button>
+                      </div>
 
+                      <div className = "bartenderinfo">
+                        {countbeerssold}
+                        <div className = "aaabbb">
+
+                              {graphOfWhatBartendersHaveSold}
+                        </div>
+
+                      </div>
+
+              </div>
 
         </div>
 
@@ -344,6 +396,37 @@ const countbeerssold = <Table width={100}>
 
   }
   //Ends render
+
+//TESTING Shifts
+getShiftsWorkedByThisBartender(){
+
+  console.log("Bar: " + this.state.CurrentBarSelected);
+  console.log("Bartender: " + this.state.CurrentBartenderSelected);
+
+
+
+  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getShiftsWorked',{
+    method: "post",
+    headers: {
+      "Content-Type":"application/json",
+    },
+    body: JSON.stringify({
+      "bar": this.state.CurrentBarSelected,
+      "bartender": this.state.CurrentBartenderSelected,
+    }),
+
+    }).then(res => res.json()
+  ).then(data => {
+    this.setState( { ShiftsOnDay: data}) ;
+    console.log(data);
+
+  });
+}
+
+//END TEST SHIFTS
+
+
+
 
   //Gets all bars
   getBars(){
@@ -428,6 +511,7 @@ const countbeerssold = <Table width={100}>
       this.setState( { ItemsSoldByBartender: data, InformationCanLoad: false}) ;
 
       this.populateCountSoldByGraph(data);
+      this.getShiftsWorkedByThisBartender();
     });
 
     this.setState({first: false});

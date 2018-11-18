@@ -9,7 +9,9 @@
 .actualInsights{
   display: inline-block;
   overflow-y: scroll;
-  height: 766px;
+  height:766px;
+  width: 100%;
+
 
 }
 
