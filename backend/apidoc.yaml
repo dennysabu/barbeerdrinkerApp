@@ -368,8 +368,6 @@ paths:
                   properties:
                     bar:
                       type: string
-                    bartender:
-                      type: string
           responses:
             "200":
               description: OK
@@ -378,7 +376,7 @@ paths:
             "400":
               description: Bad Request
 
-#           Bartenders Page       #
+#           Manufacturers Page       #
     /getManfs:
       get:
         description: Get all manufacturers SELECT DISTINCT manf FROM Items;
