@@ -8,8 +8,8 @@
 .selection{
   display:inline-block;
   padding: 10px;
-  padding-bottom: 20px;
-  background-color: darkgrey;
+  padding-bottom: ;
+  background-color: grey;
   border-radius: 20px;
   width: 25vh;
   height: 25vh;
@@ -22,11 +22,6 @@
 .bartenderinfo{
   padding-left: 25px;
   display: inline-block;
-}
-
-.test{
-  padding: 30px;
-  width: 100vh;
 }
 
 

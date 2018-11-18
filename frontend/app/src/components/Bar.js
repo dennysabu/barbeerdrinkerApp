@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import {
-    Form,
-    FormGroup,
     Input,
     Progress,
 } from 'reactstrap'; // Table pre-built component from reactstrap library
@@ -11,9 +9,7 @@ import {
   XAxis,
   YAxis,
   LabelSeries,
-  HorizontalGridLines,
   VerticalBarSeries,
-  VerticalGridLines,
 } from "react-vis";
 
 

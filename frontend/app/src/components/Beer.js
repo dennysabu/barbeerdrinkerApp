@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import {
-    Form,
-    FormGroup,
     Input,
     Progress,
-    Button,
     Table,
     Alert,
 } from 'reactstrap'; // Table pre-built component from reactstrap library
@@ -200,7 +197,7 @@ componentDidUpdate(){
 
 
 
-      const x =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal"  width={1500} height={500} margin={{bottom: 100, left: 100} } >
+      const x =    <XYPlot animation={true} margin={{top:25, bottom: 100, left: 100, right: 100}} xType="ordinal"  width={1000} height={500} margin={{bottom: 100, left: 100} } >
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis tickLabelAngle={335}/>
@@ -208,7 +205,7 @@ componentDidUpdate(){
                     <VerticalBarSeries data={this.state.graphItems} color="skyblue"/>
                   </XYPlot>
 
-      const y =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500} margin={{bottom: 150, left: 100} }>
+      const y =    <XYPlot animation={true} margin={{left: 100 ,bottom: 100}} xType="ordinal" width={1000} height={500} margin={{bottom: 150, left: 100} }>
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis tickLabelAngle={335}/>
@@ -217,7 +214,7 @@ componentDidUpdate(){
                   </XYPlot>
 
 
-      const z =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500} margin={{bottom: 100, left: 100} }>
+      const z =    <XYPlot animation={true} margin={{left: 100 ,bottom: 100}} xType="ordinal" width={1000} height={500} margin={{bottom: 100, left: 100} }>
                     <VerticalGridLines />
                     <HorizontalGridLines />
                     <XAxis tickLabelAngle={335}/>
