@@ -306,6 +306,26 @@ paths:
               description: Bad Request
 
 #           Bartenders Page       #
+
+    /getDaysWithShifts:
+        post:
+          description: Gives list of day at the bar we have shifts for
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    bar:
+                      type: string
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request
+
     /getBartenders:
       get:
         description: Get all bartenders

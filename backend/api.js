@@ -530,6 +530,29 @@ router.post('/getBarBySales', (req, res) => {
           });
   });
 
+  // gives list of day at the bar we have shifts for
+  router.post('/getDaysWithShifts', (req, res) => {
+
+     let bar = req.body.bar.replace(/'/g, "\\'");
+
+     let sql = 'SELECT DISTINCT day FROM Shifts WHERE bar = "' + bar + '";';
+
+          pool.getConnection(function(err, connection) {
+
+          connection.query(sql, function(error, results, fields) {
+                  connection.release();
+
+                  if (!error) {
+                  res.status(200);
+                  res.send(JSON.stringify(results));
+                  } else {
+                  res.status(400);
+                  res.send(JSON.stringify(error));
+                  }
+          });
+          });
+  });
+
   /*
    *  MANUFACTURERS PAGE
    */
