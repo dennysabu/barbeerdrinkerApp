@@ -330,7 +330,6 @@ export default class Drinker extends Component {
     {
     this.setState({
       transactions: data,
-      drinker: drinker,
       tableHeaders: Object.keys(data[0]),
       drinker: data[0].drinker
     });
