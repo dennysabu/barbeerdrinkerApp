@@ -34,22 +34,35 @@ export default class Modifications extends Component {
     }
 
     componentDidMount() {
-      this.getAttributes(this.state.table);
+      this.getAttributes(this.state.table, this.state.modification);
     }
 
     modificationChange(e) {
+
+      if (this.state.table === "Bills" && e.target.value === "Update")
+      {
+          alert('Sorry Bills is not allowed to be updated!');
+          e.target.value = this.state.modification
+      } else {
       this.setState({
         modification: e.target.value,
       });
         this.getAttributes(this.state.table, e.target.value);
+      }
     }
 
     tableChange(e) {
+
+      if (e.target.value === "Bills" && this.state.modification === "Update")
+      {
+          alert('Sorry Bills is not allowed to be updated!');
+          e.target.value = this.state.table
+      } else {
       this.setState({
         table: e.target.value,
       });
-
-      this.getAttributes(e.target.value, this.state.modification);
+        this.getAttributes(e.target.value, this.state.modification);
+      }
 
     }
 
@@ -155,17 +168,11 @@ export default class Modifications extends Component {
                             </Input>
 
 
-        var modSelector = <Input type="select" name="select" onChange={this.modificationChange} style={{width:'50%'}}>
+        var defMS =  <Input type="select" name="select" onChange={this.modificationChange} style={{width:'50%'}}>
                           <option>Update</option>
                           <option>Delete</option>
                           <option>Insert</option>
                           </Input>
-
-        var billsModSelector = <Input type="select" name="select" onChange={this.modificationChange} style={{width:'50%'}}>
-                          <option>Delete</option>
-                          <option>Insert</option>
-                          </Input>
-
 
     if(this.state.isLoading) {
       return(
@@ -176,6 +183,7 @@ export default class Modifications extends Component {
     } else {
 
       switch (this.state.modification) {
+
         case "Insert":
             conditionView = <div></div>
             if (this.state.table === "Bills")
@@ -220,10 +228,8 @@ export default class Modifications extends Component {
           if (this.state.table === "Bills")
           {
             defAV = billsAttributesView
-          //  modSelector =
           } else {
             defAV = attributesView
-            //modSelector =
           }
           break;
           default:
@@ -237,7 +243,7 @@ export default class Modifications extends Component {
        <div className="column">
          <label>Select Modification:</label>
         {
-          modSelector
+          defMS
         }
         <br/>
         <label>Select Table:</label>
@@ -320,15 +326,20 @@ export default class Modifications extends Component {
      }).then(res => res.json()
    ).then(data => {
 
-     if (table === "Bills")
+     if (table === "Bills" && mod !== "Update")
      {
        var at = Object.keys(data[0]);
        at.push("billid", "item", "bar", "price");
 
-       this.setState({ attributes: at, modification: mod, isLoading: false });
+       this.setState({ attributes: at, table: table, isLoading: false });
+    } else if (table === "Bills" && mod === "Update") {
+
+      this.setState({ table: table, modification: mod });
     } else {
-       this.setState({ attributes: Object.keys(data[0]), modification: mod, isLoading: false });
-    }
+
+       this.setState({ attributes: Object.keys(data[0]), table: table, isLoading: false });
+     }
+
    });
   }
 
