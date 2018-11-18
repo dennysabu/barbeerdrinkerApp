@@ -442,6 +442,7 @@ router.post('/getBarBySales', (req, res) => {
  *  Bartenders
  */
 
+// returns counts of beer sold by a bar tender on a day
  router.post('/getSoldByDay', (req, res) => {
 
     let bar = req.body.bar.replace(/'/g, "\\'");
