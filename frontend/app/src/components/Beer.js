@@ -200,27 +200,27 @@ componentDidUpdate(){
 
 
 
-      const x =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500} >
+      const x =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal"  width={1500} height={500} margin={{bottom: 100, left: 100} } >
                     <VerticalGridLines />
                     <HorizontalGridLines />
-                    <XAxis/>
+                    <XAxis tickLabelAngle={335}/>
                      <YAxis title="Quantity"/>
                     <VerticalBarSeries data={this.state.graphItems} color="skyblue"/>
                   </XYPlot>
 
-      const y =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500}>
+      const y =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500} margin={{bottom: 150, left: 100} }>
                     <VerticalGridLines />
                     <HorizontalGridLines />
-                    <XAxis/>
+                    <XAxis tickLabelAngle={335}/>
                     <YAxis title="Quantity"/>
                     <VerticalBarSeries data={this.state.graphBarItems} color="skyblue"/>
                   </XYPlot>
 
 
-      const z =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500}>
+      const z =    <XYPlot animation={true} margin={{bottom: 50}} xType="ordinal" width={1500} height={500} margin={{bottom: 100, left: 100} }>
                     <VerticalGridLines />
                     <HorizontalGridLines />
-                    <XAxis/>
+                    <XAxis tickLabelAngle={335}/>
                      <YAxis title="Quantity"/>
                     <VerticalBarSeries data={this.state.timeBarDataGraph} color="skyblue"/>
                   </XYPlot>

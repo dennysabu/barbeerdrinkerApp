@@ -1,11 +1,12 @@
 
 
 .btd-glb{
-  display: inline-flex;
+  display: inline-block;
   padding: 10px;
 }
 
 .selection{
+  display:inline-block;
   padding: 10px;
   padding-bottom: 20px;
   background-color: darkgrey;
@@ -25,4 +26,15 @@
 
 .test{
   padding: 30px;
+  width: 100vh;
+}
+
+
+.firstset{
+  display: inline-flex;
+}
+
+.analytics{
+  height: 500px;
+  background-color: #f2f4f7;
 }

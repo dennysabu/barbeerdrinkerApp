@@ -109,7 +109,7 @@ export default class Bartender extends Component {
 
 
 
-    const itemsoldbar =    <XYPlot animation={true} xType="ordinal" width={1000} height={500} className="test" margin={{bottom: 100, left: 100} } >
+    const itemsoldbar =    <XYPlot animation={true} xType="ordinal" width={1000} height={500} className={"test"} margin={{bottom: 100, left: 100} } >
                   <VerticalGridLines />
                   <HorizontalGridLines />
                   <XAxis tickLabelAngle={335}/>
@@ -148,6 +148,22 @@ export default class Bartender extends Component {
                                 </Input>
 
 
+
+
+      //Drop Down to select a bar:
+      const selectBarForAnalytics =
+                                  <Input type ="select">
+                                   {
+
+                                     this.state.Bars.map(Bar =>
+                                       <option key = {Bar.item}>
+                                         {Bar.name}
+                                       </option>
+                                     )
+                                   }
+                                  </Input>
+
+
     var ld;
 
     if(!this.state.InformationCanLoad){
@@ -176,23 +192,33 @@ export default class Bartender extends Component {
     return (
         <div className = "btd-glb">
 
-              <div className = "selection">
-                  <h2> Select a Bar: </h2>
-                  {selectBar}
-                  <h2> Select a Bartender: </h2>
-                  {selectBartender}
-                  {ld}
-                  <hr/>
+
+              <div className = "firstset">
+
+                    <div className = "selection">
+                        <h2> Select a Bar: </h2>
+                        {selectBar}
+                        <h2> Select a Bartender: </h2>
+                        {selectBartender}
+                        {ld}
+                        <hr/>
 
 
-                  <Button size="lg" onClick={this.getCountsSold}>Get Information</Button>
+                        <Button size="lg" onClick={this.getCountsSold}>Get Information</Button>
+                    </div>
+                    <div class = "bartenderinfo">
+                        {alrt}
+                        {countsoldby}
+                        {itemsoldbar}
+
+                    </div>
+
               </div>
-              <div class = "bartenderinfo">
-                  {alrt}
-                  {countsoldby}
-                  {itemsoldbar}
-              </div>
+              <hr/>
 
+              <div className = "analytics">
+                    {selectBarForAnalytics}
+              </div> 
 
         </div>
 
