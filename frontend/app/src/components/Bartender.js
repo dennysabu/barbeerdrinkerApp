@@ -46,14 +46,14 @@ export default class Bartender extends Component {
     BarsForAnalytics: [],
     SelectedBar: [],
     Shifts: [],
-    SelectedShifts: null,
+    SelectedDate: null,
+    ShiftsOnDay: [],
 
   }
 
 
   //Bind Functions
   this.getBars = this.getBars.bind(this);
-  this.getInfo = this.getInfo.bind(this);
   this.getCountsSold = this.getCountsSold.bind(this);
   this.getBartenders = this.getBartenders.bind(this);
   this.barSelectionChanged = this.barSelectionChanged.bind(this);
@@ -61,6 +61,8 @@ export default class Bartender extends Component {
   this.populateCountSoldByGraph = this.populateCountSoldByGraph.bind(this);
   this.analyticsBarSelectionChanged = this.analyticsBarSelectionChanged.bind(this);
   this.getShiftDays = this.getShiftDays.bind(this);
+  this.analyticsDateSelectionChanged = this.analyticsDateSelectionChanged.bind(this);
+  this.getAnalytics = this.getAnalytics.bind(this);
 
 }
 
@@ -161,7 +163,7 @@ export default class Bartender extends Component {
 
       //Drop Down to select a bar:
       const selectBarForAnalytics =
-                                <Input type ="select" onChange={this.analyticsBarSelectionChanged}>
+                                <Input type ="select" onChange={this.shiftChanged}>
                                    {
                                      this.state.BarsForAnalytics.map(Bar =>
                                        <option key = {Bar.item}>
@@ -174,7 +176,7 @@ export default class Bartender extends Component {
 
         //Drop Down to select a shift:
         const selectShiftsForAnalytics =
-                                  <Input type ="select" >
+                                  <Input type ="select" onChange={this.analyticsDateSelectionChanged}>
                                      {
                                        this.state.Shifts.map(Shifts =>
                                          <option key = {Shifts.day}>
@@ -183,6 +185,18 @@ export default class Bartender extends Component {
                                        )
                                      }
                                     </Input>
+
+      //Drop Down to select a shift:
+      const selectShiftsForADay =
+                                <Input type ="select" >
+                                   {
+                                     this.state.Shifts.map(Shifts =>
+                                       <option key = {Shifts.day}>
+                                         {Shifts.day}
+                                       </option>
+                                     )
+                                   }
+                                  </Input>
 
 
     var ld;
@@ -240,9 +254,10 @@ export default class Bartender extends Component {
                   {selectBarForAnalytics}
                   <h2> Select a Day: </h2>
                   {selectShiftsForAnalytics}
+
                   <hr/>
 
-                  <Button size="lg" >Get Information</Button>
+                  <Button size="lg" onClick={this.getAnalytics} >Get Analytics</Button>
               </div>
 
 
@@ -285,9 +300,12 @@ export default class Bartender extends Component {
   }
 
     analyticsBarSelectionChanged(e){
-      console.log("Skrt " + e.target.value);
       this.setState({SelectedBar: e.target.value});
       this.getShiftDays(e.target.value);
+    }
+
+    analyticsDateSelectionChanged(e){
+        this.setState({SelectedDate: e.target.value});
     }
 
   bartenderSelectionChanged(e){
@@ -394,20 +412,37 @@ export default class Bartender extends Component {
 
       }).then(res => res.json()
     ).then(data => {
-      this.setState( { Shifts: data}) ;
+      this.setState( { Shifts: data, SelectedDate: data[0].day}) ;
       console.log(data);
 
     });
   }
 
+//Get count sold by bartenders working on a Day
+getCountsSoldOnDay(){
 
+  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getSoldByDay',{
+    method: "post",
+    headers: {
+      "Content-Type":"application/json",
+    },
+    body: JSON.stringify({
+      "bar": this.state.SelectedBar,
+      "date": this.state.SelectedDate,
+    }),
 
+    }).then(res => res.json()
+  ).then(data => {
+    this.setState( { Shifts: data}) ;
+    console.log(data);
 
-  //Get Info
-  getInfo(){
-    this.setState({InformationCanLoad: true})
-  }
+  });
 
+}
+
+getAnalytics(){
+  console.log("Clicked" + this.state.SelectedDate);
+}
 
 
 }//Ends component i think
