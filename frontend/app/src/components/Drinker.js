@@ -112,7 +112,7 @@ export default class Drinker extends Component {
                         this.february.map((week, i) =>
                           <option key={week[i]}>
                             {week[0]}
-                              </option>
+                            </option>
                         )
                         }
                         </Input>

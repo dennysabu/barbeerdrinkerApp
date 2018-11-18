@@ -117,7 +117,7 @@ export default class Bar extends Component {
 
 
       var topSpenders =   <div align="center">
-                          <XYPlot animation={true} margin={{top: 25, bottom: 100}} xType="ordinal" xDistance={1000} width={1000} height={500}>
+                          <XYPlot animation={true} margin={{top: 25, bottom: 100, left: 100, right: 100}} xType="ordinal" xDistance={1000} width={1000} height={500}>
                           <VerticalBarSeries data={this.state.itemGraph} />
                           <XAxis title="Drinker"/>
                           <YAxis title="Amount Spent (USD)"/>
