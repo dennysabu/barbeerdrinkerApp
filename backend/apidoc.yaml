@@ -356,3 +356,55 @@ paths:
                 type: array
             "400":
               description: Bad Request
+
+#           Bartenders Page       #
+    /getManfs:
+      get:
+        description: Get all manufacturers SELECT DISTINCT manf FROM Items;
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
+  /getManfSales:
+      post:
+        description: Given manufacturer, show the cities where their sales are highest
+        requestBody:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  manf:
+                    type: string
+        responses:
+          "200":
+            description: OK
+            schema:
+              type: array
+          "400":
+            description: Bad Request
+
+    /getManfSalesByWeek:
+        post:
+          description: Given manufacturer & week, show the cities where their sales are highest
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    manf:
+                      type: string
+                    week:
+                      type: string
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request

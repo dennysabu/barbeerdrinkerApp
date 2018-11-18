@@ -483,6 +483,29 @@ router.post('/getBarBySales', (req, res) => {
          });
  });
 
+// Retuns shifts of a bar
+ router.post('/getShiftForBar', (req, res) => {
+
+    let bar = req.body.bar.replace(/'/g, "\\'");
+
+    let sql = 'SELECT DISTINCT startTime, endTime FROM Shifts WHERE bar = "' + bar + '";';
+
+         pool.getConnection(function(err, connection) {
+
+         connection.query(sql, function(error, results, fields) {
+                 connection.release();
+
+                 if (!error) {
+                 res.status(200);
+                 res.send(JSON.stringify(results));
+                 } else {
+                 res.status(400);
+                 res.send(JSON.stringify(error));
+                 }
+         });
+         });
+ });
+
 
   router.post('/getBartenderSales', (req, res) => {
 
@@ -506,6 +529,76 @@ router.post('/getBarBySales', (req, res) => {
           });
           });
   });
+
+  /*
+   *  MANUFACTURERS PAGE
+   */
+
+   router.get('/getManfs', (req, res) => {
+
+      let sql = 'SELECT DISTINCT manf FROM Items;';
+
+           pool.getConnection(function(err, connection) {
+
+           connection.query(sql, function(error, results, fields) {
+                   connection.release();
+
+                   if (!error) {
+                   res.status(200);
+                   res.send(JSON.stringify(results));
+                   } else {
+                   res.status(400);
+                   res.send(JSON.stringify(error));
+                   }
+           });
+           });
+   });
+
+   router.post('/getManfSales', (req, res) => {
+
+      let bar = req.body.bar.replace(/'/g, "\\'");
+      let bartender = req.body.bartender.replace(/'/g, "\\'");
+
+      let sql = 'SELECT bi.item, COUNT(bi.item) as sold FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND b.bartender = "' + bartender + '" AND b.bar = "' + bar + '" GROUP BY (bi.item);';
+
+           pool.getConnection(function(err, connection) {
+
+           connection.query(sql, function(error, results, fields) {
+                   connection.release();
+
+                   if (!error) {
+                   res.status(200);
+                   res.send(JSON.stringify(results));
+                   } else {
+                   res.status(400);
+                   res.send(JSON.stringify(error));
+                   }
+           });
+           });
+   });
+
+   router.post('/getManfSalesByWeek', (req, res) => {
+
+      let bar = req.body.bar.replace(/'/g, "\\'");
+      let bartender = req.body.bartender.replace(/'/g, "\\'");
+
+      let sql = 'SELECT bi.item, COUNT(bi.item) as sold FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND b.bartender = "' + bartender + '" AND b.bar = "' + bar + '" GROUP BY (bi.item);';
+
+           pool.getConnection(function(err, connection) {
+
+           connection.query(sql, function(error, results, fields) {
+                   connection.release();
+
+                   if (!error) {
+                   res.status(200);
+                   res.send(JSON.stringify(results));
+                   } else {
+                   res.status(400);
+                   res.send(JSON.stringify(error));
+                   }
+           });
+           });
+   });
 
 
  /*
