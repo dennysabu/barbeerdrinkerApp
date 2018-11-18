@@ -25,8 +25,15 @@ bi.item = i.name
 and
 i.type = 'beer'
 and
-DATE(b.date) = '2018-02-03'
+DATE(b.date) = '2018-02-07'
 GROUP BY(b.bartender)
 ORDER BY b.bartender
 
 
+SELECT day, TIME_FORMAT(startTime, '%h:%i %p') as shift
+FROM Shifts
+Where 
+bar = 'Celebrations Nitelife'
+AND
+bartender = 'Abbey'
+ORDER BY day;
