@@ -556,10 +556,31 @@ router.post('/getBarBySales', (req, res) => {
 
    router.post('/getManfSales', (req, res) => {
 
-      let bar = req.body.bar.replace(/'/g, "\\'");
-      let bartender = req.body.bartender.replace(/'/g, "\\'");
+      let manf = req.body.manf.replace(/'/g, "\\'");
 
-      let sql = 'SELECT bi.item, COUNT(bi.item) as sold FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND b.bartender = "' + bartender + '" AND b.bar = "' + bar + '" GROUP BY (bi.item);';
+      let sql = 'SELECT ba.city, SUM(bi.price) as sales FROM Items i, Bills b, Bill_Items bi, Bars ba WHERE i.manf = "' + manf + '" AND i.name = bi.item AND i.type = "beer" AND bi.billid = b.id AND b.bar = ba.name GROUP BY ba.city ORDER BY sales DESC LIMIT 3;';
+
+           pool.getConnection(function(err, connection) {
+
+           connection.query(sql, function(error, results, fields) {
+                   connection.release();
+
+                   if (!error) {
+                   res.status(200);
+                   res.send(JSON.stringify(results));
+                   } else {
+                   res.status(400);
+                   res.send(JSON.stringify(error));
+                   }
+           });
+           });
+   });
+
+   router.post('/getManfLikes', (req, res) => {
+
+      let manf = req.body.manf.replace(/'/g, "\\'");
+
+      let sql = 'SELECT d.city, COUNT(d.city) as likes FROM Likes l, Items i, Drinkers d WHERE l.item = i.name AND d.name = l.drinker AND i.type = "beer" AND i.manf = "' + manf + '" GROUP BY d.city ORDER BY likes DESC LIMIT 3;';
 
            pool.getConnection(function(err, connection) {
 
@@ -579,10 +600,10 @@ router.post('/getBarBySales', (req, res) => {
 
    router.post('/getManfSalesByWeek', (req, res) => {
 
-      let bar = req.body.bar.replace(/'/g, "\\'");
-      let bartender = req.body.bartender.replace(/'/g, "\\'");
+      let manf = req.body.manf.replace(/'/g, "\\'");
+      let date = req.body.date.replace(/'/g, "\\'");
 
-      let sql = 'SELECT bi.item, COUNT(bi.item) as sold FROM Bills b, Bill_Items bi WHERE b.id = bi.billid AND b.bartender = "' + bartender + '" AND b.bar = "' + bar + '" GROUP BY (bi.item);';
+      let sql = 'SELECT ba.city, SUM(bi.price) as sales FROM Items i, Bills b, Bill_Items bi, Bars ba WHERE i.manf = "' + manf + '" AND i.name = bi.item AND i.type = "beer" AND bi.billid = b.id AND b.bar = ba.name AND WEEK(b.date) = WEEK("' + date + '") GROUP BY ba.city ORDER BY sales DESC LIMIT 3;';
 
            pool.getConnection(function(err, connection) {
 

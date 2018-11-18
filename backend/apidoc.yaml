@@ -357,6 +357,27 @@ paths:
             "400":
               description: Bad Request
 
+    /getShiftForBar:
+        post:
+          description: Retuns shifts of a bar
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    bar:
+                      type: string
+                    bartender:
+                      type: string
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request
+
 #           Bartenders Page       #
     /getManfs:
       get:
@@ -387,6 +408,25 @@ paths:
               type: array
           "400":
             description: Bad Request
+
+    /getManfLikes:
+        post:
+          description: Show cities and states where their beers are liked the most
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    manf:
+                      type: string
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request
 
     /getManfSalesByWeek:
         post:
