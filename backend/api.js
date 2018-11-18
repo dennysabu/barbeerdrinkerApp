@@ -717,6 +717,25 @@ router.post('/getBarBySales', (req, res) => {
    switch (mod) {
 
      case "Insert":
+          if (table === "Bills")
+          {
+            attr.forEach(function(item, i) {
+              var newItem;
+              if (item[1] === 'NULL') {
+                 newItem = item[1];
+              } else {
+                newItem = '"' + item[1].replace(/'/g, "\\'") + '"';
+             }
+             vals[i] = newItem;
+           });
+
+           var billsql = 'INSERT INTO Bills VALUES (' + vals.join(',') + ');';
+
+           var items = [];
+           var itemssql = 'INSERT INTO Bill_Items VALUES (' + item.join(',') + ');';
+
+
+          } else {
          attr.forEach(function(item, i) {
            var newItem;
            if (item[1] === 'NULL') {
@@ -727,6 +746,7 @@ router.post('/getBarBySales', (req, res) => {
           vals[i] = newItem;
         });
        sql = 'INSERT INTO ' + table + ' VALUES (' + vals.join(',') + ');';
+        }
       break;
     case "Update": // IF ATTRIBUTE FIELD IS NOT SET, CLIENT SETS IT TO NULL (ex. ['phone', 'NULL']) AND API IGNORES NULLS
     attr.forEach(function(item, i) {
@@ -759,6 +779,7 @@ router.post('/getBarBySales', (req, res) => {
                  if (!error) {
        res.status(200); // sends a status code
        res.send(JSON.stringify(results.sqlMessage)); // sends results recieved from sql
+       console.log(results.sqlMessage);
                  } else {
        res.status(400);
        res.send(JSON.stringify(error));

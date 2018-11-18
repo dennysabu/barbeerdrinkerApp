@@ -20,6 +20,7 @@ export default class Modifications extends Component {
         table: "Bars",
         attributes: [],
         values: [[]],
+        billitems: [],
         condition: "",
         isLoading: false,
       };
@@ -31,6 +32,8 @@ export default class Modifications extends Component {
       this.getAttributes = this.getAttributes.bind(this);
       this.modificationChange = this.modificationChange.bind(this);
       this.tableChange = this.tableChange.bind(this);
+      this.addItemHandler = this.addItemHandler.bind(this);
+      this.itemChanged = this.itemChanged.bind(this);
     }
 
     componentDidMount() {
@@ -89,7 +92,25 @@ export default class Modifications extends Component {
               break;
           }
         }
+    }
 
+    itemChanged(e) {
+      var values = this.state.billitems;
+      var value = e.target.value;
+      var name = e.target.name;
+      var index = e.target.attributes.getNamedItem('index').value;
+
+      var tmp = {billid: null, item: null, bar: null, price: null};
+
+      for (var i in values) {
+            values[i] = tmp;
+      }
+
+    }
+
+    addItemHandler(e) {
+
+      this.setState({ billitems: [...this.billitems, ] });
     }
 
 
@@ -119,11 +140,12 @@ export default class Modifications extends Component {
                             })
 
           var indexBill_Items = this.state.attributes.indexOf("bartender");
-          var bill = this.state.attributes.slice(0, indexBill_Items);
+          var bill = this.state.attributes.slice(0, indexBill_Items+1);
           var item = this.state.attributes.slice(indexBill_Items+1, this.state.attributes.length);
           var billsAttributesView = <div>
                                     {
                                     bill.map((header, i) => {
+
                                       return (
                                         <div key={i} style={{width:'50%'}}>
                                         <InputGroup>
@@ -138,18 +160,24 @@ export default class Modifications extends Component {
                                     <br/>
                                     <br/>
                                     <br/>
+                                    <div styles={{marginLeft: '0'}}>
+                                    <Button outline color="secondary" onClick={this.addItemHandler}>Add Item</Button>
+                                    </div>
+                                    <br/>
                                     {
                                     item.map((header, i) => {
+
                                       return (
                                         <div key={i} style={{width:'50%'}}>
                                         <InputGroup>
-                                        <Input placeholder="value" name={header} index={i} onChange={this.attributeChange}/>
+                                        <Input placeholder="value" name={header} index={i} onChange={this.itemChanged}/>
                                         <InputGroupAddon addonType="prepend">{header}</InputGroupAddon>
                                         </InputGroup>
                                         <br/>
                                         </div>
                                       );
                                     })
+
                                   }
                                     </div>
 
@@ -272,7 +300,9 @@ export default class Modifications extends Component {
 
   nullPadArray() {
     var attr = this.state.attributes;
+
     var values = this.state.values[0];
+  console.log(values);
 
     for (var i = 0; i < attr.length; i++) {
       if (i >= values.length)
@@ -286,6 +316,7 @@ export default class Modifications extends Component {
   modifyDatabase() {
 
     this.nullPadArray();
+
 
     fetch('http://localhost:5000/api/modifyDatabase', {
     method: "POST",
@@ -308,8 +339,8 @@ export default class Modifications extends Component {
     } else {
        alert(res.sqlMessage);
     }
-
    });
+
   }
 
 
