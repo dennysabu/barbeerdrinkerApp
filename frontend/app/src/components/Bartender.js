@@ -41,6 +41,13 @@ export default class Bartender extends Component {
     InformationCanLoad: false,
     first: true,
 
+
+    //Analytics
+    BarsForAnalytics: [],
+    SelectedBar: [],
+    Shifts: [],
+    SelectedShifts: null,
+
   }
 
 
@@ -52,6 +59,8 @@ export default class Bartender extends Component {
   this.barSelectionChanged = this.barSelectionChanged.bind(this);
   this.bartenderSelectionChanged = this.bartenderSelectionChanged.bind(this);
   this.populateCountSoldByGraph = this.populateCountSoldByGraph.bind(this);
+  this.analyticsBarSelectionChanged = this.analyticsBarSelectionChanged.bind(this);
+  this.getShiftDays = this.getShiftDays.bind(this);
 
 }
 
@@ -89,7 +98,7 @@ export default class Bartender extends Component {
                       </thead>
                       <tbody style={{fontSize:'15px', textAlign:'center'}}>
                       {
-                        console.log("Items Graph: " + this.state.ItemsGraph),
+
                         this.state.ItemsSoldByBartender.map((res, x) => {
                           return (
                                <tr className ="tlbrow">
@@ -152,16 +161,28 @@ export default class Bartender extends Component {
 
       //Drop Down to select a bar:
       const selectBarForAnalytics =
-                                  <Input type ="select">
+                                <Input type ="select" onChange={this.analyticsBarSelectionChanged}>
                                    {
-
-                                     this.state.Bars.map(Bar =>
+                                     this.state.BarsForAnalytics.map(Bar =>
                                        <option key = {Bar.item}>
                                          {Bar.name}
                                        </option>
                                      )
                                    }
                                   </Input>
+
+
+        //Drop Down to select a shift:
+        const selectShiftsForAnalytics =
+                                  <Input type ="select" >
+                                     {
+                                       this.state.Shifts.map(Shifts =>
+                                         <option key = {Shifts.day}>
+                                           {Shifts.day}
+                                         </option>
+                                       )
+                                     }
+                                    </Input>
 
 
     var ld;
@@ -202,11 +223,9 @@ export default class Bartender extends Component {
                         {selectBartender}
                         {ld}
                         <hr/>
-
-
                         <Button size="lg" onClick={this.getCountsSold}>Get Information</Button>
                     </div>
-                    <div class = "bartenderinfo">
+                    <div className = "bartenderinfo">
                         {alrt}
                         {countsoldby}
                         {itemsoldbar}
@@ -216,9 +235,17 @@ export default class Bartender extends Component {
               </div>
               <hr/>
 
-              <div className = "analytics">
-                    {selectBarForAnalytics}
-              </div> 
+              <div className = "selection">
+                  <h2> Select a Bar: </h2>
+                  {selectBarForAnalytics}
+                  <h2> Select a Day: </h2>
+                  {selectShiftsForAnalytics}
+                  <hr/>
+
+                  <Button size="lg" >Get Information</Button>
+              </div>
+
+
 
         </div>
 
@@ -240,10 +267,12 @@ export default class Bartender extends Component {
 
         }).then(res => res.json()
       ).then(data => {
-        this.setState( { Bars: data, BarsIsLoading:false, CurrentBarSelected: data[0].name}) ;
+        this.setState( { Bars: data, BarsForAnalytics: data, BarsIsLoading:false, CurrentBarSelected: data[0].name, SelectedBar: data[0].name}) ;
         //console.log(data);
         this.getBartenders(data[0].name);
+        this.getShiftDays(data[0].name);
       });
+
 
 
   }
@@ -254,6 +283,12 @@ export default class Bartender extends Component {
     this.setState({CurrentBarSelected: e.target.value, InformationCanLoad:false});
     this.getBartenders(e.target.value);
   }
+
+    analyticsBarSelectionChanged(e){
+      console.log("Skrt " + e.target.value);
+      this.setState({SelectedBar: e.target.value});
+      this.getShiftDays(e.target.value);
+    }
 
   bartenderSelectionChanged(e){
     this.setState({CurrentBartenderSelected: e.target.value, InformationCanLoad:false});
@@ -275,7 +310,7 @@ export default class Bartender extends Component {
       }).then(res => res.json()
     ).then(data => {
       this.setState( { Bartenders: data, CurrentBartenderSelected:data[0].bartender, InformationCanLoad: false}) ;
-      console.log(data);
+
     });
 
     //this.setState({InformationCanLoad: true});
@@ -283,10 +318,6 @@ export default class Bartender extends Component {
   }
 
   getCountsSold(){
-      this.setState({first: false});
-      console.log("Bar: " + this.state.CurrentBarSelected);
-      console.log("Bartender: " + this.state.CurrentBartenderSelected);
-
 
 
     fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getBartenderSales',{
@@ -302,9 +333,11 @@ export default class Bartender extends Component {
       }).then(res => res.json()
     ).then(data => {
       this.setState( { ItemsSoldByBartender: data, InformationCanLoad: false}) ;
-      console.log(data);
+
       this.populateCountSoldByGraph(data);
     });
+
+    this.setState({first: false});
   }
 
   populateCountSoldByGraph(data){
@@ -326,6 +359,45 @@ export default class Bartender extends Component {
         //console.log(g);
         this.forceUpdate();
         return;
+  }
+
+  getShifts(){
+      this.setState({first: false});
+    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getShiftForBar',{
+      method: "post",
+      headers: {
+        "Content-Type":"application/json",
+      },
+      body: JSON.stringify({
+        "bar": this.state.CurrentBarSelected,
+      }),
+
+      }).then(res => res.json()
+    ).then(data => {
+      this.setState( { ItemsSoldByBartender: data, InformationCanLoad: false}) ;
+      console.log(data);
+
+    });
+  }
+
+
+  getShiftDays(value){
+
+    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getDaysWithShifts',{
+      method: "post",
+      headers: {
+        "Content-Type":"application/json",
+      },
+      body: JSON.stringify({
+        "bar": value,
+      }),
+
+      }).then(res => res.json()
+    ).then(data => {
+      this.setState( { Shifts: data}) ;
+      console.log(data);
+
+    });
   }
 
 
