@@ -15,10 +15,18 @@ FROM Shifts
 WHERE bar = '207'
 ;
 
-SELECT b.bartender, DATE(b.date), bi.item, COUNT(bi.item)
-FROM Bills b, Bill_Items bi
-WHERE bartender = 'Henka'
-AND DATE(date) = '2018-02-11'
-AND b.id = bi.billid
-GROUP BY (bi.item)
-;
+SELECT b.bartender, bi.item, COUNT(bi.item) as sold
+From Bills b, Bill_Items bi, Items i
+WHERE b.id = bi.billid
+AND
+b.bar = '207'
+AND
+bi.item = i.name
+and
+i.type = 'beer'
+and
+DATE(b.date) = '2018-02-10'
+GROUP BY(b.bartender)
+ORDER BY b.bartender
+
+
