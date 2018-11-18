@@ -442,6 +442,29 @@ router.post('/getBarBySales', (req, res) => {
  *  Bartenders
  */
 
+ router.post('/getSoldByDay', (req, res) => {
+
+    let bar = req.body.bar.replace(/'/g, "\\'");
+    let date = req.body.date.replace(/'/g, "\\'");
+
+    let sql = ' SELECT b.bartender, bi.item, COUNT(bi.item) as sold From Bills b, Bill_Items bi, Items i WHERE b.id = bi.billid AND b.bar = "' + bar + '" AND bi.item = i.name and i.type = "beer" and DATE(b.date) = DATE("' + date + '") GROUP BY(b.bartender) ORDER BY b.bartender;';
+
+         pool.getConnection(function(err, connection) {
+
+         connection.query(sql, function(error, results, fields) {
+                 connection.release();
+
+                 if (!error) {
+                 res.status(200);
+                 res.send(JSON.stringify(results));
+                 } else {
+                 res.status(400);
+                 res.send(JSON.stringify(error));
+                 }
+         });
+         });
+ });
+
  router.get('/getBartenders', (req, res) => {
 
          pool.getConnection(function(err, connection) {

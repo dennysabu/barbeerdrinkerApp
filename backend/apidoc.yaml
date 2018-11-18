@@ -326,6 +326,27 @@ paths:
             "400":
               description: Bad Request
 
+    /getSoldByDay:
+        post:
+          description: returns counts of beer sold by a bar tender on a day
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    bar:
+                      type: string
+                    date:
+                      type: string
+          responses:
+            "200":
+              description: OK
+              schema:
+                type: array
+            "400":
+              description: Bad Request
+
     /getBartenders:
       get:
         description: Get all bartenders

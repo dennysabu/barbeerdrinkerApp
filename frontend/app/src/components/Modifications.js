@@ -44,6 +44,7 @@ export default class Modifications extends Component {
         condition: "",
         values: [[]]
       });
+        this.getAttributes(this.state.table, e.target.value);
     }
 
     tableChange(e) {
@@ -54,7 +55,7 @@ export default class Modifications extends Component {
         values: [[]]
       });
 
-      this.getAttributes(e.target.value);
+      this.getAttributes(e.target.value, this.state.modification);
     }
 
     conditionChange(e) {
@@ -107,6 +108,27 @@ export default class Modifications extends Component {
             );
           })
 
+          var tablesSelector =
+                            <Input type="select" name="select" onChange={this.tableChange} style={{width:'50%'}}>
+                            <option>Bars</option>
+                            <option>Bartenders</option>
+                            <option value="Bills">Bills/Bill_Items</option>
+                            <option>Drinkers</option>
+                            <option>Frequents</option>
+                            <option>Inventory</option>
+                            <option>Items</option>
+                            <option>Likes</option>
+                            <option>Sells</option>
+                            <option>Shifts</option>
+                            </Input>
+
+        var modSelector = <Input type="select" name="select" onChange={this.modificationChange} style={{width:'50%'}}>
+                          <option>Update</option>
+                          <option>Delete</option>
+                          <option>Insert</option>
+                          </Input>
+
+
     if(this.state.isLoading) {
       return(
         <Progress multi>
@@ -133,6 +155,8 @@ export default class Modifications extends Component {
                           <br/>
                           </div>
           break;
+        case "Update":
+
           default:
             break;
 
@@ -147,26 +171,14 @@ export default class Modifications extends Component {
        <div className="column">
 
          <label>Select Modification:</label>
-        <Input type="select" name="select" onChange={this.modificationChange} style={{width:'50%'}}>
-         <option>Update</option>
-         <option>Delete</option>
-         <option>Insert</option>
-        </Input>
+        {
+          modSelector
+        }
         <br/>
         <label>Select Table:</label>
-        <Input type="select" name="select" onChange={this.tableChange} style={{width:'50%'}}>
-         <option>Bars</option>
-         <option>Bartenders</option>
-         <option>Bill_Items</option>
-         <option>Bills</option>
-         <option>Drinkers</option>
-         <option>Frequents</option>
-         <option>Inventory</option>
-         <option>Items</option>
-         <option>Likes</option>
-         <option>Sells</option>
-         <option>Shifts</option>
-        </Input>
+        {
+          tablesSelector
+        }
         <br/>
         {
           attributesView
@@ -230,7 +242,7 @@ export default class Modifications extends Component {
   }
 
 
-  getAttributes(value) {
+  getAttributes(value, mod) {
 
     fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/query', {
     method: "POST",
@@ -241,7 +253,9 @@ export default class Modifications extends Component {
          query: "SELECT * FROM " + value + " LIMIT 1",
      }),
      }).then(res => res.json()
-   ).then(data => this.setState({ attributes: Object.keys(data[0]), isLoading: false }));
+   ).then(data => {
+     this.setState({ attributes: Object.keys(data[0]), modification: mod, isLoading: false })
+   });
   }
 
 }
