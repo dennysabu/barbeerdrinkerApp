@@ -308,7 +308,11 @@ const countbeerssold = <Table width={100}>
                     </div>
                     <div className = "bartenderinfo">
                         {alrt}
-                        {countsoldby}
+                        <div className ="scrollxf ">
+                          <h2>Counts Sold:</h2>
+                          {countsoldby}
+                        </div>
+
                         {itemsoldbar}
 
                     </div>

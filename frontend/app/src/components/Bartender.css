@@ -3,6 +3,7 @@
 .btd-glb{
   display: inline-block;
   padding: 10px;
+  width: 100%;
 }
 
 .selection{
@@ -11,8 +12,8 @@
   padding-bottom: ;
   background-color: grey;
   border-radius: 20px;
-  width: 25vh;
-  height: 25vh;
+  width: 25%;
+  height: 25%;
 }
 
 .selection h2{
@@ -21,15 +22,23 @@
 
 .bartenderinfo{
   padding-left: 25px;
-  display: inline-block;
+  display: inline-flex;
 }
 
 
 .firstset{
-  display: inline-flex;
+  display: flex;
+  width: 100%;
 }
 
 .analytics{
   height: 500px;
   background-color: #f2f4f7;
+}
+
+
+.scrollxf{
+  height:  400px;
+  width: 35%;
+  overflow-y: scroll;
 }
