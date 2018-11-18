@@ -577,6 +577,30 @@ router.post('/getBarBySales', (req, res) => {
           });
   });
 
+
+  router.post('/getShiftsWorked', (req, res) => {
+
+     let bar = req.body.bar.replace(/'/g, "\\'");
+     let bartender = req.body.bartender.replace(/'/g, "\\'");
+
+     let sql = '  SELECT day, TIME_FORMAT(startTime, "%h:%i %p") as shift FROM Shifts WHERE bar = "' + bar + '" AND bartender = "' + bartender + '" ORDER BY day;';
+
+          pool.getConnection(function(err, connection) {
+
+          connection.query(sql, function(error, results, fields) {
+                  connection.release();
+
+                  if (!error) {
+                  res.status(200);
+                  res.send(JSON.stringify(results));
+                  } else {
+                  res.status(400);
+                  res.send(JSON.stringify(error));
+                  }
+          });
+          });
+  });
+
   /*
    *  MANUFACTURERS PAGE
    */
