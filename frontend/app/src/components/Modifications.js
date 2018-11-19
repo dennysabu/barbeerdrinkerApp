@@ -21,11 +21,13 @@ export default class Modifications extends Component {
         attributes: [],
         values: [[]],
         billitems: [],
+        billitem: {billid: '', bar: '', item: '', price: ''},
+        itemAttributes: [],
         condition: "",
         isLoading: false,
       };
 
-      this.nullPadArray = this.nullPadArray.bind(this);
+      this.checkNulls = this.checkNulls.bind(this);
       this.conditionChange = this.conditionChange.bind(this);
       this.attributeChange = this.attributeChange.bind(this);
       this.modifyDatabase = this.modifyDatabase.bind(this);
@@ -100,17 +102,36 @@ export default class Modifications extends Component {
       var name = e.target.name;
       var index = e.target.attributes.getNamedItem('index').value;
 
-      var tmp = {billid: null, item: null, bar: null, price: null};
+      let copyObj = Object.assign({}, this.state.billitem);
+      copyObj[name] = value;
 
-      for (var i in values) {
-            values[i] = tmp;
-      }
-
+      this.setState({
+          billitem: copyObj
+      });
     }
 
     addItemHandler(e) {
 
-      this.setState({ billitems: [...this.billitems, ] });
+      var nFlag = 0;
+      var item = this.state.billitem;
+
+      for (var i in item) {
+        if (item[i] === '')
+        {
+          nFlag = 1;
+          alert('Error: Null found for item attribute');
+          break;
+        }
+      }
+
+      if (nFlag === 0)
+      {
+      this.setState( prevState => ({
+        billitems: [...this.state.billitems, this.state.billitem]
+      }));
+      alert('Item Added!');
+    }
+
     }
 
 
@@ -286,7 +307,7 @@ export default class Modifications extends Component {
           conditionView
         }
     <br/>
-    <Button outline color="secondary" onClick={this.modifyDatabase} style={{width:'25%'}}>{this.state.modification}</Button>
+    <Button outline color="secondary" onClick={this.checkNulls} style={{width:'25%'}}>{this.state.modification}</Button>
     <br/>
     <br/>
     <br/>
@@ -298,24 +319,36 @@ export default class Modifications extends Component {
      }
   }
 
-  nullPadArray() {
+  checkNulls() {
     var attr = this.state.attributes;
+    var isNull = 0;
 
     var values = this.state.values[0];
-  console.log(values);
 
     for (var i = 0; i < attr.length; i++) {
-      if (i >= values.length)
+     if (i >= values.length)
+     {
+       values[i] = [attr[i], 'NULL'];
+     }
+   }
+
+    for (var j = 0; j < values.length; j++) {
+      if (values[0][j] === '' || attr.length != values.length || values[0][j] === 'NULL')
       {
-        values[i] = [attr[i], "NULL"];
+        isNull = 1;
+        alert('Error: null value detected for attributes');
+        break;
       }
+    }
+
+    if (isNull !== 1)
+    {
+      this.modifyDatabase();
     }
 
   }
 
   modifyDatabase() {
-
-    this.nullPadArray();
 
 
     fetch('http://localhost:5000/api/modifyDatabase', {
@@ -326,7 +359,8 @@ export default class Modifications extends Component {
     body: JSON.stringify({
          modification: this.state.modification,
          table: this.state.table,
-         values: this.state.values[0],
+         values: this.state.values[0].splice(0,this.state.values[0].length-4),
+         items: this.state.billitems,
          condition: this.state.condition,
      }),
    }).then(res => {
@@ -334,7 +368,7 @@ export default class Modifications extends Component {
      {
        alert('Successul ' + this.state.modification + ' to the ' + this.state.table + ' table!');
         return res.json();
-     } else if (res.sqlMessage === undefined){
+     } else if (res.sqlMessage === undefined) {
        alert('Invalid Modification, Please Check Your "Where" Syntax and Table Selection 😭');
     } else {
        alert(res.sqlMessage);
@@ -361,8 +395,9 @@ export default class Modifications extends Component {
      {
        var at = Object.keys(data[0]);
        at.push("billid", "item", "bar", "price");
+       var iat = ["billid", "item", "bar", "price"];
 
-       this.setState({ attributes: at, table: table, isLoading: false });
+       this.setState({ attributes: at, itemAttributes: iat,  table: table, isLoading: false });
     } else if (table === "Bills" && mod === "Update") {
 
       this.setState({ table: table, modification: mod });

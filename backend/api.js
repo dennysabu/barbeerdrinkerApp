@@ -704,8 +704,10 @@ router.post('/getBarBySales', (req, res) => {
    let table = req.body.table;
    let attr = req.body.values;
    let cond = req.body.condition;
+   let items = req.body.items;
 
    console.log(attr);
+   console.log(items);
 
    if (cond.length !== 0) {
      cond = 'WHERE ' + cond;
@@ -713,12 +715,14 @@ router.post('/getBarBySales', (req, res) => {
 
    let sql;
    var vals = [];
+   var billItems = [];
 
    switch (mod) {
 
      case "Insert":
-          if (table === "Bills")
+          if (table === "Bills") // Bills
           {
+
             attr.forEach(function(item, i) {
               var newItem;
               if (item[1] === 'NULL') {
@@ -731,11 +735,27 @@ router.post('/getBarBySales', (req, res) => {
 
            var billsql = 'INSERT INTO Bills VALUES (' + vals.join(',') + ');';
 
-           var items = [];
-           var itemssql = 'INSERT INTO Bill_Items VALUES (' + item.join(',') + ');';
+           var bitems = [];
 
+           var qValues = [];
+           items.forEach(function(item, i) {
 
-          } else {
+             var newItem = '(' + '"' + item['billid'] + '"' + ','
+             + '"' +  item['bar'] + '"' + ','
+             + '"' + item['item'] + '"' + ','
+             + '"' + item['price'] + '"' + ')';
+
+            billItems[i] = newItem;
+          });
+
+          console.log(billItems);
+
+           var itemssql = 'INSERT INTO Bill_Items VALUES ' + billItems.join(',') + ';';
+
+           sql = billsql + itemssql;
+
+         } else { /// NON Bills
+
          attr.forEach(function(item, i) {
            var newItem;
            if (item[1] === 'NULL') {
