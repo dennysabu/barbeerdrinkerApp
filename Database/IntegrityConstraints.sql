@@ -17,16 +17,16 @@ FROM
     Sells s4,
     Items i
 WHERE
-		s1.day = s2.day 
-		AND s3.day = s4.day
-		AND s1.day = s3.day
-        AND s1.item = s3.item
-        AND s2.item = s4.item
-        AND s1.item != s2.item
-        AND s1.bar = s3.bar
-        AND s2.bar = s4.bar
-        AND s1.price > s2.price
-        AND s3.price < s4.price
+s1.day = s2.day 
+AND s3.day = s4.day
+AND s1.day = s3.day
+AND s1.item = s3.item
+AND s2.item = s4.item
+AND s1.item = s2.item
+AND s1.bar = s3.bar
+AND s2.bar = s4.bar
+AND s1.price > s2.price
+AND s3.price < s4.price
 ;
 
 
