@@ -8,7 +8,7 @@ AND
 b.city != d.city;
 
 -- Verify Bar A and Bar B
-SELECT 
+SELECT
     *
 FROM
     Sells s1,
@@ -23,10 +23,7 @@ WHERE
         AND s1.bar = s3.bar
         AND s2.bar = s4.bar
         AND s1.price > s3.price
-        AND s2.price < s4.price
-;
-
-
+        AND s2.price < s4.price;
 
 -- Verify Bill is made when bar is open
 SELECT bi.date, ba.weekendOpen, ba.weekendClose, bi.bar
@@ -42,3 +39,8 @@ HAVING shifts_worked > 1;
 
 
 -- Verify Bar cannot sell more beers of specific brand, than it has in its inventory
+SELECT i.item, i.bar, i.count, i.date 
+FROM Inventory i, (SELECT item, bar, COUNT(billid) as sold FROM Bill_Items GROUP BY item, bar) b 
+WHERE i.item = b.item AND i.count <= sold;
+
+SELECT item, bar, COUNT(billid) as sold FROM Bill_Items GROUP BY item, bar;
