@@ -165,7 +165,7 @@ export default class NavBar extends React.Component {
       */}
       <div>
         <Navbar color="light" light expand="md">
-          <NavbarBrand href="/" style={{ font: "32px cursive, courier", fontWeight: "bolder" }}>
+          <NavbarBrand href="/" style={{ font: "32px Tahoma", fontWeight: "bolder" }}>
           Beerazon <span role="img" aria-label="beer">🍺</span>
           </NavbarBrand>
           <NavbarToggler onClick={this.toggle} />

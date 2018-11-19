@@ -351,7 +351,7 @@ export default class Modifications extends Component {
   modifyDatabase() {
 
 
-    fetch('http://localhost:5000/api/modifyDatabase', {
+    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/modifyDatabase', {
     method: "POST",
     headers: {
              "Content-Type": "application/json", // enables json content only

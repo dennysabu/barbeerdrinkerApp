@@ -12,7 +12,7 @@
 }
 
 .caption {
-    font: 28px cursive, courier;
+    font: 28px Helvetica;
     font-weight: bolder;
 }
 
@@ -23,12 +23,12 @@
 .titleCurs {
    font-weight: bold;
    color: black;
-   font: 24px cursive, courier;
+   font: 24px Helvetica;
 }
 
 .bodyCurs {
    color: black;
-   font: 16px cursive, courier;
+   font: 16px Helvetica;
 }
 
 .facebook {

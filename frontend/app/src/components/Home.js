@@ -107,7 +107,7 @@ class Home extends Component {
                   <br/>
                   <div className="row" style={{ width: '85%', height: '50%'}}>
                     <p className="bodyCurs" style={{ width: '33%'}}>
-                    We are a small company selling classic American beers.
+                    The premier data aggregator of the Top 100 Bars across the 6 major cities in America!
                     </p>
                     <p className="bodyCurs" style={{ width: '33%'}}>
                     We vow to only sell the highest quality beers providing a perfect balance of hops and malt.
@@ -121,7 +121,7 @@ class Home extends Component {
 
                     </div>
                     <div className="row" style={{ display:'table', width: '25%', height: '25%'}}>
-                        <p style={{ font:  "22px cursive, courier", color: "black", textAlign: 'center' }}>© 2018 Beerazon</p>
+                        <p style={{ font:  "22px Helvetica", color: "black", textAlign: 'center' }}>© 2018 Beerazon</p>
                     </div>
                     </div>
 
