@@ -9,6 +9,10 @@ Api uses Express via Node.js to handle MySQL CRUD operations. The MySQL database
 
 ## App Sample Screen Shots
 
+| ![Alt text](/appScreenShots/home.png?raw=true) |
+|:--:|
+| *Home Page* |
+
 | ![Alt text](/appScreenShots/graphs.png?raw=true) |
 |:--:|
 | *Data Analytics* |
@@ -16,7 +20,3 @@ Api uses Express via Node.js to handle MySQL CRUD operations. The MySQL database
 | ![Alt text](/appScreenShots/modifications.png?raw=true) |
 |:--:|
 | *Modifications to Tables* |
-
-| ![Alt text](/appScreenShots/home.png?raw=true) |
-|:--:|
-| *Home Page* |
