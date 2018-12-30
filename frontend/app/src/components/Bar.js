@@ -262,7 +262,7 @@ export default class Bar extends Component {
   // fetch request to express api endpoint
   getItemGraphData(bar, day) {
 
-   fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getTop10Spenders', {
+   fetch('http://127.0.0.1:5000/api/getTop10Spenders', {
    method: "POST",
    headers: {
             "Content-Type": "application/json", // enables json content only
@@ -281,7 +281,7 @@ export default class Bar extends Component {
 
   getBeerGraphData(bar, day) {
 
-    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getTopBeersForBarAndDay', {
+    fetch('http://127.0.0.1:5000/api/getTopBeersForBarAndDay', {
     method: "POST",
     headers: {
              "Content-Type": "application/json", // enables json content only
@@ -300,7 +300,7 @@ export default class Bar extends Component {
 
   getTimeGraphData(bar, day) {
 
-    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getTimeDistForBar', {
+    fetch('http://127.0.0.1:5000/api/getTimeDistForBar', {
     method: "POST",
     headers: {
              "Content-Type": "application/json", // enables json content only
@@ -318,7 +318,7 @@ export default class Bar extends Component {
 
 getSalesGraphData(beer, day) {
 
-  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getBarBySales', {
+  fetch('http://127.0.0.1:5000/api/getBarBySales', {
   method: "POST",
   headers: {
            "Content-Type": "application/json", // enables json content only

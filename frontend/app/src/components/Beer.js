@@ -327,7 +327,7 @@ populateTimeBarGraph(data){
 
 
 getTimeSold(value){
-  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/beerTdtime',{
+  fetch('http://127.0.0.1:5000/api/beerTdtime',{
     method: "post",
     headers: {
         "Content-Type":"application/json",
@@ -370,7 +370,7 @@ populateBarGraph(data)
 getTopBars(value){
 
 
-  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getBarsForBeer',{
+  fetch('http://127.0.0.1:5000/api/getBarsForBeer',{
     method: "post",
     headers: {
         "Content-Type":"application/json",
@@ -417,7 +417,7 @@ populateGraph(data){
 
 getTopConsumers(value){
 
-  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getTopBeerConsumers',{
+  fetch('http://127.0.0.1:5000/api/getTopBeerConsumers',{
     method: "post",
     headers: {
         "Content-Type":"application/json",
@@ -439,7 +439,7 @@ getTopConsumers(value){
 
 getBeers(){
 
-  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/query',{
+  fetch('http://127.0.0.1:5000/api/query',{
     method: "post",
     headers: {
       "Content-Type":"application/json",

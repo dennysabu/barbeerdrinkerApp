@@ -405,7 +405,7 @@ getShiftsWorkedByThisBartender(){
 
 
 
-  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getShiftsWorked',{
+  fetch('http://127.0.0.1:5000/api/getShiftsWorked',{
     method: "post",
     headers: {
       "Content-Type":"application/json",
@@ -431,7 +431,7 @@ getShiftsWorkedByThisBartender(){
   //Gets all bars
   getBars(){
 
-    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getBars',{
+    fetch('http://127.0.0.1:5000/api/getBars',{
       method: "get",
       headers: {
         "Content-Type":"application/json",
@@ -474,7 +474,7 @@ getShiftsWorkedByThisBartender(){
   //Gets Bartenders from CurrentBarSelected
   getBartenders(value){
 
-    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getBartendersByBar',{
+    fetch('http://127.0.0.1:5000/api/getBartendersByBar',{
       method: "post",
       headers: {
         "Content-Type":"application/json",
@@ -496,7 +496,7 @@ getShiftsWorkedByThisBartender(){
   getCountsSold(){
 
 
-    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getBartenderSales',{
+    fetch('http://127.0.0.1:5000/api/getBartenderSales',{
       method: "post",
       headers: {
         "Content-Type":"application/json",
@@ -540,7 +540,7 @@ getShiftsWorkedByThisBartender(){
 
   getShifts(){
       this.setState({first: false});
-    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getShiftForBar',{
+    fetch('http://127.0.0.1:5000/api/getShiftForBar',{
       method: "post",
       headers: {
         "Content-Type":"application/json",
@@ -560,7 +560,7 @@ getShiftsWorkedByThisBartender(){
 
   getShiftDays(value){
 
-    fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getDaysWithShifts',{
+    fetch('http://127.0.0.1:5000/api/getDaysWithShifts',{
       method: "post",
       headers: {
         "Content-Type":"application/json",
@@ -580,7 +580,7 @@ getShiftsWorkedByThisBartender(){
 //Get count sold by all the bartenders at a given bar on a given day.
 getCountsSoldOnDay(){
 
-  fetch('http://ec2-18-206-201-243.compute-1.amazonaws.com:5000/api/getSoldByDay',{
+  fetch('http://127.0.0.1:5000/api/getSoldByDay',{
     method: "post",
     headers: {
       "Content-Type":"application/json",

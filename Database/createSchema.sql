@@ -2,50 +2,11 @@
 
 USE BarBeerDrinkersPLUS;
 
-UPDATE `Likes` set `item` = TRIM(REPLACE(REPLACE(REPLACE(`item`,'\t',''),'\n',''),'\r',''));
-
 /*
 -- This Command loads large CSV data WAY faster than data import wizard
 */
-SET FOREIGN_KEY_CHECKS = 0;
-
-LOAD DATA LOCAL INFILE '~/Desktop/db/Sells.csv'
-INTO TABLE Sells
-FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
-LINES TERMINATED BY '\n';
-
-LOAD DATA LOCAL INFILE '~/Desktop/db/Frequents.csv'
-INTO TABLE Frequents
-FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
-LINES TERMINATED BY '\n';
-
 LOAD DATA LOCAL INFILE '~/Desktop/db/Bars.csv'
 INTO TABLE Bars
-FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
-LINES TERMINATED BY '\n';
-
-LOAD DATA LOCAL INFILE '~/Desktop/db/Bill_Items.csv'
-INTO TABLE Bill_Items
-FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
-LINES TERMINATED BY '\n';
-
-LOAD DATA LOCAL INFILE '~/Desktop/db/Bills.csv'
-INTO TABLE Bills
-FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
-LINES TERMINATED BY '\n';
-
-LOAD DATA LOCAL INFILE '~/Desktop/db/Shifts.csv'
-INTO TABLE Shifts
-FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
-LINES TERMINATED BY '\n';
-
-LOAD DATA LOCAL INFILE '~/Desktop/db/Likes.csv'
-INTO TABLE Likes
-FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
-LINES TERMINATED BY '\n';
-
-LOAD DATA LOCAL INFILE '~/Desktop/db/Bartenders.csv'
-INTO TABLE Bartenders
 FIELDS OPTIONALLY ENCLOSED BY '"' TERMINATED BY ','
 LINES TERMINATED BY '\n';
 
@@ -127,11 +88,11 @@ CREATE TABLE Sells (
 );
 
 CREATE TABLE Inventory (
-	item varchar(50),
+	date date,
     bar varchar(50),
-    primary key (item, bar),
+    item varchar(50),
     count Int,
-    date date,
+    primary key (item, bar),
     CONSTRAINT fk_inventory_item
     FOREIGN KEY (item)
     REFERENCES Items(name),

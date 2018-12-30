@@ -1,4 +1,6 @@
 # Makes sure bartender works at bar where bill is issued, for Bills insert
+DROP TRIGGER BartendersShifts_Bills;
+
 DELIMITER $
 CREATE TRIGGER BartendersShifts_Bills
 BEFORE INSERT ON Bills
