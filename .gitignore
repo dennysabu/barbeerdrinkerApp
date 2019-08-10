@@ -1,3 +1,7 @@
-
-.DS_Store
-Database/IntegrityConstraints.sql
+*.pdf
+*.pptx
+node_modules/
+package-lock.json
+config.json
+*.DS_Store
+IntegrityConstraints.sql
